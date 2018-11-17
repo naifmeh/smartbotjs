@@ -1,0 +1,29 @@
+{
+  "name": "smarbotjs",
+  "version": "1.0.0",
+  "description": "Smart crawler using reinforcement learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/naifmeh/smartbotjs.git"
+  },
+  "keywords": [
+    "crawler",
+    "smart",
+    "rl",
+    "reinforcement"
+  ],
+  "author": "Naif Mehanna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/naifmeh/smartbotjs/issues"
+  },
+  "homepage": "https://github.com/naifmeh/smartbotjs#readme",
+  "dependencies": {
+    "puppeteer": "^1.10.0",
+    "save": "^2.3.2"
+  }
+}
