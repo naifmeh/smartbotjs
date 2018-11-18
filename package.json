@@ -25,5 +25,8 @@
   "dependencies": {
     "puppeteer": "^1.10.0",
     "save": "^2.3.2"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
   }
 }
