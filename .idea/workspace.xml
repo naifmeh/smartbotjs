@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/preprocessing/preprocessing.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/io_utils.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/io_utils.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/logging.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/preprocessing.js" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/io_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/io_utils.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,31 +25,34 @@
         <counts>
           <entry key="project.closed" value="1" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.23" value="1" />
+          <entry key="project.open.time.23" value="2" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="2" />
-          <entry key="js" value="6" />
-          <entry key="json" value="2" />
+          <entry key="js" value="8" />
+          <entry key="json" value="3" />
           <entry key="md" value="1" />
+          <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JSON" value="2" />
-          <entry key="JavaScript" value="6" />
+          <entry key="JSON" value="3" />
+          <entry key="JavaScript" value="8" />
           <entry key="PLAIN_TEXT" value="3" />
+          <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="15" />
-          <entry key="js" value="3028" />
+          <entry key="js" value="4655" />
+          <entry key="json" value="35" />
           <entry key="md" value="81" />
           <entry key="mjs" value="36" />
         </counts>
@@ -55,7 +60,8 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ECMAScript 6" value="36" />
-          <entry key="JavaScript" value="3028" />
+          <entry key="JSON" value="35" />
+          <entry key="JavaScript" value="4655" />
           <entry key="PLAIN_TEXT" value="96" />
         </counts>
       </usages-collector>
@@ -93,17 +99,44 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+            <state relative-caret-position="51">
+              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/utils/logging.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" selection-start-line="2" selection-end-line="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="219">
+              <caret line="19" column="82" selection-start-line="19" selection-start-column="82" selection-end-line="19" selection-end-column="82" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="317">
+              <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+            <state relative-caret-position="85">
+              <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -132,8 +165,12 @@
         <option value="$PROJECT_DIR$/crawler/crawler.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.mjs" />
         <option value="$PROJECT_DIR$/preprocessing/sitemap.js" />
-        <option value="$PROJECT_DIR$/preprocessing/preprocessing.js" />
+        <option value="$PROJECT_DIR$/utils/io_utils.test.js" />
+        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/utils/io_utils.js" />
+        <option value="$PROJECT_DIR$/test/io_utils.test.js" />
+        <option value="$PROJECT_DIR$/preprocessing/preprocessing.js" />
+        <option value="$PROJECT_DIR$/utils/logging.js" />
       </list>
     </option>
   </component>
@@ -158,10 +195,9 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="817" />
-    <option name="y" value="2" />
-    <option name="width" value="980" />
-    <option name="height" value="1040" />
+    <option name="x" value="952" />
+    <option name="width" value="977" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -196,6 +232,17 @@
             <path>
               <item name="smarbotjs" type="b2602c69:ProjectViewProjectNode" />
               <item name="smarbotjs" type="462c0819:PsiDirectoryNode" />
+              <item name="preprocessing" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="smarbotjs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="smarbotjs" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="smarbotjs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="smarbotjs" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -208,11 +255,17 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="10.13.0" />
-    <property name="last_opened_file_path" value="$USER_HOME$/AppData/Local/GitHub/PortableGit_69bd5e6f85e4842f07db71c9618a621154c52254/bin/git.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/test/io_utils.test.js" />
+    <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/node_modules/mocha" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Naif Mehanna\Documents\PFE\smarbotjs\test" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -226,13 +279,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Node.js.preprocessing.js">
     <configuration name="preprocessing.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="preprocessing.js" working-dir="$PROJECT_DIR$/preprocessing">
       <method v="2" />
     </configuration>
+    <configuration name="utils\io_utils.test.js" type="mocha-javascript-test-runner" factoryName="Mocha" temporary="true" nameIsGenerated="true">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <ui>bdd</ui>
+      <extra-mocha-options />
+      <test-kind>TEST_FILE</test-kind>
+      <test-file>$PROJECT_DIR$/test/io_utils.test.js</test-file>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.preprocessing.js" />
+      <item itemvalue="Mocha.utils\io_utils.test.js" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.preprocessing.js" />
+        <item itemvalue="Mocha.utils\io_utils.test.js" />
       </list>
     </recent_temporary>
   </component>
@@ -250,29 +319,62 @@
       <workItem from="1542537795420" duration="10870000" />
       <workItem from="1542632638642" duration="1192000" />
       <workItem from="1542733455145" duration="2863000" />
+      <workItem from="1542793215676" duration="4895000" />
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 19m 51s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 20m 22s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 23m 26s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 30m 00s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 30m 55s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 31m 11s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 31m 17s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 31m 19s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 35m 38s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+    <history-entry file="utils_io_utils_test_js - 2018.11.21 at 11h 36m 24s.xml">
+      <configuration name="utils\io_utils.test.js" configurationId="mocha-javascript-test-runner" />
+    </history-entry>
+  </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18311000" />
+    <option name="totallyTimeSpent" value="23206000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="654" y="2" width="784" height="832" extended-state="0" />
+    <frame x="762" y="0" width="781" height="830" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19946453" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17473118" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32904148" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32855093" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39885223" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3319027" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32998565" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -303,11 +405,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-204" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -329,17 +426,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
+        <state relative-caret-position="317">
+          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="19" column="82" selection-start-line="19" selection-start-column="82" selection-end-line="19" selection-end-column="82" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+        <state relative-caret-position="85">
+          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/data/naifmehanna.xyz.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-546" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/logging.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
