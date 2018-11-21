@@ -17,7 +17,7 @@
     "reinforcement"
   ],
   "author": "Naif Mehanna",
-  "license": "MIT",
+  "license": "Common License",
   "bugs": {
     "url": "https://github.com/naifmeh/smartbotjs/issues"
   },
@@ -27,7 +27,6 @@
     "mocha": "^5.2.0",
     "puppeteer": "^1.10.0",
     "sitemap-generator": "^8.3.2",
-    "tape": "^4.9.1",
     "winston": "^3.1.0",
     "xml2js": "^0.4.19"
   },
