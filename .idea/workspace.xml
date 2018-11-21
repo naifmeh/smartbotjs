@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/test/io_utils.test.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils/logging.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/algorithm/utils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/algorithm/environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/environment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/preprocessing/preprocessing.js" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/io_utils.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/io_utils.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/io_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/io_utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/logging.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/logging.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,46 +25,49 @@
     <session id="777841980">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.0" value="1" />
+          <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.23" value="2" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="2" />
-          <entry key="js" value="8" />
+          <entry key="js" value="12" />
           <entry key="json" value="3" />
+          <entry key="log" value="9" />
           <entry key="md" value="1" />
-          <entry key="xml" value="1" />
+          <entry key="xml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="3" />
-          <entry key="JavaScript" value="8" />
-          <entry key="PLAIN_TEXT" value="3" />
-          <entry key="XML" value="1" />
+          <entry key="JavaScript" value="12" />
+          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="XML" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="15" />
-          <entry key="js" value="4655" />
+          <entry key="js" value="8940" />
           <entry key="json" value="35" />
           <entry key="md" value="81" />
           <entry key="mjs" value="36" />
+          <entry key="txt" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ECMAScript 6" value="36" />
           <entry key="JSON" value="35" />
-          <entry key="JavaScript" value="4655" />
-          <entry key="PLAIN_TEXT" value="96" />
+          <entry key="JavaScript" value="8940" />
+          <entry key="PLAIN_TEXT" value="121" />
         </counts>
       </usages-collector>
     </session>
@@ -72,17 +77,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="42">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
+        <entry file="file://$PROJECT_DIR$/algorithm/utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1479">
-              <caret line="87" selection-start-line="87" selection-end-line="87" />
+            <state relative-caret-position="51">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -99,17 +104,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="17">
+              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="70" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/logging.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="255">
+              <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -117,26 +122,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="219">
-              <caret line="19" column="82" selection-start-line="19" selection-start-column="82" selection-end-line="19" selection-end-column="82" />
+            <state relative-caret-position="289">
+              <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+            <state relative-caret-position="705">
+              <caret line="96" column="28" selection-start-line="96" selection-start-column="28" selection-end-line="96" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -161,16 +157,18 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.js" />
-        <option value="$PROJECT_DIR$/algorithm/environment.js" />
         <option value="$PROJECT_DIR$/crawler/crawler.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.mjs" />
         <option value="$PROJECT_DIR$/preprocessing/sitemap.js" />
         <option value="$PROJECT_DIR$/utils/io_utils.test.js" />
         <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/utils/io_utils.js" />
-        <option value="$PROJECT_DIR$/test/io_utils.test.js" />
         <option value="$PROJECT_DIR$/preprocessing/preprocessing.js" />
+        <option value="$PROJECT_DIR$/logs/preprocessing.log" />
+        <option value="$PROJECT_DIR$/algorithm/utils.js" />
+        <option value="$PROJECT_DIR$/test/io_utils.test.js" />
+        <option value="$PROJECT_DIR$/algorithm/environment.js" />
         <option value="$PROJECT_DIR$/utils/logging.js" />
+        <option value="$PROJECT_DIR$/utils/io_utils.js" />
       </list>
     </option>
   </component>
@@ -195,9 +193,9 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="952" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+    <option name="x" value="3193" />
+    <option name="width" value="1294" />
+    <option name="height" value="1407" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -223,6 +221,11 @@
               <item name="smarbotjs" type="b2602c69:ProjectViewProjectNode" />
               <item name="smarbotjs" type="462c0819:PsiDirectoryNode" />
               <item name="crawler" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="smarbotjs" type="b2602c69:ProjectViewProjectNode" />
+              <item name="smarbotjs" type="462c0819:PsiDirectoryNode" />
+              <item name="logs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="smarbotjs" type="b2602c69:ProjectViewProjectNode" />
@@ -279,7 +282,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Node.js.preprocessing.js">
+  <component name="RunManager" selected="Node.js.io_utils.js">
+    <configuration name="environment.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="environment.js" working-dir="$PROJECT_DIR$/algorithm">
+      <method v="2" />
+    </configuration>
+    <configuration name="io_utils.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="io_utils.js" working-dir="$PROJECT_DIR$/utils">
+      <method v="2" />
+    </configuration>
     <configuration name="preprocessing.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="preprocessing.js" working-dir="$PROJECT_DIR$/preprocessing">
       <method v="2" />
     </configuration>
@@ -297,10 +306,14 @@
     <list>
       <item itemvalue="Node.js.preprocessing.js" />
       <item itemvalue="Mocha.utils\io_utils.test.js" />
+      <item itemvalue="Node.js.environment.js" />
+      <item itemvalue="Node.js.io_utils.js" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Node.js.io_utils.js" />
         <item itemvalue="Node.js.preprocessing.js" />
+        <item itemvalue="Node.js.environment.js" />
         <item itemvalue="Mocha.utils\io_utils.test.js" />
       </list>
     </recent_temporary>
@@ -319,8 +332,17 @@
       <workItem from="1542537795420" duration="10870000" />
       <workItem from="1542632638642" duration="1192000" />
       <workItem from="1542733455145" duration="2863000" />
-      <workItem from="1542793215676" duration="4895000" />
+      <workItem from="1542793215676" duration="4942000" />
+      <workItem from="1542805249426" duration="10653000" />
     </task>
+    <task id="LOCAL-00001" summary="Added tests and logging">
+      <created>1542798177978</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1542798177978</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -356,25 +378,25 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="23206000" />
+    <option name="totallyTimeSpent" value="33906000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="762" y="0" width="781" height="830" extended-state="0" />
+    <frame x="3193" y="0" width="1294" height="1407" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17473118" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.10350318" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32855093" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3283582" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39885223" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32998565" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3299293" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -386,6 +408,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added tests and logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added tests and logging" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/README.md">
@@ -405,17 +431,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1479">
           <caret line="87" selection-start-line="87" selection-end-line="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/app.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/preprocessing.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/app_debug.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/combined.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/logging.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/simplecrawler/lib/crawler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="1263" column="24" selection-start-line="1263" selection-start-column="24" selection-end-line="1263" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/sitemap-generator/src/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="97" lean-forward="true" selection-start-line="97" selection-end-line="97" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/data/naifmehanna.xyz.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="663">
+          <caret line="39" column="9" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algorithm/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
@@ -426,43 +513,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="219">
-          <caret line="19" column="82" selection-start-line="19" selection-start-column="82" selection-end-line="19" selection-end-column="82" />
+        <state relative-caret-position="42">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing/data/naifmehanna.xyz.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-546" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/logging.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="705">
+          <caret line="96" column="28" selection-start-line="96" selection-start-column="28" selection-end-line="96" selection-end-column="28" />
         </state>
       </provider>
     </entry>

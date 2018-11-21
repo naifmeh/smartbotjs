@@ -15,6 +15,15 @@ describe('extract hostname should remove all the surrounding of an url',
             });
         });
 
+        context('url with path parameters', function() {
+            it('should return only the hostname', function() {
+                let expectedHost = 'naifmehanna.xyz';
+                let resultat = io_utils.extract_hostname('https://naifmehanna.xyz/tag/convolutional-paper');
+
+                expect(resultat).to.equal(expectedHost);
+            })
+        })
+
         context('with non string argument', function() {
             it('should throw error', function() {
                 expect(function() { //Requirement to wrap it in a function by chai
@@ -23,4 +32,5 @@ describe('extract hostname should remove all the surrounding of an url',
                     to.throw(TypeError, 'Argument should be a string');
             });
         });
+
     });

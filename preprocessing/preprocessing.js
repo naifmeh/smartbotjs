@@ -1,6 +1,5 @@
 const Sitemap = require('sitemap-generator');
-const winston = require('winston');
-winston.level = 'debug';
+const logger = require('../utils/logging.js').Logger('preprocessing');
 
 const MAX_ENTRIES_SITEMAP = 20
 
@@ -14,10 +13,10 @@ function PreprocessingController() {
             maxEntriesPerFile: MAX_ENTRIES_SITEMAP,
         });
         generator.on('add', (url)=> {
-            winston.log('debug', `Added ${url}`);
+            logger.log('debug', `Added ${url}`);
         });
         generator.on('done', () => {
-            winston.log('info', `Sitemap for ${website} done.`);
+            logger.log('info', `Sitemap for ${website} done.`);
         });
 
         generator.start();
