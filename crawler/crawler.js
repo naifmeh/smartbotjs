@@ -89,4 +89,4 @@ function CrawlerController() {
         return Promise.resolve(response);
     }
 }
-module.exports = CrawlerController()
+module.exports = CrawlerController(); 

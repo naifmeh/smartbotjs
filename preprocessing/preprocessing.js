@@ -1,9 +1,10 @@
-const Sitemap = require('sitemap-generator');
-const logger = require('../utils/logging.js').Logger('preprocessing');
 
-const MAX_ENTRIES_SITEMAP = 20
+
 
 function PreprocessingController() {
+    const MAX_ENTRIES_SITEMAP = 20
+    const Sitemap = require('sitemap-generator');
+    const logger = require('../utils/logging.js').Logger('preprocessing');
 
     function generate_sitemap(website) {
         const extractor = require('../utils/io_utils.js').io_utils;

@@ -71,33 +71,38 @@ function IO_Utils() {
      * @param folder_path The folder path
      * @returns {Array} Array of filenames in the folder.
      */
-    function list_folder(folder_path) {
+    async function list_folder(folder_path) {
         let fs = require('fs'),
-            files_folder = [];
+            path = require('path');
 
-        fs.readdir(folder_path, function(err, files) {
-            if(err) {
-                logger.log('error', 'Could not list directory');
-                throw new Error('Could not list directory.');
-            }
 
-            files.forEach(function (file, index) {
-                let chemin = path.join(folder_path, file)
+        return new Promise((resolve, reject) => {
+            let files_folder = [];
+            fs.readdir(folder_path, function (err, files) {
+                if (err) {
+                    logger.log('error', 'Could not list directory');
+                    reject(err);
+                }
 
-                fs.stat(chemin, function(error, stat) {
-                    if(error) {
-                        logger.log('error', 'Error stating file.');
-                        throw new Error('Error stating file');
-                    }
-                    if(stat.isFile())
-                        files_folder.push(chemin);
+                files.forEach(function (file, index) {
+                    let chemin = path.join(folder_path, file)
 
+                    fs.stat(chemin, function (error, stat) {
+                        if (error) {
+                            logger.log('error', 'Error stating file.');
+                            reject(err);
+                        }
+                        if (stat.isFile()) {
+                            files_folder.push(chemin);
+                        }
+                        if(files.length == index+1)
+                            resolve(files_folder)
+                    });
                 });
+
+
             });
-
         });
-
-        return files_folder;
     }
 
     return {
@@ -109,3 +114,4 @@ function IO_Utils() {
 }
 
 module.exports.io_utils = new IO_Utils();
+

@@ -42,29 +42,25 @@ function EnvironmentController() {
 
     }
 
-    function init_website_object() {
-        let fs = require('fs');
-        let path = require('path');
-
-        fs.readdir(WEBSITES_DATA_FOLDER, function(err, files) {
-            if(err) {
-                logger.log('error', 'Directory could not be listed');
-                throw new Error('Directory could not be listed');
+    async function init_website_object() {
+        let io_utils = require('../utils/io_utils.js');
+        return new Promise((resolve, reject) => {
+            const folder = async() => {
+                let values = await io_utils.list_folder('../preprocessing/data/websites');
+                console.log(values());
+                resolve(values())
             }
+        });
 
-            files.forEach(function(file, index) {
-                let filePath = path.join(WEBSITES_DATA_FOLDER, file);
-            })
-        })
 
 
     }
 
     return {
         set_states: set_states,
+        init_website_object: init_website_object,
     }
 
 }
 
 module.exports = new EnvironmentController();
-new EnvironmentController().set_states();

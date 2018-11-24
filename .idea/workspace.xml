@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="">
+    <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="supported async">
+      <change afterPath="$PROJECT_DIR$/utils/persistence.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/algorithm/environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/environment.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crawler/crawler.js" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/crawler.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app_debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app_debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/preprocessing.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/preprocessing.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/data/naifmehanna.xyz.xml" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/data/websites/naifmehanna.xyz.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/preprocessing/preprocessing.js" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessing.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/utils/io_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/io_utils.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -20,22 +27,25 @@
     <session id="777841980">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.20" value="1" />
-          <entry key="project.open.time.21" value="1" />
-          <entry key="project.open.time.23" value="2" />
+          <entry key="project.open.time.21" value="2" />
+          <entry key="project.open.time.22" value="1" />
+          <entry key="project.open.time.23" value="4" />
+          <entry key="project.open.time.24" value="1" />
+          <entry key="project.open.time.25" value="2" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gitignore" value="2" />
-          <entry key="js" value="12" />
+          <entry key="js" value="14" />
           <entry key="json" value="5" />
-          <entry key="log" value="9" />
+          <entry key="log" value="10" />
           <entry key="md" value="1" />
           <entry key="xml" value="3" />
         </counts>
@@ -43,38 +53,38 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="5" />
-          <entry key="JavaScript" value="12" />
-          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="JavaScript" value="14" />
+          <entry key="PLAIN_TEXT" value="13" />
           <entry key="XML" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="15" />
-          <entry key="js" value="10139" />
+          <entry key="js" value="14136" />
           <entry key="json" value="49" />
           <entry key="md" value="81" />
           <entry key="mjs" value="36" />
-          <entry key="txt" value="25" />
+          <entry key="txt" value="41" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ECMAScript 6" value="36" />
           <entry key="JSON" value="49" />
-          <entry key="JavaScript" value="10139" />
-          <entry key="PLAIN_TEXT" value="121" />
+          <entry key="JavaScript" value="14136" />
+          <entry key="PLAIN_TEXT" value="137" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="56" column="14" lean-forward="true" selection-start-line="56" selection-start-column="14" selection-end-line="56" selection-end-column="14" />
+            <state relative-caret-position="276">
+              <caret line="38" column="43" lean-forward="true" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -98,10 +108,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
+        <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="70" />
+            <state relative-caret-position="389">
+              <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/utils/persistence.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="310">
+              <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
             </state>
           </provider>
         </entry>
@@ -127,8 +146,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1410">
-              <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="23" />
+            <state relative-caret-position="1972">
+              <caret line="116" selection-start-line="116" selection-end-line="116" />
             </state>
           </provider>
         </entry>
@@ -142,6 +161,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <dirStrings>
+      <dir>D:\Naif Mehanna\Documents\PFE\smarbotjs\preprocessing\data</dir>
+    </dirStrings>
+  </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -153,18 +177,19 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.js" />
-        <option value="$PROJECT_DIR$/crawler/crawler.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.mjs" />
         <option value="$PROJECT_DIR$/preprocessing/sitemap.js" />
         <option value="$PROJECT_DIR$/utils/io_utils.test.js" />
-        <option value="$PROJECT_DIR$/preprocessing/preprocessing.js" />
         <option value="$PROJECT_DIR$/logs/preprocessing.log" />
         <option value="$PROJECT_DIR$/algorithm/utils.js" />
         <option value="$PROJECT_DIR$/test/io_utils.test.js" />
-        <option value="$PROJECT_DIR$/algorithm/environment.js" />
         <option value="$PROJECT_DIR$/utils/logging.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/utils/io_utils.js" />
+        <option value="$PROJECT_DIR$/algorithm/environment.js" />
+        <option value="$PROJECT_DIR$/crawler/crawler.js" />
+        <option value="$PROJECT_DIR$/preprocessing/preprocessing.js" />
+        <option value="$PROJECT_DIR$/utils/persistence.js" />
       </list>
     </option>
   </component>
@@ -189,9 +214,10 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="952" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="980" />
+    <option name="height" value="1040" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -259,10 +285,11 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="settings.nodejs" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Naif Mehanna\Documents\PFE\smarbotjs\preprocessing\data\website" />
       <recent name="D:\Naif Mehanna\Documents\PFE\smarbotjs\test" />
     </key>
   </component>
@@ -278,11 +305,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Node.js.io_utils.js">
+  <component name="RunManager" selected="Node.js.persistence.js">
     <configuration name="environment.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="environment.js" working-dir="$PROJECT_DIR$/algorithm">
       <method v="2" />
     </configuration>
     <configuration name="io_utils.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="io_utils.js" working-dir="$PROJECT_DIR$/utils">
+      <method v="2" />
+    </configuration>
+    <configuration name="persistence.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="persistence.js" working-dir="$PROJECT_DIR$/utils">
       <method v="2" />
     </configuration>
     <configuration name="preprocessing.js" type="NodeJSConfigurationType" factoryName="Node.js" temporary="true" nameIsGenerated="true" path-to-js-file="preprocessing.js" working-dir="$PROJECT_DIR$/preprocessing">
@@ -304,12 +334,14 @@
       <item itemvalue="Mocha.utils\io_utils.test.js" />
       <item itemvalue="Node.js.environment.js" />
       <item itemvalue="Node.js.io_utils.js" />
+      <item itemvalue="Node.js.persistence.js" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Node.js.io_utils.js" />
+        <item itemvalue="Node.js.persistence.js" />
         <item itemvalue="Node.js.preprocessing.js" />
         <item itemvalue="Node.js.environment.js" />
+        <item itemvalue="Node.js.io_utils.js" />
         <item itemvalue="Mocha.utils\io_utils.test.js" />
       </list>
     </recent_temporary>
@@ -330,7 +362,14 @@
       <workItem from="1542733455145" duration="2863000" />
       <workItem from="1542793215676" duration="4942000" />
       <workItem from="1542805249426" duration="10653000" />
-      <workItem from="1542822175049" duration="3179000" />
+      <workItem from="1542822175049" duration="3217000" />
+      <workItem from="1542876290116" duration="607000" />
+      <workItem from="1542879399481" duration="3144000" />
+      <workItem from="1542909214268" duration="598000" />
+      <workItem from="1542965200122" duration="3887000" />
+      <workItem from="1542994772957" duration="599000" />
+      <workItem from="1543012543307" duration="951000" />
+      <workItem from="1543065683960" duration="5659000" />
     </task>
     <task id="LOCAL-00001" summary="Added tests and logging">
       <created>1542798177978</created>
@@ -339,7 +378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1542798177978</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="supported async">
+      <created>1542839307164</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1542839307164</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -375,25 +421,25 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37085000" />
+    <option name="totallyTimeSpent" value="52568000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08592201" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.38018742" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32765958" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32340425" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39885223" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32907802" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.3319027" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -408,7 +454,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added tests and logging" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added tests and logging" />
+    <MESSAGE value="supported async" />
+    <option name="LAST_COMMIT_MESSAGE" value="supported async" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/README.md">
@@ -425,13 +472,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1479">
-          <caret line="87" selection-start-line="87" selection-end-line="87" />
         </state>
       </provider>
     </entry>
@@ -459,10 +499,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algorithm/utils.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="204">
+          <caret line="24" column="19" lean-forward="true" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/data/websites/naifmehanna.xyz.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="59" selection-start-line="1" selection-start-column="59" selection-end-line="1" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-140">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -470,13 +524,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="70" />
         </state>
       </provider>
     </entry>
@@ -494,31 +541,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="24" column="19" lean-forward="true" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing/data/naifmehanna.xyz.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="59" selection-start-line="1" selection-start-column="59" selection-end-line="1" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1410">
-          <caret line="9" column="18" lean-forward="true" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="23" />
+        <state relative-caret-position="1972">
+          <caret line="116" selection-start-line="116" selection-end-line="116" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/persistence.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algorithm/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="56" column="14" lean-forward="true" selection-start-line="56" selection-start-column="14" selection-end-line="56" selection-end-column="14" />
+        <state relative-caret-position="276">
+          <caret line="38" column="43" lean-forward="true" selection-start-line="38" selection-start-column="43" selection-end-line="38" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/persistence.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
         </state>
       </provider>
     </entry>
