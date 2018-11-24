@@ -7,8 +7,9 @@ function EnvironmentController() {
     const PLUGINS = true;
     const UA_PROXY = true;
     const UA_COUNT = true;
-    const MAX_UA_USE = 10000;
+    const MAX_UA_USE = 1000;
     const MAX_IP_USE = 100;
+    const MAX_DOMAIN_COUNT = 100;
     const IP_COUNT = true;
     const DOMAINE_COUNT = true;
 
@@ -16,7 +17,10 @@ function EnvironmentController() {
 
     const logger = require('../utils/logging.js').Logger('environment');
 
+
     function set_states() {
+        let utils = require('./utils.js').algo_utils;
+
         let boolean_states_attributes = {
             fingerprinting: FINGERPRINTING,
             screen_size: SCREEN_SIZE,
@@ -40,17 +44,27 @@ function EnvironmentController() {
             }
         }
 
+        for(let key in numeric_states_attributes) {
+            if(numeric_states_attributes[`${key}`] === true) {
+                let max = 0;
+                if(`${key}` === 'ua_count')
+                    max = MAX_UA_USE
+                else if(`${key}` === 'ip_count')
+                    max = MAX_IP_USE
+                else if(`${key}` === 'domain_count')
+                    max = MAX_DOMAIN_COUNT
+
+                states.push(utils.generate_step_array(max, Math.ceil(max/10)));
+            }
+        }
+        let cartesian = require('cartesian');
+        return cartesian(states);
+
     }
 
     async function init_website_object() {
         let io_utils = require('../utils/io_utils.js');
-        return new Promise((resolve, reject) => {
-            const folder = async() => {
-                let values = await io_utils.list_folder('../preprocessing/data/websites');
-                console.log(values());
-                resolve(values())
-            }
-        });
+
 
 
 

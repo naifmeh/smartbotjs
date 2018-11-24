@@ -17,12 +17,13 @@
     "reinforcement"
   ],
   "author": "Naif Mehanna",
-  "license": "Common License",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/naifmeh/smartbotjs/issues"
   },
   "homepage": "https://github.com/naifmeh/smartbotjs#readme",
   "dependencies": {
+    "cartesian": "^1.0.1",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "mongodb": "^3.1.10",

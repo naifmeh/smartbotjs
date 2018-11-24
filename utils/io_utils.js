@@ -62,8 +62,44 @@ function IO_Utils() {
                 });
             });
         });
+    }
 
+    /**
+     * Async function to read a file line by line and store each line in a string array
+     * @param file_path the path to the file to read
+     * @returns {Promise<never>} a promise resolving on the array
+     */
+    async function readLines(file_path) {
+        let fs = require('fs');
 
+        let remaining = '';
+        let line_array = [];
+        try {
+            let readStream = fs.createReadStream(file_path);
+            readStream.on('data', function (data) {
+                remaining += data;
+                let index = remaining.indexOf('\r');
+                while (index > -1) {
+                    let line = remaining.substr(0, index);
+                    remaining = remaining.substr(index + 1);
+                    line_array.push(line.split('\n').length == 2 ? line.split('\n')[1] : line);
+                    index = remaining.indexOf('\r');
+                }
+            });
+
+            return new Promise((resolve) => {
+                readStream.on('end', function () {
+                    if (remaining.length > 0) {
+                        line_array.push(remaining.split('\n').length == 2 ? remaining.split('\n')[1] : remaining);
+                        //readStream.close()
+                        resolve(line_array);
+                    }
+                });
+            });
+        } catch(err) {
+            logger.log('error', err.stack);
+            return Promise.reject(err);
+        }
     }
 
     /**
@@ -110,8 +146,9 @@ function IO_Utils() {
         extract_rootDomaine: extract_rootDomaine,
         list_folder: list_folder,
         read_xml_file: read_xml_file,
+        readLines: readLines,
     }
 }
 
-module.exports.io_utils = new IO_Utils();
+module.exports = new IO_Utils();
 
