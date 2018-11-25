@@ -16,6 +16,7 @@ function EnvironmentController() {
     const WEBSITES_DATA_FOLDER = '../preprocessing/data/websites';
 
     const logger = require('../utils/logging.js').Logger('environment');
+    const io_utils = require('../utils/io_utils.js');
 
     let boolean_states_attributes = {
         fingerprinting: FINGERPRINTING,
@@ -42,8 +43,14 @@ function EnvironmentController() {
         domain_count: DOMAINE_COUNT,
         ua_count: UA_COUNT,
         ip_count: IP_COUNT,
-    }
+    };
 
+    let user_agents = io_utils.readLines('./data/useragents.txt');
+
+    /**
+     * Function setting up the list of possibles states using cartesian permutations.
+     * @returns {Array}
+     */
     function set_states() {
         let utils = require('./utils.js').algo_utils;
 
@@ -75,12 +82,11 @@ function EnvironmentController() {
 
     /**
      * Async function getting the data from a mongoDb database, parsing them and generating a list of websites
-     * matching the states attributes.
+     * matching the states attributes.txt.
      * @param MAX_WEBSITE
      * @returns {Promise<Array>}
      */
     async function init_website_object(MAX_WEBSITE) {
-        let io_utils = require('../utils/io_utils.js');
         let persistence = require('../utils/persistence');
         const Url = require('url-parse');
 
@@ -88,7 +94,7 @@ function EnvironmentController() {
         let docs = await persistence.fetchData(MAX_WEBSITE);
 
 
-        let attributes = await io_utils.readLines('./data/attributes');
+        let attributes = await io_utils.readLines('./data/attributes.txt');
 
         let unique_attrs = {}
         for(let v of attributes) {
@@ -142,8 +148,25 @@ function EnvironmentController() {
                 reject(err);
             }
         });
+    }
+
+    /**
+     * 0: Change UA
+     * 1: Change IP
+     * 2: Use proxy
+     * 3: Load pictures
+     * 4: Unload pictures
+     * 5: Run css
+     * 6: Change screen size
+     * 7: Use plugins
+     * @param action
+     * @param bot
+     */
+    function do_action(action, bot) {
 
     }
+
+
 
     return {
         set_states: set_states,
@@ -153,7 +176,3 @@ function EnvironmentController() {
 }
 
 module.exports = new EnvironmentController();
-(async() => {
-    let res = await new EnvironmentController().init_website_object(100)
-    console.log(res);
-})();

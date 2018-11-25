@@ -1,5 +1,61 @@
 
+module.exports.crawler = class Crawler {
+    _proxy;
+    _user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
+    _url;
+    _runCss = false;
+    _plugins;
+    _loadPictures = false;
 
+    set proxy(prox) {
+        this._proxy = prox;
+    }
+
+
+    set user_agent(value) {
+        this._user_agent = value;
+    }
+
+    set url(value) {
+        this._url = value;
+    }
+
+    set runCss(value) {
+        this._runCss = value;
+    }
+
+    set plugins(value) {
+        this._plugins = value;
+    }
+
+    set loadPictures(value) {
+        this._loadPictures = value;
+    }
+
+    get proxy() {
+        return this._proxy;
+    }
+
+    get user_agent() {
+        return this._user_agent;
+    }
+
+    get url() {
+        return this._url;
+    }
+
+    get runCss() {
+        return this._runCss;
+    }
+
+    get plugins() {
+        return this._plugins;
+    }
+
+    get loadPictures() {
+        return this._loadPictures;
+    }
+}
 
 function CrawlerController() {
     let proxy;
@@ -89,4 +145,9 @@ function CrawlerController() {
         return Promise.resolve(response);
     }
 }
-module.exports = CrawlerController(); 
+module.exports.crawler_controller = function() {
+    return {
+        CrawlerController: CrawlerController,
+    }
+};
+

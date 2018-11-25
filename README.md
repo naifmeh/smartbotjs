@@ -1,3 +1,4 @@
 # SMARTBOTJS
 
-Smart crawler using reinforcement learning to avoid detection
+Smart crawler using reinforcement learning to avoid detection.
+

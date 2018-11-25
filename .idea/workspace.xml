@@ -2,16 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/algorithm/data/data_rl_bot.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/algorithm/data/useragents.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/algorithm/sarsa.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithm/data/attributes" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/data/attributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/algorithm/data/attributes" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/data/attributes.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithm/environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/environment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app_debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app_debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/persistence.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/persistence.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/io_utils.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/io_utils.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/io_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/io_utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crawler/crawler.js" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/crawler.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -44,18 +41,19 @@
           <entry key="attributes" value="2" />
           <entry key="csv" value="2" />
           <entry key="gitignore" value="2" />
-          <entry key="js" value="23" />
+          <entry key="js" value="26" />
           <entry key="json" value="6" />
           <entry key="log" value="11" />
-          <entry key="md" value="1" />
+          <entry key="md" value="2" />
+          <entry key="txt" value="1" />
           <entry key="xml" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="6" />
-          <entry key="JavaScript" value="23" />
-          <entry key="PLAIN_TEXT" value="18" />
+          <entry key="JavaScript" value="26" />
+          <entry key="PLAIN_TEXT" value="20" />
           <entry key="XML" value="3" />
         </counts>
       </usages-collector>
@@ -63,53 +61,88 @@
         <counts>
           <entry key="attributes" value="499" />
           <entry key="gitignore" value="15" />
-          <entry key="js" value="19617" />
+          <entry key="js" value="20282" />
           <entry key="json" value="52" />
-          <entry key="md" value="81" />
+          <entry key="md" value="85" />
           <entry key="mjs" value="36" />
-          <entry key="txt" value="80" />
+          <entry key="txt" value="113" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ECMAScript 6" value="36" />
           <entry key="JSON" value="52" />
-          <entry key="JavaScript" value="19617" />
-          <entry key="PLAIN_TEXT" value="675" />
+          <entry key="JavaScript" value="20282" />
+          <entry key="PLAIN_TEXT" value="712" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="139" column="34" selection-start-line="139" selection-start-column="34" selection-end-line="139" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="118" column="41" selection-start-line="118" selection-start-column="41" selection-end-line="118" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/persistence.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1292">
-              <caret line="76" column="15" selection-start-line="76" selection-start-column="15" selection-end-line="76" selection-end-column="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.4247312">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="337">
+                  <caret line="164" column="34" selection-start-line="164" selection-start-column="34" selection-end-line="164" selection-end-column="34" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="259">
+                  <caret line="118" column="41" selection-start-line="118" selection-start-column="41" selection-end-line="118" selection-end-column="41" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/utils/persistence.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1292">
+                  <caret line="76" column="15" selection-start-line="76" selection-start-column="15" selection-end-line="76" selection-end-column="15" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-924">
+                  <caret line="60" column="14" lean-forward="true" selection-start-line="60" selection-start-column="14" selection-end-line="60" selection-end-column="14" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/README.md">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="68">
+                  <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="34">
+                  <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -139,7 +172,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.js" />
         <option value="$PROJECT_DIR$/crawler/crawler_utils.mjs" />
@@ -147,7 +179,6 @@
         <option value="$PROJECT_DIR$/utils/io_utils.test.js" />
         <option value="$PROJECT_DIR$/logs/preprocessing.log" />
         <option value="$PROJECT_DIR$/utils/logging.js" />
-        <option value="$PROJECT_DIR$/crawler/crawler.js" />
         <option value="$PROJECT_DIR$/preprocessing/preprocessing.js" />
         <option value="$PROJECT_DIR$/utils/persistence.js" />
         <option value="$PROJECT_DIR$/algorithm/utils.js" />
@@ -157,7 +188,10 @@
         <option value="$PROJECT_DIR$/algorithm/data/attributes" />
         <option value="$PROJECT_DIR$/algorithm/data/data_rl_bot.csv" />
         <option value="$PROJECT_DIR$/utils/io_utils.js" />
+        <option value="$PROJECT_DIR$/algorithm/data/useragents.txt" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/algorithm/environment.js" />
+        <option value="$PROJECT_DIR$/crawler/crawler.js" />
       </list>
     </option>
   </component>
@@ -182,8 +216,7 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
+    <option name="x" value="952" />
     <option name="width" value="977" />
     <option name="height" value="1038" />
   </component>
@@ -347,7 +380,7 @@
       <workItem from="1542994772957" duration="599000" />
       <workItem from="1543012543307" duration="951000" />
       <workItem from="1543065683960" duration="15464000" />
-      <workItem from="1543146172886" duration="10334000" />
+      <workItem from="1543146172886" duration="13402000" />
     </task>
     <task id="LOCAL-00001" summary="Added tests and logging">
       <created>1542798177978</created>
@@ -377,7 +410,14 @@
       <option name="project" value="LOCAL" />
       <updated>1543078594997</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="websites preprocessing done">
+      <created>1543160814233</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1543160814233</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -413,18 +453,18 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72707000" />
+    <option name="totallyTimeSpent" value="75775000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.7688172" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.36682087" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.21985815" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.18723404" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39885223" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -449,16 +489,10 @@
     <MESSAGE value="supported async" />
     <MESSAGE value="Persistence completed" />
     <MESSAGE value="states done" />
-    <option name="LAST_COMMIT_MESSAGE" value="states done" />
+    <MESSAGE value="websites preprocessing done" />
+    <option name="LAST_COMMIT_MESSAGE" value="websites preprocessing done" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="61" selection-start-line="2" selection-start-column="61" selection-end-line="2" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -542,13 +576,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1513">
-          <caret line="89" column="5" selection-start-line="89" selection-start-column="5" selection-end-line="89" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/utils/persistence.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1292">
@@ -563,7 +590,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algorithm/data/attributes">
+    <entry file="file://$PROJECT_DIR$/algorithm/data/attributes.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="303">
           <caret line="26" column="17" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="17" />
@@ -587,10 +614,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/algorithm/data/useragents.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="564">
+          <caret line="49" column="102" lean-forward="true" selection-start-line="49" selection-start-column="102" selection-end-line="49" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/algorithm/sarsa.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="139" column="34" selection-start-line="139" selection-start-column="34" selection-end-line="139" selection-end-column="34" />
+        <state relative-caret-position="337">
+          <caret line="164" column="34" selection-start-line="164" selection-start-column="34" selection-end-line="164" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/crawler/crawler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="10" selection-start-line="2" selection-start-column="10" selection-end-line="2" selection-end-column="10" />
         </state>
       </provider>
     </entry>
