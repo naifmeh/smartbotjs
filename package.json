@@ -25,10 +25,12 @@
   "dependencies": {
     "cartesian": "^1.0.1",
     "chai": "^4.2.0",
+    "fast-csv": "^2.4.1",
     "mocha": "^5.2.0",
     "mongodb": "^3.1.10",
     "puppeteer": "^1.10.0",
     "sitemap-generator": "^8.3.2",
+    "url-parse": "^1.4.4",
     "winston": "^3.1.0",
     "xml2js": "^0.4.19"
   },

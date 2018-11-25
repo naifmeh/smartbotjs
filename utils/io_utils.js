@@ -91,13 +91,36 @@ function IO_Utils() {
                 readStream.on('end', function () {
                     if (remaining.length > 0) {
                         line_array.push(remaining.split('\n').length == 2 ? remaining.split('\n')[1] : remaining);
-                        //readStream.close()
                         resolve(line_array);
                     }
                 });
             });
         } catch(err) {
             logger.log('error', err.stack);
+            return Promise.reject(err);
+        }
+    }
+
+
+    async function read_csv_file(filepath, delimit=',') {
+        let fs = require('fs');
+        try {
+            let stream = fs.createReadStream(filepath);
+
+            let csv = require('fast-csv');
+
+            return new Promise((resolve) => {
+                let csv_obj = {};
+                csv.fromStream(stream, {
+                    headers: true,
+                    delimiter: delimit,
+                }).on('data', function(data){
+                    csv_obj[data.hostname] = data;
+                }).on('end', function() {
+                    resolve(csv_obj);
+                });
+            });
+        } catch(err) {
             return Promise.reject(err);
         }
     }
@@ -147,6 +170,7 @@ function IO_Utils() {
         list_folder: list_folder,
         read_xml_file: read_xml_file,
         readLines: readLines,
+        read_csv_file: read_csv_file,
     }
 }
 

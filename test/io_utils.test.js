@@ -55,6 +55,15 @@ describe('extract rootdomain should remove all the surrounding and subdomain',
 
                 expect(resultat).to.equal(expectedHost);
             })
+        });
+
+        context('url with double extension', function() {
+            it('should return only the hostname', function() {
+                let expectedHost = 'naifmehanna.co.uk';
+                let resultat = io_utils.extract_rootDomaine('https://webmail.naifmehanna.co.uk/tag/convolutional-paper');
+
+                expect(resultat).to.equal(expectedHost);
+            })
         })
 
         context('with non string argument', function() {

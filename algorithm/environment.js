@@ -17,24 +17,35 @@ function EnvironmentController() {
 
     const logger = require('../utils/logging.js').Logger('environment');
 
+    let boolean_states_attributes = {
+        fingerprinting: FINGERPRINTING,
+        screen_size: SCREEN_SIZE,
+        block_bots: BLOCK_BOTS,
+        mouse_pattern: MOUSE_PATTERN,
+        plugins: PLUGINS,
+        ua_proxy: UA_PROXY,
+    };
+
+    let numeric_states_attributes = {
+        domain_count: DOMAINE_COUNT,
+        ua_count: UA_COUNT,
+        ip_count: IP_COUNT,
+    };
+
+    let states_attributes = {
+        fingerprinting: FINGERPRINTING,
+        screen_size: SCREEN_SIZE,
+        block_bots: BLOCK_BOTS,
+        mouse_pattern: MOUSE_PATTERN,
+        plugins: PLUGINS,
+        ua_proxy: UA_PROXY,
+        domain_count: DOMAINE_COUNT,
+        ua_count: UA_COUNT,
+        ip_count: IP_COUNT,
+    }
 
     function set_states() {
         let utils = require('./utils.js').algo_utils;
-
-        let boolean_states_attributes = {
-            fingerprinting: FINGERPRINTING,
-            screen_size: SCREEN_SIZE,
-            block_bots: BLOCK_BOTS,
-            mouse_pattern: MOUSE_PATTERN,
-            plugins: PLUGINS,
-            ua_proxy: UA_PROXY,
-        };
-
-        let numeric_states_attributes = {
-            domain_count: DOMAINE_COUNT,
-            ua_count: UA_COUNT,
-            ip_count: IP_COUNT,
-        };
 
         let states = [];
 
@@ -62,11 +73,75 @@ function EnvironmentController() {
 
     }
 
-    async function init_website_object() {
+    /**
+     * Async function getting the data from a mongoDb database, parsing them and generating a list of websites
+     * matching the states attributes.
+     * @param MAX_WEBSITE
+     * @returns {Promise<Array>}
+     */
+    async function init_website_object(MAX_WEBSITE) {
         let io_utils = require('../utils/io_utils.js');
+        let persistence = require('../utils/persistence');
+        const Url = require('url-parse');
+
+        persistence.mongoInit();
+        let docs = await persistence.fetchData(MAX_WEBSITE);
 
 
+        let attributes = await io_utils.readLines('./data/attributes');
 
+        let unique_attrs = {}
+        for(let v of attributes) {
+            let split_attr = v.split(' ');
+            if(split_attr[1] !== 'nan') {
+                unique_attrs[`${split_attr[0]}`] = split_attr[1];
+            }
+        }
+
+        let websites = {};
+        let counter = 0;
+
+        let csv = await io_utils.read_csv_file('./data/data_rl_bot.csv');
+
+        return new Promise((resolve, reject) => {
+            try {
+                docs.forEach((doc) => {
+                    counter++;
+                    let hostname = new Url(doc.url).host;
+                    let website_obj = {};
+                    website_obj['hostname'] = io_utils.extract_rootDomaine(hostname);
+                    website_obj['urls'] = [];
+                    website_obj['visits'] = 0;
+                    website_obj['uas'] = [];
+                    website_obj['ips'] = [];
+                    for (let val of doc.scripts) {
+                        if (new Url(val.name).host === hostname) {
+                            website_obj['urls'].push(val.name);
+                            for (let key in val.attributes) {
+                                if (key in unique_attrs)
+                                    website_obj[unique_attrs[key]] = states_attributes[unique_attrs[key]]
+                            }
+
+                        }
+                    }
+                    websites[io_utils.extract_rootDomaine(hostname)] = website_obj;
+                });
+
+                for(let key in csv) {
+                    if(key in websites) {
+                       for(let inside_key in csv[`${key}`]) {
+                           if(inside_key === 'hasFingerprinting')
+                               websites[key]['fingerprinting'] = csv[`${key}`]['hasFingerprinting'];
+                           else if(inside_key === 'blocked')
+                               websites[key]['block_bots'] = csv[`${key}`]['blocked'];
+                       }
+                    }
+                }
+                resolve(websites);
+            }catch(err) {
+                reject(err);
+            }
+        });
 
     }
 
@@ -78,3 +153,7 @@ function EnvironmentController() {
 }
 
 module.exports = new EnvironmentController();
+(async() => {
+    let res = await new EnvironmentController().init_website_object(100)
+    console.log(res);
+})();
