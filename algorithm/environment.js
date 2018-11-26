@@ -13,8 +13,6 @@ function EnvironmentController() {
     const IP_COUNT = true;
     const DOMAINE_COUNT = true;
 
-    const WEBSITES_DATA_FOLDER = '../preprocessing/data/websites';
-
     const logger = require('../utils/logging.js').Logger('environment');
     const io_utils = require('../utils/io_utils.js');
 
@@ -47,6 +45,7 @@ function EnvironmentController() {
 
     let user_agents = io_utils.readLines('./data/useragents.txt');
 
+
     /**
      * Function setting up the list of possibles states using cartesian permutations.
      * @returns {Array}
@@ -66,15 +65,16 @@ function EnvironmentController() {
             if(numeric_states_attributes[`${key}`] === true) {
                 let max = 0;
                 if(`${key}` === 'ua_count')
-                    max = MAX_UA_USE
+                    max = MAX_UA_USE;
                 else if(`${key}` === 'ip_count')
-                    max = MAX_IP_USE
+                    max = MAX_IP_USE;
                 else if(`${key}` === 'domain_count')
-                    max = MAX_DOMAIN_COUNT
+                    max = MAX_DOMAIN_COUNT;
 
                 states.push(utils.generate_step_array(max, Math.ceil(max/10)));
             }
         }
+
         let cartesian = require('cartesian');
         return cartesian(states);
 
@@ -107,7 +107,7 @@ function EnvironmentController() {
         let websites = {};
         let counter = 0;
 
-        let csv = await io_utils.read_csv_file('./data/data_rl_bot.csv');
+        let csv = await io_utils.read_csv_file('./data/data_rl_bot.csv','features');
 
         return new Promise((resolve, reject) => {
             try {
@@ -162,8 +162,35 @@ function EnvironmentController() {
      * @param action
      * @param bot
      */
-    function do_action(action, bot) {
+    async function set_action(action) {
+        const math_utils = require('../utils/math_utils');
+        const Crawler = require('../crawler/crawler').crawler;
+        let my_crawler = new Crawler();
 
+        let proxies = await io_utils.read_csv_file('./data/proxies.csv');
+        console.log(proxies);
+        switch(action) {
+            case 0:
+                my_crawler.setUserAgent(math_utils.randomItem(user_agents));
+                break;
+            case 1:
+                //Todo
+                break;
+            case 2: 
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+            case 7:
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -171,8 +198,10 @@ function EnvironmentController() {
     return {
         set_states: set_states,
         init_website_object: init_website_object,
+        set_action: set_action,
     }
 
 }
 
 module.exports = new EnvironmentController();
+new EnvironmentController().set_action(5);

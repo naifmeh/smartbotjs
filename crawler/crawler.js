@@ -1,19 +1,22 @@
 
 module.exports.crawler = class Crawler {
-    _proxy;
-    _user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
-    _url;
-    _runCss = false;
-    _plugins;
-    _loadPictures = false;
 
-    set proxy(prox) {
-        this._proxy = prox;
+    constructor() {
+        this._proxy;
+        this._useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
+        this._url;
+        this._runCss = false;
+        this._plugins;
+        this._loadPictures = false;
+    }
+
+    set proxy(value) {
+        this._proxy = value;
     }
 
 
-    set user_agent(value) {
-        this._user_agent = value;
+    set userAgent(value) {
+        this._useragent = value;
     }
 
     set url(value) {
@@ -36,8 +39,8 @@ module.exports.crawler = class Crawler {
         return this._proxy;
     }
 
-    get user_agent() {
-        return this._user_agent;
+    get userAgent() {
+        return this._useragent;
     }
 
     get url() {
@@ -55,7 +58,7 @@ module.exports.crawler = class Crawler {
     get loadPictures() {
         return this._loadPictures;
     }
-}
+};
 
 function CrawlerController() {
     let proxy;

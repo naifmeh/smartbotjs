@@ -102,7 +102,7 @@ function IO_Utils() {
     }
 
 
-    async function read_csv_file(filepath, delimit=',') {
+    async function read_csv_file(filepath,mode='normal', delimit=',') {
         let fs = require('fs');
         try {
             let stream = fs.createReadStream(filepath);
@@ -111,13 +111,20 @@ function IO_Utils() {
 
             return new Promise((resolve) => {
                 let csv_obj = {};
+                let csv_arr = [];
                 csv.fromStream(stream, {
                     headers: true,
                     delimiter: delimit,
                 }).on('data', function(data){
-                    csv_obj[data.hostname] = data;
+                    if(mode === 'features')
+                        csv_obj[data.hostname] = data;
+                    else
+                        csv_arr.push(data);
                 }).on('end', function() {
-                    resolve(csv_obj);
+                    if(mode === 'features')
+                        resolve(csv_obj)
+                    else
+                        resolve(csv_arr);
                 });
             });
         } catch(err) {
