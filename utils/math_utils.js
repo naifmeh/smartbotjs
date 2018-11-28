@@ -10,7 +10,7 @@ function Math_utils() {
         for(let i=0; i<prob.length; i++) {
             threshold += prob[i];
             if(threshold > rand) {
-                console.log(data[i])
+                console.log(data[i]);
                 return data[i];
             }
         }
@@ -35,9 +35,19 @@ function Math_utils() {
         }
     }
 
+    function ones(taille) {
+        return Array.apply(null, Array(taille)).map(Number.prototype.valueOf, 1);
+    }
+
+    function argmax(array) {
+        return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
+    }
+
     return {
         weightedRandomItem: weightedRandomItem,
         randomItem: randomItem,
+        ones: ones,
+        argmax: argmax,
         combinations: combinations,
     }
 }

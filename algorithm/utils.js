@@ -39,6 +39,10 @@ function Algorithm_Utils() {
         return list;
     }
 
+    function serialise_program(properties) {
+
+    }
+
     return {
         generate_step_array: generate_step_array,
         reformat_proxies: reformat_proxies,

@@ -197,7 +197,7 @@ function EnvironmentController() {
      * @param bot
      */
     function set_action(action, actual_crawler) {
-        const Crawler = require('../crawler/crawler').crawler;
+        //const Crawler = require('../crawler/crawler').crawler;
         let my_crawler = actual_crawler;
 
         let amt_useless_changes = 0; //punish the bot if the amount of useless change is high
