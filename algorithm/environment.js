@@ -11,6 +11,7 @@ function EnvironmentController() {
     const MAX_IP_USE = 100;
     const MAX_DOMAIN_COUNT = 100;
     const IP_COUNT = true;
+    const WEBDRIVER = true;
     const DOMAINE_COUNT = true;
 
     const logger = require('../utils/logging.js').Logger('environment');
@@ -22,6 +23,7 @@ function EnvironmentController() {
         block_bots: BLOCK_BOTS,
         mouse_pattern: MOUSE_PATTERN,
         plugins: PLUGINS,
+        webdriver: WEBDRIVER,
         ua_proxy: UA_PROXY,
     };
 
@@ -38,19 +40,23 @@ function EnvironmentController() {
         mouse_pattern: MOUSE_PATTERN,
         plugins: PLUGINS,
         ua_proxy: UA_PROXY,
+        webdriver: WEBDRIVER,
         domain_count: DOMAINE_COUNT,
         ua_count: UA_COUNT,
         ip_count: IP_COUNT,
     };
 
-    let user_agents = io_utils.readLines('./data/useragents.txt');
+    let user_agents;
+    let useragents_list;
+    let proxies;
+    let proxies_list;
 
 
     /**
      * Function setting up the list of possibles states using cartesian permutations.
      * @returns {Array}
      */
-    function set_states() {
+    function init_states() {
         let utils = require('./utils.js').algo_utils;
 
         let states = [];
@@ -123,11 +129,10 @@ function EnvironmentController() {
                     for (let val of doc.scripts) {
                         if (new Url(val.name).host === hostname) {
                             website_obj['urls'].push(val.name);
-                            for (let key in val.attributes) {
-                                if (key in unique_attrs)
-                                    website_obj[unique_attrs[key]] = states_attributes[unique_attrs[key]]
-                            }
-
+                        }
+                        for (let key in val.attributes) {
+                            if (key in unique_attrs)
+                                website_obj[unique_attrs[key]] = states_attributes[unique_attrs[key]]
                         }
                     }
                     websites[io_utils.extract_rootDomaine(hostname)] = website_obj;
@@ -150,6 +155,32 @@ function EnvironmentController() {
         });
     }
 
+    async function init_miscellaneaous() {
+        const utils = require('./utils').algo_utils;
+        try {
+            user_agents = io_utils.readLines('./data/useragents.txt');
+            useragents_list = utils.reformat_useragents(user_agents);
+            proxies = await io_utils.read_csv_file('./data/proxies.csv');
+            proxies_list = utils.reformat_proxies(proxies);
+
+            return Promise.resolve();
+        }catch(err) {
+            return Promise.reject(err);
+        }
+    }
+
+    function init_actions(NUM_ACTIONS) {
+        const math_utils = require('../utils/math_utils.js');
+        let elementary_actions = Array.from(Array(NUM_ACTIONS).keys());
+        let output = [];
+
+        for(let i=1; i <= NUM_ACTIONS; i++) {
+            math_utils.combinations(elementary_actions, i, output);
+        }
+
+        return output;
+    }
+
     /**
      * 0: Change UA
      * 1: Change IP
@@ -157,51 +188,120 @@ function EnvironmentController() {
      * 3: Load pictures
      * 4: Unload pictures
      * 5: Run css
-     * 6: Change screen size
-     * 7: Use plugins
+     * 6: Unrun css
+     * 7: Change screen size
+     * 8: Use plugins
+     * 9: Fake webdriver
+     * 10: Unfake webdriver
      * @param action
      * @param bot
      */
-    async function set_action(action) {
-        const math_utils = require('../utils/math_utils');
+    function set_action(action, actual_crawler) {
         const Crawler = require('../crawler/crawler').crawler;
-        let my_crawler = new Crawler();
+        let my_crawler = actual_crawler;
 
-        let proxies = await io_utils.read_csv_file('./data/proxies.csv');
-        console.log(proxies);
-        switch(action) {
-            case 0:
-                my_crawler.setUserAgent(math_utils.randomItem(user_agents));
-                break;
-            case 1:
-                //Todo
-                break;
-            case 2: 
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-            case 7:
-                break;
-            default:
-                break;
+        let amt_useless_changes = 0; //punish the bot if the amount of useless change is high
+
+        for(let i=0; i<action.length; i++) {
+            switch (action[i]) {
+                case 0:
+                    let old_useragent = useragents_list.find(actual_crawler.getUserAgent());
+                    if (old_useragent !== -1) {
+                        if (old_useragent.hasNext()) {
+                            old_useragent.next.data['usage'] += 1;
+                            my_crawler.setUserAgent(old_useragent.next.data);
+                        } else {
+                            useragents_list.getHeadNode().data['usage'] += 1;
+                            my_crawler.setUserAgent(useragents_list.getHeadNode().data);
+                        }
+                    }
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    let old_proxy = proxies_list.find(actual_crawler.getProxy());
+                    if (old_proxy !== -1) {
+                        let new_proxy;
+                        if (old_proxy.hasNext()) {
+                            old_proxy.next.data['usage'] += 1;
+                            new_proxy = old_proxy.next.data;
+                            my_crawler.setProxy(new_proxy);
+                        }
+                        else {
+                            proxies_list.getHeadNode().data['usage'] += 1;
+                            new_proxy = proxies_list.getHeadNode().data;
+                            my_crawler.setProxy(proxies_list.getHeadNode().data['proxy']);
+                        }
+                    }
+                    break;
+                case 3:
+                    if (actual_crawler.getLoadPictures() === true)
+                        amt_useless_changes += 1;
+                    my_crawler.setLoadPictures(true);
+                    break;
+                case 4:
+                    if (actual_crawler.getLoadPictures() === false)
+                        amt_useless_changes += 1
+                    my_crawler.setLoadPictures(false);
+                    break;
+                case 5:
+                    if (actual_crawler.getRunCss() === true)
+                        amt_useless_changes += 1;
+                    my_crawler.setRunCss(true);
+                    break;
+                case 6:
+                    if (actual_crawler.getRunCss === false)
+                        amt_useless_changes += 1;
+                    my_crawler.setRunCss(false);
+                    break;
+                case 7:
+                    if (actual_crawler.getPlugins() === true)
+                        amt_useless_changes += 1;
+                    my_crawler.setPlugins(true);
+                    break;
+                case 8:
+                    if (actual_crawler.getPlugins() === false)
+                        amt_useless_changes += 1;
+                    my_crawler.setPlugins(false);
+                    break;
+                case 9:
+                    if (actual_crawler.getWebdriver() === true)
+                        amt_useless_changes += 1;
+                    my_crawler.setWebdriver(true);
+                    break;
+                case 10:
+                    if (actual_crawler.getWebdriver() === false)
+                        amt_useless_changes += 1;
+                    my_crawler.setWebdriver(false);
+                default:
+                    break;
+            }
         }
+
+        return my_crawler, amt_useless_changes;
     }
 
 
 
     return {
-        set_states: set_states,
+        init_states: init_states,
         init_website_object: init_website_object,
         set_action: set_action,
+        init_actions: init_actions,
+        init_miscellaneaous: init_miscellaneaous,
     }
 
 }
 
 module.exports = new EnvironmentController();
-new EnvironmentController().set_action(5);
+(async() => {
+    let crawl = new require('../crawler/crawler').crawler;
+    let my_crawler = new crawl();
+    my_crawler.setProxy({proxy:'http://113.254.114.24:8380', usage:0});
+
+    let env_controller = new EnvironmentController();
+    let result = env_controller.init_actions(11);
+    await env_controller.init_miscellaneaous();
+    await env_controller.init_website_object(1000);
+    let crawler = env_controller.set_action(2, my_crawler);
+})();

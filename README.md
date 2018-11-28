@@ -3,6 +3,10 @@
 Smart crawler using reinforcement learning to avoid detection.
 
 ![Program Flow](./documents/EpisodeFlow.png)
+**Actions** :
+
+Actions classiques.
+L'action permettant de faker la réactivité à un Iframe sera peut être ajoutée.
 
 **Sérialisation**
 

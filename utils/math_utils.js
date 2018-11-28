@@ -24,11 +24,24 @@ function Math_utils() {
         return weightedRandomItem(data, probs);
     }
 
+    function combinations(array, size, output, start=0, initialStuff=[]) {
+        if (initialStuff.length >= size) {
+            output.push(initialStuff);
+        } else {
+            let i;
+            for (i = start; i < array.length; ++i) {
+                combinations(array, size, output, i+1, initialStuff.concat(array[i]));
+            }
+        }
+    }
+
     return {
         weightedRandomItem: weightedRandomItem,
         randomItem: randomItem,
+        combinations: combinations,
     }
 }
 
 module.exports = new Math_utils();
+
 

@@ -122,7 +122,7 @@ function IO_Utils() {
                         csv_arr.push(data);
                 }).on('end', function() {
                     if(mode === 'features')
-                        resolve(csv_obj)
+                        resolve(csv_obj);
                     else
                         resolve(csv_arr);
                 });

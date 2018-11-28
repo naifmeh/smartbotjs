@@ -2,72 +2,82 @@
 module.exports.crawler = class Crawler {
 
     constructor() {
-        this._proxy;
+        this._proxy = '';
         this._useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
-        this._url;
+        this._url = '';
         this._runCss = false;
-        this._plugins;
+        this._plugins = false;
         this._loadPictures = false;
+        this._webdriver = false;
     }
 
-    set proxy(value) {
+    setProxy(value) {
         this._proxy = value;
     }
 
+    setWebdriver(value) {
+        this._webdriver = false;
+    }
 
-    set userAgent(value) {
+    setUserAgent(value) {
         this._useragent = value;
     }
 
-    set url(value) {
+    setUrl(value) {
         this._url = value;
     }
 
-    set runCss(value) {
+    setRunCss(value) {
         this._runCss = value;
     }
 
-    set plugins(value) {
+    setPlugins(value) {
         this._plugins = value;
     }
 
-    set loadPictures(value) {
+    setLoadPictures(value) {
         this._loadPictures = value;
     }
 
-    get proxy() {
+    getProxy() {
         return this._proxy;
     }
 
-    get userAgent() {
+    getWebdriver() {
+        return this._webdriver;
+    }
+
+
+    getUserAgent() {
         return this._useragent;
     }
 
-    get url() {
+    getUrl() {
         return this._url;
     }
 
-    get runCss() {
+    getRunCss() {
         return this._runCss;
     }
 
-    get plugins() {
+    getPlugins() {
         return this._plugins;
     }
 
-    get loadPictures() {
+    getLoadPictures() {
         return this._loadPictures;
     }
 };
 
-function CrawlerController() {
-    let proxy;
-    let user_agent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36";
-    let url;
+function CrawlerController(crawler) {
+    let proxy = crawler.getProxy();
+    let user_agent = crawler.getUserAgent();
+    let url = crawler.getUrl();
     let viewportType = "desktop";
-    let loadPictures = true;
-    let runCss = true;
-    let plugins = '';
+    let loadPictures = crawler.getLoadPictures();
+    let runCss = crawler.getRunCss();
+    let plugins = crawler.getPlugins();
+    let webdriver = crawler.getWebdriver();
 
     function set_proxy(new_proxy) {
         proxy = new_proxy;
@@ -100,22 +110,41 @@ function CrawlerController() {
     async function launch_crawler(action='screenshot', debug=false) {
         const puppeteer = require('puppeteer');
 
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
         let properties = {};
         if(debug) {
             properties.headless = true;
         }
         if(user_agent !== undefined) {
             properties.args.push(`--user-agent=${user_agent}`);
+            await page.setUserAgent(user_agent);
         }
-        if(proxy !== undefined) {
+        if(proxy !== '') {
             properties.args.push(`--proxy-server=${proxy}`);
         }
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        //page.setUserAgent(user_agent);
 
-        if(url === undefined) {
+
+
+        if(url === '') {
             throw new Error("URL not defined");
+        }
+
+        if(plugins) {
+            await page.evaluateOnNewDocument(() => {
+                Object.defineProperty(navigator, 'plugins', {
+                    get: () => [1, 2, 3, 4, 5]
+                })
+            });
+        }
+
+        if(webdriver) {
+            await page.evaluateOnNewDocument(() => {
+                const newProto = Object.getPrototypeOf(navigator);
+                delete newProto.webdriver;
+                Object.setPrototypeOf(navigator, newProto);
+            })
         }
         if(!loadPictures || !runCss) {
             await page.setRequestInterception(true);

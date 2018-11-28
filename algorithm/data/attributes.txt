@@ -10,7 +10,7 @@ platform nan
 availWidth screen_size
 availHeight screen_size
 availTop screen_size
-webdriver nan
+webdriver webdriver
 _phantom nan
 callPhantom nan
 doNotTrack nan
@@ -20,7 +20,7 @@ vendor nan
 createOffer nan
 pixelDepth nan
 _Selenium_IDE_Recorder nan
-__webdriver_script_fn nan
+__webdriver_script_fn webdriver
 _selenium nan
 callSelenium nan
 domAutomationController nan
