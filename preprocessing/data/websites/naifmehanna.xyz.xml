@@ -13,6 +13,15 @@
     <loc>http://naifmehanna.xyz/simple-crawler-using-puppeteer-and-chrome-headless/</loc>
   </url>
   <url>
+    <loc>http://naifmehanna.xyz/tag/machinelearning/</loc>
+  </url>
+  <url>
+    <loc>http://naifmehanna.xyz/tag/reinforcementlearning/</loc>
+  </url>
+  <url>
+    <loc>http://naifmehanna.xyz/tag/python/</loc>
+  </url>
+  <url>
     <loc>http://naifmehanna.xyz/implementing-sarsa-in-python/</loc>
   </url>
   <url>
@@ -20,9 +29,6 @@
   </url>
   <url>
     <loc>http://naifmehanna.xyz/browser-fingerprints-in-a-nutshell/</loc>
-  </url>
-  <url>
-    <loc>http://naifmehanna.xyz/tag/python/</loc>
   </url>
   <url>
     <loc>http://naifmehanna.xyz/tag/deep-learning/</loc>
@@ -40,10 +46,10 @@
     <loc>http://naifmehanna.xyz/tag/ghost-tag/</loc>
   </url>
   <url>
-    <loc>http://naifmehanna.xyz/deploy-your-blog-using-ghost-and-docker-on-aws/</loc>
+    <loc>http://naifmehanna.xyz/page/2/</loc>
   </url>
   <url>
-    <loc>http://naifmehanna.xyz/page/2/</loc>
+    <loc>http://naifmehanna.xyz/deploy-your-blog-using-ghost-and-docker-on-aws/</loc>
   </url>
   <url>
     <loc>http://naifmehanna.xyz/a-bit-of-a-boring-introduction/</loc>

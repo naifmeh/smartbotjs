@@ -155,6 +155,36 @@ function EnvironmentController() {
         });
     }
 
+    async function add_websites_url(websites) {
+        const preprocessing = require('../preprocessing/preprocessing');
+        let keys = Object.keys(websites);
+        let compteur = 0;
+        let done = false;
+        return new Promise((resolve, reject) => {
+            try {
+                for(let i=0; i< keys.length; i++) {
+                    let result = preprocessing.generate_sitemap('http://' + keys[i], function (urls) {
+                        for (let j = 0; j < urls.length; j++) {
+                            websites[`${keys[i]}`]['urls'].push(urls[j]);
+                        }
+                        compteur++;
+                        console.log(compteur)
+                        if(compteur === keys.length) {
+                            resolve();
+                        }
+
+                    });
+                }
+
+            } catch (err) {
+                reject(err);
+            }
+        });
+
+
+
+    }
+
     async function init_miscellaneaous() {
         const utils = require('./utils').algo_utils;
         try {
@@ -286,6 +316,7 @@ function EnvironmentController() {
     return {
         init_states: init_states,
         init_website_object: init_website_object,
+        add_websites_url: add_websites_url,
         set_action: set_action,
         init_actions: init_actions,
         init_miscellaneaous: init_miscellaneaous,
@@ -294,14 +325,22 @@ function EnvironmentController() {
 }
 
 module.exports = new EnvironmentController();
+let websites;
+let env_controller = new EnvironmentController();
 (async() => {
-    let crawl = new require('../crawler/crawler').crawler;
-    let my_crawler = new crawl();
-    my_crawler.setProxy({proxy:'http://113.254.114.24:8380', usage:0});
+    try {
+        let crawl = new require('../crawler/crawler').crawler;
+        let my_crawler = new crawl();
+        my_crawler.setProxy({proxy: 'http://113.254.114.24:8380', usage: 0});
 
-    let env_controller = new EnvironmentController();
-    let result = env_controller.init_actions(11);
-    await env_controller.init_miscellaneaous();
-    await env_controller.init_website_object(1000);
-    let crawler = env_controller.set_action(2, my_crawler);
+        let result = env_controller.init_actions(11);
+        await env_controller.init_miscellaneaous();
+        websites = await env_controller.init_website_object(10);
+        await env_controller.add_websites_url(websites);
+        console.log(websites);
+        let crawler = env_controller.set_action(2, my_crawler);
+    } catch(err) {
+        console.log(err);
+    }
 })();
+
