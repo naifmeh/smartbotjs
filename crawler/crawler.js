@@ -2,7 +2,7 @@
 module.exports.crawler = class Crawler {
 
     constructor() {
-        this._proxy = '';
+        this._proxy = {};
         this._useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
         this._url = '';
         this._runCss = false;

@@ -14,7 +14,7 @@ function Algorithm_Utils() {
     function reformat_proxies(proxies) {
         const dbly_lkd = require('dbly-linked-list');
         let list = new dbly_lkd();
-        proxies.forEach(function(value, _) {
+        proxies.forEach(function(value) {
             let proxy = '';
             if(value['HTTPS'] === 'yes')
                 proxy = 'https://';
@@ -22,7 +22,7 @@ function Algorithm_Utils() {
                 proxy = 'http://';
             proxy += value['IP']+':'+value['PORT'];
 
-            list.insert({proxy: proxy, usage:0});
+            list.insert(proxy);
         });
 
         return list;
@@ -33,10 +33,18 @@ function Algorithm_Utils() {
         let list = new dbly_lkd();
 
         for(let i=0; i< useragents.length; i++) {
-            list.insert({useragent:value, usage:0});
+            list.insert(useragents[i]);
         }
 
         return list;
+    }
+
+    function reformat_with_usage(data) {
+        let with_usage = {};
+        for(let i=0; i<data.length; i++) {
+            with_usage[`${data[i]}`] = 0;
+        }
+        return with_usage;
     }
 
     function serialise_program(properties) {
@@ -75,6 +83,7 @@ function Algorithm_Utils() {
         reformat_proxies: reformat_proxies,
         reformat_useragents: reformat_useragents,
         is_blocked: is_blocked,
+        reformat_with_usage: reformat_with_usage,
     }
 }
 
