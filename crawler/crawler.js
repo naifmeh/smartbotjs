@@ -109,6 +109,8 @@ function CrawlerController(crawler) {
 
     async function launch_crawler(action='screenshot', debug=false) {
         const puppeteer = require('puppeteer');
+        const regexOccurence = require('regex-occurence');
+        const fs = require('fs');
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
@@ -167,14 +169,37 @@ function CrawlerController(crawler) {
                 });
             }
         }
-        const response = await page.goto(url);
-        if(action === 'screenshot') {
-            await page.screenshot({path: `screenshots/${url}.png`});
+        let response = await page.goto('http://'+url);
+        let status = response._status;
+        if(status === undefined) {
+            response = await page.goto('https://'+url);
+            status = response._status;
         }
+
+        let content = await page.content();
+        if(action === 'screenshot') {
+            await page.screenshot({path: `screenshots/currentPicture.png`, fullPage:true});
+        }
+
+        const captchaOcc = regexOccurence(content, /(captcha)+/gi);
+        const cloudflareOcc = regexOccurence(content, /(cloudflare)+/ig);
+        const pleaseAllowOcc = regexOccurence(content, /(Please allow up)([A-Za-z ])+([0-9])+( seconds)+/gi);
+
+        if(pleaseAllowOcc >= 1) {
+            await new Promise(resolve => setTimeout(resolve, 10000));
+        }
+        let stats = fs.statSync('screenshots/currentPicture.png');
+
+        let propertyObject = {};
+        propertyObject.fileSize = stats.size;
+        propertyObject.captchaOccurence = captchaOcc;
+        propertyObject.cloudflareOccurence = cloudflareOcc;
+        propertyObject.pleaseAllowOccurence = pleaseAllowOcc;
+        propertyObject.responseCode = status;
 
         await browser.close();
 
-        return Promise.resolve(response);
+        return Promise.resolve(propertyObject);
     }
 }
 module.exports.crawler_controller = function() {

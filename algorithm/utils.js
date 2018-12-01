@@ -43,10 +43,38 @@ function Algorithm_Utils() {
 
     }
 
+    function is_blocked(propObject) {
+        let score = 0;
+        if(propObject.fileSize < 150000)
+            score += 1;
+
+        if(propObject.captchaOccurence > 2)
+            score += 2;
+
+        let flooredStatus = Math.floor(propObject.responseCode/100);
+        if(flooredStatus === 4 || flooredStatus === 5) {
+            score += 4;
+        }
+
+        if(score&4 === 4 || score&2===2) {
+            return true;
+        }
+        if(score&4 === 4 && score&2 ===2 && score&1 ===1) {
+            return true;
+        }
+        if(score&4 === 4 && score&2 === 2) {
+            return true;
+        }
+
+        return false;
+
+    }
+
     return {
         generate_step_array: generate_step_array,
         reformat_proxies: reformat_proxies,
         reformat_useragents: reformat_useragents,
+        is_blocked: is_blocked,
     }
 }
 

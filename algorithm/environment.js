@@ -1,5 +1,5 @@
 
-function EnvironmentController() {
+function EnvironmentController(N_WEBSITES) {
     const FINGERPRINTING = true;
     const SCREEN_SIZE = true;
     const BLOCK_BOTS = true;
@@ -16,6 +16,10 @@ function EnvironmentController() {
 
     const logger = require('../utils/logging.js').Logger('environment');
     const io_utils = require('../utils/io_utils.js');
+
+    const N_ACTIONS = 11;
+    const MAX_WEBSITES = N_WEBSITES;
+
 
     let boolean_states_attributes = {
         fingerprinting: FINGERPRINTING,
@@ -51,6 +55,9 @@ function EnvironmentController() {
     let proxies;
     let proxies_list;
 
+    let websites;
+    let states;
+    let actions;
 
     /**
      * Function setting up the list of possibles states using cartesian permutations.
@@ -59,7 +66,7 @@ function EnvironmentController() {
     function init_states() {
         let utils = require('./utils.js').algo_utils;
 
-        let states = [];
+        states = [];
 
         for(let key in boolean_states_attributes) {
             if(boolean_states_attributes[`${key}`] === true) {
@@ -82,7 +89,8 @@ function EnvironmentController() {
         }
 
         let cartesian = require('cartesian');
-        return cartesian(states);
+        states = cartesian(states);
+        return states;
 
     }
 
@@ -102,7 +110,7 @@ function EnvironmentController() {
 
         let attributes = await io_utils.readLines('./data/attributes.txt');
 
-        let unique_attrs = {}
+        let unique_attrs = {};
         for(let v of attributes) {
             let split_attr = v.split(' ');
             if(split_attr[1] !== 'nan') {
@@ -110,7 +118,7 @@ function EnvironmentController() {
             }
         }
 
-        let websites = {};
+        websites = {};
         let counter = 0;
 
         let csv = await io_utils.read_csv_file('./data/data_rl_bot.csv','features');
@@ -180,9 +188,6 @@ function EnvironmentController() {
                 reject(err);
             }
         });
-
-
-
     }
 
     async function init_miscellaneaous() {
@@ -308,7 +313,31 @@ function EnvironmentController() {
             }
         }
 
-        return my_crawler, amt_useless_changes;
+        return {crawler: my_crawler, changes: amt_useless_changes};
+    }
+
+    function compute_reward(stepData) {
+        let reward = 0;
+        if(!stepData.blocked_bot)
+            reward += 5;
+        else
+            reward -= 5;
+
+        if(stepData.useless_changes >= 0)
+            reward -= stepData.useless_changes * 0.1;
+
+        if(stepData.n_actions > 1)
+            reward -= stepData.n_actions * 0.05;
+
+        return reward;
+    }
+
+
+
+    async function init_env() {
+         states = init_states();
+         websites = await init_website_object(MAX_WEBSITES);
+         actions = init_actions(N_ACTIONS);
     }
 
 
@@ -320,6 +349,7 @@ function EnvironmentController() {
         set_action: set_action,
         init_actions: init_actions,
         init_miscellaneaous: init_miscellaneaous,
+        compute_reward: compute_reward,
     }
 
 }
@@ -336,11 +366,16 @@ let env_controller = new EnvironmentController();
         let result = env_controller.init_actions(11);
         await env_controller.init_miscellaneaous();
         websites = await env_controller.init_website_object(10);
-        await env_controller.add_websites_url(websites);
-        console.log(websites);
+        //await env_controller.add_websites_url(websites);
+        //console.log(websites);
         let crawler = env_controller.set_action(2, my_crawler);
     } catch(err) {
         console.log(err);
     }
 })();
 
+// Todo (1) : Make the init function
+// Todo (2) : Make the reset function
+// Todo (3) : Make the reward function
+// Todo (4) : Make the step function
+// Todo (5) : Serialize the program
