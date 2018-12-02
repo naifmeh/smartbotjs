@@ -1,49 +1,4 @@
-{"level":"debug","message":"Added http://naifmehanna.xyz/sitemap.xml"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/javascript/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/crawlers/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/simple-crawler-using-puppeteer-and-chrome-headless/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/implementing-sarsa-in-python/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/privacy/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/browser-fingerprints-in-a-nutshell/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/python/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/deep-learning/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/convolutional-neural-networks/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/visualizing-convolutional-neural-networks-outputs-part-1/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/aws/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/ghost-tag/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/deploy-your-blog-using-ghost-and-docker-on-aws/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/page/2/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/a-bit-of-a-boring-introduction/"}
-{"level":"info","message":"Sitemap for http://naifmehanna.xyz done."}
-{"level":"error"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/sitemap.xml"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/javascript/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/crawlers/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/simple-crawler-using-puppeteer-and-chrome-headless/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/implementing-sarsa-in-python/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/privacy/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/browser-fingerprints-in-a-nutshell/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/python/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/deep-learning/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/convolutional-neural-networks/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/visualizing-convolutional-neural-networks-outputs-part-1/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/aws/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/ghost-tag/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/deploy-your-blog-using-ghost-and-docker-on-aws/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/page/2/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/a-bit-of-a-boring-introduction/"}
-{"level":"info","message":"Sitemap for http://naifmehanna.xyz done."}
-{"level":"debug","message":"Added http://naifmehanna.xyz/sitemap.xml"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/javascript/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/tag/crawlers/"}
-{"level":"debug","message":"Added http://naifmehanna.xyz/simple-crawler-using-puppeteer-and-chrome-headless/"}
-{"name":"MongoError","level":"error"}
-{"name":"MongoError","level":"error"}
-{"name":"MongoNetworkError","errorLabels":["TransientTransactionError"],"level":"error"}
-{"name":"MongoNetworkError","errorLabels":["TransientTransactionError"],"level":"error"}
+{"level":"error","message":"MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]\n    at Pool.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\mongodb-core\\lib\\topologies\\server.js:564:11)\n    at Pool.emit (events.js:182:13)\n    at Connection.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\mongodb-core\\lib\\connection\\pool.js:317:12)\n    at Object.onceWrapper (events.js:273:13)\n    at Connection.emit (events.js:182:13)\n    at Socket.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\mongodb-core\\lib\\connection\\connection.js:246:50)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at emitErrorNT (internal/streams/destroy.js:82:8)\n    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)"}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
@@ -60,77 +15,15 @@
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
+{"error":{},"level":"error","message":"uncaughtException: client is not defined\nReferenceError: client is not defined\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:237:21)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","stack":"ReferenceError: client is not defined\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:237:21)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","exception":true,"date":"Sat Dec 01 2018 20:50:39 GMT+0100 (GMT+01:00)","process":{"pid":12820,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":73453568,"heapTotal":66928640,"heapUsed":30746896,"external":18402408}},"os":{"loadavg":[0,0,0],"uptime":27897},"trace":[{"column":21,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js","function":"Socket.net.connect","line":237,"method":"connect","native":false},{"column":13,"file":"events.js","function":"Object.onceWrapper","line":273,"method":"onceWrapper","native":false},{"column":13,"file":"events.js","function":"Socket.emit","line":182,"method":"emit","native":false},{"column":10,"file":"net.js","function":"TCPConnectWrap.afterConnect [as oncomplete]","line":1099,"method":"afterConnect [as oncomplete]","native":false}]}
 {"level":"debug","message":"Successfully connected to server"}
+{"error":{},"level":"error","message":"uncaughtException: client is not defined\nReferenceError: client is not defined\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:237:21)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","stack":"ReferenceError: client is not defined\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:237:21)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","exception":true,"date":"Sat Dec 01 2018 20:51:34 GMT+0100 (GMT+01:00)","process":{"pid":2872,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":73756672,"heapTotal":66404352,"heapUsed":30733064,"external":18402408}},"os":{"loadavg":[0,0,0],"uptime":27953},"trace":[{"column":21,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js","function":"Socket.net.connect","line":237,"method":"connect","native":false},{"column":13,"file":"events.js","function":"Object.onceWrapper","line":273,"method":"onceWrapper","native":false},{"column":13,"file":"events.js","function":"Socket.emit","line":182,"method":"emit","native":false},{"column":10,"file":"net.js","function":"TCPConnectWrap.afterConnect [as oncomplete]","line":1099,"method":"afterConnect [as oncomplete]","native":false}]}
 {"level":"debug","message":"Successfully connected to server"}
-{"level":"error","message":"ReferenceError: collection is not defined\n    at Object.fetchById (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:73:39)\n    at process._tickCallback (internal/process/next_tick.js:68:7)"}
+{"error":{},"level":"error","message":"uncaughtException: Cannot read property 'push' of undefined\nTypeError: Cannot read property 'push' of undefined\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:238:29)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","stack":"TypeError: Cannot read property 'push' of undefined\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:238:29)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","exception":true,"date":"Sat Dec 01 2018 20:52:04 GMT+0100 (GMT+01:00)","process":{"pid":3852,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":73916416,"heapTotal":66404352,"heapUsed":30734824,"external":18402408}},"os":{"loadavg":[0,0,0],"uptime":27982},"trace":[{"column":29,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js","function":"Socket.net.connect","line":238,"method":"connect","native":false},{"column":13,"file":"events.js","function":"Object.onceWrapper","line":273,"method":"onceWrapper","native":false},{"column":13,"file":"events.js","function":"Socket.emit","line":182,"method":"emit","native":false},{"column":10,"file":"net.js","function":"TCPConnectWrap.afterConnect [as oncomplete]","line":1099,"method":"afterConnect [as oncomplete]","native":false}]}
 {"level":"debug","message":"Successfully connected to server"}
+{"error":{},"level":"error","message":"uncaughtException: client.close is not a function\nTypeError: client.close is not a function\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:244:28)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","stack":"TypeError: client.close is not a function\n    at Socket.net.connect (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js:244:28)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1099:10)","exception":true,"date":"Sat Dec 01 2018 20:52:19 GMT+0100 (GMT+01:00)","process":{"pid":14168,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":82477056,"heapTotal":70074368,"heapUsed":31424240,"external":18402415}},"os":{"loadavg":[0,0,0],"uptime":27998},"trace":[{"column":28,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js","function":"Socket.net.connect","line":244,"method":"connect","native":false},{"column":13,"file":"events.js","function":"Object.onceWrapper","line":273,"method":"onceWrapper","native":false},{"column":13,"file":"events.js","function":"Socket.emit","line":182,"method":"emit","native":false},{"column":10,"file":"net.js","function":"TCPConnectWrap.afterConnect [as oncomplete]","line":1099,"method":"afterConnect [as oncomplete]","native":false}]}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"error","message":"Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters\n    at new ObjectID (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\bson\\lib\\bson\\objectid.js:57:11)\n    at Object.fetchById (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:67:24)\n    at D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:101:29\n    at Object.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:103:3)\n    at Module._compile (internal/modules/cjs/loader.js:688:30)\n    at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)\n    at Module.load (internal/modules/cjs/loader.js:598:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:537:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:529:3)\n    at Function.Module.runMain (internal/modules/cjs/loader.js:741:12)"}
-{"level":"error","message":"Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters\n    at new ObjectID (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\bson\\lib\\bson\\objectid.js:57:11)\n    at Object.fetchById (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:67:24)\n    at D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:102:33\n    at Object.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:107:3)\n    at Module._compile (internal/modules/cjs/loader.js:688:30)\n    at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)\n    at Module.load (internal/modules/cjs/loader.js:598:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:537:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:529:3)\n    at Function.Module.runMain (internal/modules/cjs/loader.js:741:12)"}
-{"level":"error","message":"Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters\n    at new ObjectID (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\bson\\lib\\bson\\objectid.js:57:11)\n    at Object.fetchById (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:67:24)\n    at D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:102:33\n    at Object.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\utils\\persistence.js:106:3)\n    at Module._compile (internal/modules/cjs/loader.js:688:30)\n    at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)\n    at Module.load (internal/modules/cjs/loader.js:598:32)\n    at tryModuleLoad (internal/modules/cjs/loader.js:537:12)\n    at Function.Module._load (internal/modules/cjs/loader.js:529:3)\n    at Function.Module.runMain (internal/modules/cjs/loader.js:741:12)"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"error":{"errno":-4058,"code":"ENOENT","syscall":"open","path":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv"},"level":"error","message":"uncaughtException: ENOENT: no such file or directory, open 'D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv'\nError: ENOENT: no such file or directory, open 'D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv'","stack":"Error: ENOENT: no such file or directory, open 'D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv'","exception":true,"date":"Sun Nov 25 2018 16:32:14 GMT+0100 (GMT+01:00)","process":{"pid":728,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":40796160,"heapTotal":31178752,"heapUsed":15569208,"external":18985583}},"os":{"loadavg":[0,0,0],"uptime":151232},"trace":[]}
-{"level":"debug","message":"Successfully connected to server"}
-{"level":"debug","message":"Successfully connected to server"}
-{"error":{"errno":-4058,"code":"ENOENT","syscall":"open","path":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv"},"level":"error","message":"uncaughtException: ENOENT: no such file or directory, open 'D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv'\nError: ENOENT: no such file or directory, open 'D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv'","stack":"Error: ENOENT: no such file or directory, open 'D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\data\\data_rl_bots.csv'","exception":true,"date":"Sun Nov 25 2018 16:35:08 GMT+0100 (GMT+01:00)","process":{"pid":21600,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":39432192,"heapTotal":31178752,"heapUsed":14479576,"external":18985583}},"os":{"loadavg":[0,0,0],"uptime":151406},"trace":[]}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}

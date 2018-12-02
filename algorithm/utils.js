@@ -84,7 +84,6 @@ function Algorithm_Utils() {
         }
 
         return false;
-
     }
 
     return {

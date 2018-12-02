@@ -18,6 +18,7 @@ function EnvironmentController(N_WEBSITES) {
     const io_utils = require('../utils/io_utils.js');
     const math_utils = require('../utils/math_utils');
     const Crawler = require('../crawler/crawler').crawler;
+    const crawler_controller = require('../crawler/crawler').crawler_controller;
 
     const N_ACTIONS = 11;
     const MAX_WEBSITES = N_WEBSITES;
@@ -73,6 +74,9 @@ function EnvironmentController(N_WEBSITES) {
     let current_action;
     let current_crawler;
     let current_reward;
+    let length_episode = 0;
+    let current_step = 0;
+    let current_website_key = 0;
 
     function getEnvironmentData() {
         return {
@@ -330,7 +334,7 @@ function EnvironmentController(N_WEBSITES) {
                     break;
                 case 4:
                     if (actual_crawler.getLoadPictures() === false)
-                        amt_useless_changes += 1
+                        amt_useless_changes += 1;
                     my_crawler.setLoadPictures(false);
                     break;
                 case 5:
@@ -368,6 +372,32 @@ function EnvironmentController(N_WEBSITES) {
         }
 
         return {crawler: my_crawler, changes: amt_useless_changes};
+    }
+
+    function is_blocked(propObject) {
+        let score = 0;
+        if(propObject.fileSize < 150000)
+            score += 1;
+
+        if(propObject.captchaOccurence > 2)
+            score += 2;
+
+        let flooredStatus = Math.floor(propObject.responseCode/100);
+        if(flooredStatus === 4 || flooredStatus === 5) {
+            score += 4;
+        }
+
+        if(score&4 === 4 || score&2===2) {
+            return true;
+        }
+        if(score&4 === 4 && score&2 ===2 && score&1 ===1) {
+            return true;
+        }
+        if(score&4 === 4 && score&2 === 2) {
+            return true;
+        }
+
+        return false;
     }
 
     function compute_reward(stepData) {
@@ -422,14 +452,66 @@ function EnvironmentController(N_WEBSITES) {
          websites_keys = Object.keys(websites);
          await init_miscellaneaous();
 
-         current_website = math_utils.randomItem(websites_keys);
-         current_crawler = new Crawler();
-         current_reward = 0;
-         current_action = 0;
-         current_state = fit_website_to_state(current_website, current_crawler);
-
-
+         return new Promise(resolve => {
+            current_website = math_utils.randomItem(websites_keys);
+            current_crawler = new Crawler();
+            current_reward = 0;
+            current_action = 0;
+            length_episode = current_website.urls.length;
+            current_state = fit_website_to_state(current_website, current_crawler);
+            resolve();
+        });
     }
+
+    async function step(action) {
+        let action_data = set_action(action, current_crawler);
+        let done = false;
+        /* Building the reward info object */
+        let reward_info = {};
+        reward_info.useless_changes = action_data.changes;
+        reward_info.n_actions = action.length; //TODO: Action is not yet a list
+
+        current_crawler = action_data.crawler;
+        current_crawler.setUrl(current_website.urls[current_step++]);
+
+        let crawl_infos =  await crawler_controller(current_crawler).launch_crawler();
+
+        /* TODO: Maybe put this block into a promise */
+        let blocked = is_blocked(crawl_infos); //compute if is blocked
+        reward_info.blocked_bot = blocked;
+
+        current_reward = compute_reward(reward_info);
+        current_website.visits += 1;
+
+        if(current_step === length_episode) done = true;
+
+        current_state = fit_website_to_state(current_website, current_crawler);
+
+        let step_infos = {
+            state: current_state,
+            done: done,
+            reward: current_reward,
+        };
+
+        current_step++;
+
+        return Promise.resolve(step_infos);
+    }
+
+    function reset() {
+        //Adding the modifications although we don't really care
+        websites[websites_keys[current_website_key]] = current_website;
+
+        //Getting the new website to visit
+        current_website_key++;
+        current_website = websites[websites_keys[current_website_key]];
+        current_state = fit_website_to_state(current_website, current_crawler);
+
+        current_step = 0;
+        length_episode = current_website.urls.length;
+    }
+
+
 
 
 
@@ -483,7 +565,7 @@ let env_controller = new EnvironmentController(10);
 
 
 
-// Todo (1) : Make the init function
+// Todo (1) : Make the init function (OK)
 // Todo (2) : Make the reset function
 // Todo (3) : Make the reward function
 // Todo (4) : Make the step function
