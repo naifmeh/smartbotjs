@@ -236,17 +236,17 @@ function EnvironmentController(N_WEBSITES) {
             useragent_list = utils.reformat_useragents(user_agents);
             useragent_usage = utils.reformat_with_usage(user_agents);
             proxies = await io_utils.read_csv_file('./data/proxies.csv');
+            proxies_list = utils.reformat_proxies(proxies);
+            proxies_usage = utils.reformat_with_usage(proxies_list,mode='linked');
             const net = require('net');
             await new Promise((resolve) => {
                 const client = net.connect({port: 80, host:"google.com"}, () => {
                     my_ip = client.localAddress;
-                    proxies.push(my_ip);
+                    proxies_usage[`${my_ip}`] = 0;
                     client.end();
                     resolve();
                 });
             });
-            proxies_list = utils.reformat_proxies(proxies);
-            proxies_usage = utils.reformat_with_usage(proxies);
 
 
             return Promise.resolve();
@@ -390,7 +390,7 @@ function EnvironmentController(N_WEBSITES) {
         let visits = website.visits;
         let ua_usage = useragent_usage[actual_crawler.getUserAgent()];
         let ip_usage = 0;
-        if(actual_crawler.getProxy() !== '') { //TODO: verify this
+        if(actual_crawler.getProxy() !== '') { //TODO: verify this (OK)
             let proxy = actual_crawler.getProxy();
             ip_usage = proxies_usage[proxy];
         } else {
@@ -404,11 +404,9 @@ function EnvironmentController(N_WEBSITES) {
                 website['plugins'] === states[i][3] &&
                 website['webdriver'] === states[i][4] &&
                 website['ua_proxy'] === states[i][5]) {
-
-                if(visits >= states[i][6][0] && visits < states[i][6][1] &&
-                    ua_usage >= states[i][7][0] && ua_usage < states[i][7][1] &&
-                    ip_usage >= states[i][8][0] && ip_usage < states[i][8][1]) {
-
+                if((visits >= states[i][6][0] && visits < states[i][6][1]) &&
+                    (ua_usage >= states[i][7][0] && ua_usage < states[i][7][1]) &&
+                    (ip_usage >= states[i][8][0] && ip_usage < states[i][8][1])) {
                     return states[i];
                 }
 
@@ -443,6 +441,7 @@ function EnvironmentController(N_WEBSITES) {
         init_actions: init_actions,
         init_miscellaneaous: init_miscellaneaous,
         compute_reward: compute_reward,
+        fit_website_to_state: fit_website_to_state,
         getEnvironmentData: getEnvironmentData,
 
     }
@@ -456,11 +455,23 @@ let env_controller = new EnvironmentController(10);
     try {
         let crawl = new require('../crawler/crawler').crawler;
         let my_crawler = new crawl();
+        my_crawler.setProxy('http://138.94.160.32:33173');
         let websites = await env_controller.init_website_object();
-        console.log(websites);
         let states = env_controller.init_states()
         let result = env_controller.init_actions(11);
         await env_controller.init_miscellaneaous();
+        let state = env_controller.fit_website_to_state({ hostname: 'bnf.fr',
+            urls: [],
+            visits: 0,
+            uas: [],
+            ips: [],
+            ua_proxy: true,
+            screen_size: true,
+            fingerprinting: false,
+            block_bots: false,
+            plugins: false,
+            webdriver: false }, my_crawler);
+
         let data = env_controller.getEnvironmentData();
     } catch(err) {
         console.log(err);

@@ -39,10 +39,19 @@ function Algorithm_Utils() {
         return list;
     }
 
-    function reformat_with_usage(data) {
+    function reformat_with_usage(data, mode='normal') {
         let with_usage = {};
-        for(let i=0; i<data.length; i++) {
-            with_usage[`${data[i]}`] = 0;
+        if(mode === 'linked') {
+            let current = data.getHeadNode();
+            for(let i=0; i< data.getSize(); i++) {
+                with_usage[current.data] = 0;
+                current = current.next;
+            }
+        } else {
+            for (let i = 0; i < data.length; i++) {
+
+                with_usage[`${data[i]}`] = 0;
+            }
         }
         return with_usage;
     }
