@@ -218,14 +218,13 @@ function EnvironmentController(N_WEBSITES) {
                             websites[`${keys[i]}`]['urls'].push(urls[j]);
                         }
                         compteur++;
-                        console.log(compteur)
+                        console.log(compteur);
                         if(compteur === keys.length) {
                             resolve();
                         }
 
                     });
                 }
-
             } catch (err) {
                 reject(err);
             }
@@ -448,6 +447,7 @@ function EnvironmentController(N_WEBSITES) {
     async function init_env() {
          states = init_states();
          websites = await init_website_object(MAX_WEBSITES);
+         await add_websites_url(websites);
          actions = init_actions(N_ACTIONS);
          websites_keys = Object.keys(websites);
          await init_miscellaneaous();
@@ -509,7 +509,11 @@ function EnvironmentController(N_WEBSITES) {
 
         current_step = 0;
         length_episode = current_website.urls.length;
+
+        return current_state;
     }
+
+
 
 
 
@@ -518,6 +522,9 @@ function EnvironmentController(N_WEBSITES) {
     return {
         init_states: init_states,
         init_website_object: init_website_object,
+        init_env: init_env,
+        reset: reset,
+        step: step,
         add_websites_url: add_websites_url,
         set_action: set_action,
         init_actions: init_actions,
@@ -530,19 +537,24 @@ function EnvironmentController(N_WEBSITES) {
 
 }
 
-module.exports = new EnvironmentController();
+module.exports = function(){
+    return {EnvironmentController: EnvironmentController }
+};
+
 let websites;
-let env_controller = new EnvironmentController(10);
+let env_controller = new EnvironmentController(15);
 (async() => {
     try {
         let crawl = new require('../crawler/crawler').crawler;
         let my_crawler = new crawl();
         my_crawler.setProxy('http://138.94.160.32:33173');
         let websites = await env_controller.init_website_object();
-        let states = env_controller.init_states()
+        await env_controller.add_websites_url(websites);
+        console.log(websites)
+        /*let states = env_controller.init_states()
         let result = env_controller.init_actions(11);
-        await env_controller.init_miscellaneaous();
-        let state = env_controller.fit_website_to_state({ hostname: 'bnf.fr',
+        await env_controller.init_miscellaneaous();*/
+        /*let state = env_controller.fit_website_to_state({ hostname: 'bnf.fr',
             urls: [],
             visits: 0,
             uas: [],
@@ -554,7 +566,7 @@ let env_controller = new EnvironmentController(10);
             plugins: false,
             webdriver: false }, my_crawler);
 
-        let data = env_controller.getEnvironmentData();
+        let data = env_controller.getEnvironmentData();*/
     } catch(err) {
         console.log(err);
     }
@@ -566,7 +578,7 @@ let env_controller = new EnvironmentController(10);
 
 
 // Todo (1) : Make the init function (OK)
-// Todo (2) : Make the reset function
-// Todo (3) : Make the reward function
-// Todo (4) : Make the step function
+// Todo (2) : Make the reset function (OK)
+// Todo (3) : Make the reward function (OK)
+// Todo (4) : Make the step function (OK)
 // Todo (5) : Serialize the program

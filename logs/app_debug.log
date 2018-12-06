@@ -47,3 +47,177 @@
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
 {"level":"debug","message":"Successfully connected to server"}
+{"level":"error","message":"MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]\n    at Pool.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\mongodb-core\\lib\\topologies\\server.js:564:11)\n    at Pool.emit (events.js:182:13)\n    at Connection.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\mongodb-core\\lib\\connection\\pool.js:317:12)\n    at Object.onceWrapper (events.js:273:13)\n    at Connection.emit (events.js:182:13)\n    at Socket.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\mongodb-core\\lib\\connection\\connection.js:246:50)\n    at Object.onceWrapper (events.js:273:13)\n    at Socket.emit (events.js:182:13)\n    at emitErrorNT (internal/streams/destroy.js:82:8)\n    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)"}
+{"level":"debug","message":"Successfully connected to server"}
+{"level":"info","message":"Sitemap for http://putlockers.fm done."}
+{"level":"info","message":"Sitemap for http://mericasads.com done."}
+{"level":"info","message":"Sitemap for http://irbroker.com done."}
+{"level":"debug","message":"Added http://reimu.net/"}
+{"level":"info","message":"Sitemap for http://yooying.com done."}
+{"level":"info","message":"Sitemap for http://reimu.net done."}
+{"level":"debug","message":"Added http://samatika.com/"}
+{"level":"info","message":"Sitemap for http://freep.com done."}
+{"level":"info","message":"Sitemap for http://samatika.com done."}
+{"level":"debug","message":"Added https://www.sm.de/"}
+{"level":"debug","message":"Added https://www.zedge.net/sitemap/index.xml"}
+{"level":"info","message":"Sitemap for http://sm.de done."}
+{"level":"debug","message":"Added https://www.zedge.net/"}
+{"level":"debug","message":"Added http://www.bnf.fr/"}
+{"level":"info","message":"Sitemap for http://bnf.fr done."}
+{"level":"debug","message":"Added https://www.zedge.net/find/"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones/"}
+{"level":"debug","message":"Added https://www.zedge.net/terms/"}
+{"level":"debug","message":"Added https://www.zedge.net/privacy/"}
+{"level":"debug","message":"Added https://www.zedge.net/cookies/"}
+{"level":"debug","message":"Added https://www.zedge.net/dmca-claim/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/community-guidelines"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/android-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/android-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/android-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/zakum1974"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/RisingPhoenix84"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/honeybee87"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/PerfumeVanilla"}
+{"level":"debug","message":"Successfully connected to server"}
+{"level":"info","message":"Sitemap for http://putlockers.fm done."}
+{"level":"info","message":"Sitemap for http://yooying.com done."}
+{"level":"debug","message":"Added http://www.bnf.fr/"}
+{"level":"debug","message":"Added http://reimu.net/"}
+{"level":"debug","message":"Added http://samatika.com/"}
+{"level":"info","message":"Sitemap for http://irbroker.com done."}
+{"level":"info","message":"Sitemap for http://mericasads.com done."}
+{"level":"info","message":"Sitemap for http://reimu.net done."}
+{"level":"info","message":"Sitemap for http://bnf.fr done."}
+{"level":"info","message":"Sitemap for http://samatika.com done."}
+{"level":"debug","message":"Added https://www.sm.de/"}
+{"level":"debug","message":"Added https://www.zedge.net/sitemap/index.xml"}
+{"level":"info","message":"Sitemap for http://freep.com done."}
+{"level":"info","message":"Sitemap for http://sm.de done."}
+{"level":"debug","message":"Added https://www.zedge.net/"}
+{"level":"debug","message":"Added https://www.zedge.net/find/"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones/"}
+{"level":"debug","message":"Added https://www.zedge.net/terms/"}
+{"level":"debug","message":"Added https://www.zedge.net/privacy/"}
+{"level":"debug","message":"Added https://www.zedge.net/cookies/"}
+{"level":"debug","message":"Added https://www.zedge.net/dmca-claim/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/community-guidelines"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/android-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/android-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/android-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/DonTox"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/ShinchanX8"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/BOLITO9312"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/rosamystica3"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/zakum1974"}
+{"level":"debug","message":"Successfully connected to server"}
+{"level":"info","message":"Sitemap for http://putlockers.fm done."}
+{"level":"info","message":"Sitemap for http://yooying.com done."}
+{"level":"debug","message":"Added http://reimu.net/"}
+{"level":"debug","message":"Added http://samatika.com/"}
+{"level":"info","message":"Sitemap for http://irbroker.com done."}
+{"level":"info","message":"Sitemap for http://mericasads.com done."}
+{"level":"info","message":"Sitemap for http://reimu.net done."}
+{"level":"info","message":"Sitemap for http://samatika.com done."}
+{"level":"debug","message":"Added http://www.bnf.fr/"}
+{"level":"info","message":"Sitemap for http://bnf.fr done."}
+{"level":"debug","message":"Added https://www.sm.de/"}
+{"level":"debug","message":"Added https://www.zedge.net/sitemap/index.xml"}
+{"level":"info","message":"Sitemap for http://freep.com done."}
+{"level":"info","message":"Sitemap for http://sm.de done."}
+{"level":"debug","message":"Added https://www.zedge.net/"}
+{"level":"debug","message":"Added https://www.zedge.net/find/"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones/"}
+{"level":"debug","message":"Added https://www.zedge.net/terms/"}
+{"level":"debug","message":"Added https://www.zedge.net/privacy/"}
+{"level":"debug","message":"Added https://www.zedge.net/cookies/"}
+{"level":"debug","message":"Added https://www.zedge.net/dmca-claim/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/community-guidelines"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/android-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/android-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/android-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/honeybee87"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/_Dark_doG_"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/Agaaa_K"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/Blu3Li0ns"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/Bstedman1"}
+{"level":"debug","message":"Successfully connected to server"}
+{"level":"info","message":"Sitemap for http://putlockers.fm done."}
+{"level":"info","message":"Sitemap for http://mericasads.com done."}
+{"level":"info","message":"Sitemap for http://irbroker.com done."}
+{"level":"info","message":"Sitemap for http://yooying.com done."}
+{"level":"debug","message":"Added http://reimu.net/"}
+{"level":"info","message":"Sitemap for http://reimu.net done."}
+{"level":"debug","message":"Added https://www.zedge.net/sitemap/index.xml"}
+{"level":"debug","message":"Added https://www.sm.de/"}
+{"level":"debug","message":"Added http://samatika.com/"}
+{"level":"info","message":"Sitemap for http://freep.com done."}
+{"level":"info","message":"Sitemap for http://sm.de done."}
+{"level":"info","message":"Sitemap for http://samatika.com done."}
+{"level":"debug","message":"Added https://www.zedge.net/"}
+{"level":"debug","message":"Added https://www.zedge.net/find/"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones/"}
+{"level":"debug","message":"Added https://www.zedge.net/terms/"}
+{"level":"debug","message":"Added https://www.zedge.net/privacy/"}
+{"level":"debug","message":"Added https://www.zedge.net/cookies/"}
+{"level":"debug","message":"Added https://www.zedge.net/dmca-claim/"}
+{"level":"debug","message":"Added https://www.zedge.net/ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/community-guidelines"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/android-wallpapers"}
+{"level":"debug","message":"Added https://www.zedge.net/android-ringtones"}
+{"level":"debug","message":"Added https://www.zedge.net/backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/iphone-backgrounds"}
+{"level":"debug","message":"Added http://www.bnf.fr/"}
+{"level":"debug","message":"Added https://www.zedge.net/android-backgrounds"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/alchemere24"}
+{"level":"info","message":"Sitemap for http://bnf.fr done."}
+{"level":"debug","message":"Added https://www.zedge.net/profile/Z_Studios"}
+{"level":"debug","message":"Added https://www.zedge.net/profile/PerfumeVanilla"}
+{"level":"debug","message":"Successfully connected to server"}
+{"level":"info","message":"Sitemap for http://putlockers.fm done."}
+{"level":"info","message":"Sitemap for http://mericasads.com done."}
+{"level":"info","message":"Sitemap for http://yooying.com done."}
+{"level":"info","message":"Sitemap for http://irbroker.com done."}
+{"level":"info","message":"Sitemap for http://reimu.net done."}
+{"level":"info","message":"Sitemap for http://samatika.com done."}
+{"level":"info","message":"Sitemap for http://freep.com done."}
+{"level":"info","message":"Sitemap for http://sm.de done."}
+{"level":"info","message":"Sitemap for http://bnf.fr done."}
+{"level":"debug","message":"Successfully connected to server"}
+{"error":{},"level":"error","message":"uncaughtException: Site \"http://gov.in\" could not be found.\nError: Site \"http://gov.in\" could not be found.\n    at Crawler.SitemapGenerator.crawler.on (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\sitemap-generator\\src\\index.js:87:13)\n    at Crawler.emit (events.js:182:13)\n    at D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\crawler.js:1264:25\n    at FetchQueue.update (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\queue.js:229:9)\n    at ClientRequest.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\crawler.js:1247:27)\n    at ClientRequest.emit (events.js:182:13)\n    at Socket.socketErrorListener (_http_client.js:391:9)\n    at Socket.emit (events.js:182:13)\n    at emitErrorNT (internal/streams/destroy.js:82:8)\n    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)","stack":"Error: Site \"http://gov.in\" could not be found.\n    at Crawler.SitemapGenerator.crawler.on (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\sitemap-generator\\src\\index.js:87:13)\n    at Crawler.emit (events.js:182:13)\n    at D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\crawler.js:1264:25\n    at FetchQueue.update (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\queue.js:229:9)\n    at ClientRequest.<anonymous> (D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\crawler.js:1247:27)\n    at ClientRequest.emit (events.js:182:13)\n    at Socket.socketErrorListener (_http_client.js:391:9)\n    at Socket.emit (events.js:182:13)\n    at emitErrorNT (internal/streams/destroy.js:82:8)\n    at emitErrorAndCloseNT (internal/streams/destroy.js:50:3)","exception":true,"date":"Thu Dec 06 2018 15:35:09 GMT+0100 (GMT+01:00)","process":{"pid":6252,"uid":null,"gid":null,"cwd":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm","execPath":"D:\\Programmes\\node\\node.exe","version":"v10.13.0","argv":["D:\\Programmes\\node\\node.exe","D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\algorithm\\environment.js"],"memoryUsage":{"rss":58720256,"heapTotal":39055360,"heapUsed":22192696,"external":35463849}},"os":{"loadavg":[0,0,0],"uptime":3135},"trace":[{"column":13,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\sitemap-generator\\src\\index.js","function":"Crawler.SitemapGenerator.crawler.on","line":87,"method":"on","native":false},{"column":13,"file":"events.js","function":"Crawler.emit","line":182,"method":"emit","native":false},{"column":25,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\crawler.js","function":null,"line":1264,"method":null,"native":false},{"column":9,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\queue.js","function":"FetchQueue.update","line":229,"method":"update","native":false},{"column":27,"file":"D:\\Naif Mehanna\\Documents\\PFE\\smarbotjs\\node_modules\\simplecrawler\\lib\\crawler.js","function":null,"line":1247,"method":null,"native":false},{"column":13,"file":"events.js","function":"ClientRequest.emit","line":182,"method":"emit","native":false},{"column":9,"file":"_http_client.js","function":"Socket.socketErrorListener","line":391,"method":"socketErrorListener","native":false},{"column":13,"file":"events.js","function":"Socket.emit","line":182,"method":"emit","native":false},{"column":8,"file":"internal/streams/destroy.js","function":"emitErrorNT","line":82,"method":null,"native":false},{"column":3,"file":"internal/streams/destroy.js","function":"emitErrorAndCloseNT","line":50,"method":null,"native":false}]}
+{"level":"info","message":"Sitemap for http://putlockers.fm done."}
+{"level":"info","message":"Sitemap for http://gov.in done."}
+{"level":"info","message":"Sitemap for http://irbroker.com done."}
+{"level":"info","message":"Sitemap for http://mericasads.com done."}
+{"level":"info","message":"Sitemap for http://yooying.com done."}
+{"level":"info","message":"Sitemap for http://reimu.net done."}
+{"level":"info","message":"Sitemap for http://samatika.com done."}
+{"level":"info","message":"Sitemap for http://bnf.fr done."}
+{"level":"info","message":"Sitemap for http://freep.com done."}
+{"level":"info","message":"Sitemap for http://sm.de done."}
+{"level":"info","message":"Sitemap for http://www.sm.de done."}
+{"level":"info","message":"Sitemap for http://za.gl done."}

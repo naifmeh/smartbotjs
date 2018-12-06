@@ -19,7 +19,7 @@ function PreprocessingController() {
         generator.on('add', (url)=> {
             compteur++;
             urls.push(url);
-            logger.log('debug', `Added ${url}`);
+            //logger.log('debug', `Added ${url}`);
             if(compteur == MAX_ENTRIES_SITEMAP) {
                 if(callback) {
                     callback(urls);
