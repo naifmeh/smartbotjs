@@ -18,7 +18,7 @@ function EnvironmentController(N_WEBSITES) {
     const io_utils = require('../utils/io_utils.js');
     const math_utils = require('../utils/math_utils');
     const Crawler = require('../crawler/crawler').crawler;
-    const crawler_controller = require('../crawler/crawler').crawler_controller;
+    const crawler_controller = require('../crawler/crawler').controller().CrawlerController;
 
     const N_ACTIONS = 11;
     const MAX_WEBSITES = N_WEBSITES;
@@ -78,19 +78,49 @@ function EnvironmentController(N_WEBSITES) {
     let current_step = 0;
     let current_website_key = 0;
 
+    //Process
+    let IS_LOADED = false;
+
     function getEnvironmentData() {
         return {
             websites: websites,
-            websites_key: websites_keys,
+            websites_keys: websites_keys,
             states: states,
             actions: actions,
-            useragent_list: useragent_list,
-            proxies_list: proxies_list,
+            useragent_usage: useragent_usage,
+            proxies_usage: proxies_usage,
             current_website: current_website,
             current_state: current_state,
             current_action: current_action,
             current_crawler: current_crawler,
+            length_episode: length_episode,
+            current_step: current_step,
+            current_reward: current_reward,
+            current_website_key: current_website_key,
         }
+    }
+
+    async function setEnvironmentData(data) {
+        await init_miscellaneaous();
+        return new Promise((resolve, reject) => {
+            IS_LOADED = true;
+            websites = data.websites;
+            websites_keys = data.websites_keys;
+            states = data.states;
+            actions = data.actions;
+            useragent_usage = data.useragent_usage;
+            proxies_usage = data.proxies_usage;
+            current_website = data.current_website;
+            current_state = data.current_state;
+            current_action = data.current_action;
+            current_crawler = data.current_crawler;
+            length_episode = data.length_episode;
+            current_step = data.current_step;
+            current_reward = data.current_reward;
+            current_website_key = data.current_website_key;
+            resolve();
+        });
+
     }
 
     /**
@@ -207,6 +237,7 @@ function EnvironmentController(N_WEBSITES) {
 
     async function add_websites_url(websites) {
         const preprocessing = require('../preprocessing/preprocessing');
+
         let keys = Object.keys(websites);
         let compteur = 0;
         let done = false;
@@ -218,11 +249,9 @@ function EnvironmentController(N_WEBSITES) {
                             websites[`${keys[i]}`]['urls'].push(urls[j]);
                         }
                         compteur++;
-                        console.log(compteur);
                         if(compteur === keys.length) {
                             resolve();
                         }
-
                     });
                 }
             } catch (err) {
@@ -314,7 +343,7 @@ function EnvironmentController(N_WEBSITES) {
                         let new_proxy;
                         if (old_proxy.hasNext()) {
                             //old_proxy.next.data['usage'] += 1;
-                            proxies_usage[old_proxy.next.data] += 1;
+                            proxies_usage[old_proxy.next.data] += 1; //TODO: il faudrait faire ça dans le step
                             new_proxy = old_proxy.next.data;
                             my_crawler.setProxy(new_proxy);
                         }
@@ -386,13 +415,14 @@ function EnvironmentController(N_WEBSITES) {
             score += 4;
         }
 
-        if(score&4 === 4 || score&2===2) {
-            return true;
-        }
+
         if(score&4 === 4 && score&2 ===2 && score&1 ===1) {
             return true;
         }
         if(score&4 === 4 && score&2 === 2) {
+            return true;
+        }
+        if(score&4 === 4 || score&2===2) {
             return true;
         }
 
@@ -445,22 +475,25 @@ function EnvironmentController(N_WEBSITES) {
     }
 
     async function init_env() {
-         states = init_states();
-         websites = await init_website_object(MAX_WEBSITES);
-         await add_websites_url(websites);
-         actions = init_actions(N_ACTIONS);
-         websites_keys = Object.keys(websites);
-         await init_miscellaneaous();
+        if(!IS_LOADED) {
+            states = init_states();
+            websites = await init_website_object();
+            await add_websites_url(websites);
+            actions = init_actions(N_ACTIONS);
+            websites_keys = Object.keys(websites);
+            await init_miscellaneaous();
 
-         return new Promise(resolve => {
-            current_website = math_utils.randomItem(websites_keys);
-            current_crawler = new Crawler();
-            current_reward = 0;
-            current_action = 0;
-            length_episode = current_website.urls.length;
-            current_state = fit_website_to_state(current_website, current_crawler);
-            resolve();
-        });
+            return new Promise(resolve => {
+                current_website = websites[math_utils.randomItem(websites_keys)];
+                current_crawler = new Crawler();
+                current_reward = 0;
+                current_action = 0;
+                length_episode = current_website.urls.length;
+                current_state = fit_website_to_state(current_website, current_crawler);
+                resolve();
+            });
+        } else
+            return Promise.resolve();
     }
 
     async function step(action) {
@@ -520,18 +553,12 @@ function EnvironmentController(N_WEBSITES) {
 
 
     return {
-        init_states: init_states,
-        init_website_object: init_website_object,
         init_env: init_env,
         reset: reset,
         step: step,
-        add_websites_url: add_websites_url,
         set_action: set_action,
-        init_actions: init_actions,
-        init_miscellaneaous: init_miscellaneaous,
-        compute_reward: compute_reward,
-        fit_website_to_state: fit_website_to_state,
         getEnvironmentData: getEnvironmentData,
+        setEnvironmentData: setEnvironmentData,
 
     }
 
@@ -543,14 +570,22 @@ module.exports = function(){
 
 let websites;
 let env_controller = new EnvironmentController(15);
+
 (async() => {
     try {
-        let crawl = new require('../crawler/crawler').crawler;
+        //await env_controller.init_env();
+        //let data = env_controller.getEnvironmentData();
+        //let step = await env_controller.step(5);
+
+        let serialising = require('../utils/serialisation');
+        let data2 = await serialising.unserialise('program_state.json');
+        await env_controller.setEnvironmentData(data2);
+        /*let crawl = new require('../crawler/crawler').crawler;
         let my_crawler = new crawl();
         my_crawler.setProxy('http://138.94.160.32:33173');
         let websites = await env_controller.init_website_object();
         await env_controller.add_websites_url(websites);
-        console.log(websites)
+        console.log(websites)*/
         /*let states = env_controller.init_states()
         let result = env_controller.init_actions(11);
         await env_controller.init_miscellaneaous();*/

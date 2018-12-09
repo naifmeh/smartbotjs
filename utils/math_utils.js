@@ -10,7 +10,6 @@ function Math_utils() {
         for(let i=0; i<prob.length; i++) {
             threshold += prob[i];
             if(threshold > rand) {
-                console.log(data[i]);
                 return data[i];
             }
         }

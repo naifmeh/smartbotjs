@@ -1,6 +1,7 @@
 
 async function sarsa() {
     const math_utils = require('../utils/math_utils');
+
     const environment = require('./environment')().EnvironmentController(100);
     await environment.init_env();
     let data = environment.getEnvironmentData();
@@ -20,7 +21,9 @@ async function sarsa() {
     }
 
     async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.1) {
-        let Q = {};
+        const Q = new Proxy({}, {
+            get: (target, name) => name in target ? target[name] : new Array(AMOUNT_ACTIONS).fill(0)
+        });
 
         let policy = make_epsilon_greedy_policy(Q, epsilon, AMOUNT_ACTIONS);
 
@@ -57,5 +60,9 @@ async function sarsa() {
         return {
             Q: Q,
         }
+    }
+
+    return {
+        sarsa: algo,
     }
 }

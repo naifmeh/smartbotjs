@@ -109,7 +109,7 @@ function CrawlerController(crawler) {
 
     async function launch_crawler(action='screenshot', debug=false) {
         const puppeteer = require('puppeteer');
-        const regexOccurence = require('regex-occurence');
+        const regexOccurence = require('regex-occurrence');
         const fs = require('fs');
 
         const browser = await puppeteer.launch();
@@ -120,7 +120,6 @@ function CrawlerController(crawler) {
             properties.headless = true;
         }
         if(user_agent !== undefined) {
-            properties.args.push(`--user-agent=${user_agent}`);
             await page.setUserAgent(user_agent);
         }
         if(proxy !== '') {
@@ -164,7 +163,7 @@ function CrawlerController(crawler) {
                     if(req.resourceType() === 'stylesheet') {
                         req.abort();
                     } else {
-                        req.continue();
+                        //req.continue();
                     }
                 });
             }
@@ -201,8 +200,12 @@ function CrawlerController(crawler) {
 
         return Promise.resolve(propertyObject);
     }
+
+    return {
+        launch_crawler: launch_crawler,
+    }
 }
-module.exports.crawler_controller = function() {
+module.exports.controller = function() {
     return {
         CrawlerController: CrawlerController,
     }
