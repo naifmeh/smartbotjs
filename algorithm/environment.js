@@ -326,11 +326,11 @@ function EnvironmentController(N_WEBSITES) {
                     if (old_useragent !== -1) {
                         if (old_useragent.hasNext()) {
                             //old_useragent.next.data['usage'] += 1;
-                            useragent_usage[old_useragent.next.data] += 1;
+                            //useragent_usage[old_useragent.next.data] += 1;
                             my_crawler.setUserAgent(old_useragent.next.data);
                         } else {
                             //useragent_list.getHeadNode().data['usage'] += 1;
-                            useragent_usage[useragent_list.getHeadNode().data] += 1;
+                            //useragent_usage[useragent_list.getHeadNode().data] += 1;
                             my_crawler.setUserAgent(useragent_list.getHeadNode().data);
                         }
                     }
@@ -499,6 +499,9 @@ function EnvironmentController(N_WEBSITES) {
     async function step(action) {
         let action_data = set_action(action, current_crawler);
         let done = false;
+        //Update useragent
+        useragent_usage[current_crawler.getUserAgent().data] += 1;
+
         /* Building the reward info object */
         let reward_info = {};
         reward_info.useless_changes = action_data.changes;
@@ -573,13 +576,13 @@ let env_controller = new EnvironmentController(15);
 
 (async() => {
     try {
-        //await env_controller.init_env();
-        //let data = env_controller.getEnvironmentData();
+        await env_controller.init_env();
+        let data = env_controller.getEnvironmentData();
         //let step = await env_controller.step(5);
-
-        let serialising = require('../utils/serialisation');
-        let data2 = await serialising.unserialise('program_state.json');
-        await env_controller.setEnvironmentData(data2);
+        console.log(data.websites);
+        //let serialising = require('../utils/serialisation');
+        //let data2 = await serialising.unserialise('program_state.json');
+        //await env_controller.setEnvironmentData(data2);
         /*let crawl = new require('../crawler/crawler').crawler;
         let my_crawler = new crawl();
         my_crawler.setProxy('http://138.94.160.32:33173');

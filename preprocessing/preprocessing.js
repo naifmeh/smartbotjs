@@ -6,43 +6,98 @@ function PreprocessingController() {
     const Sitemap = require('sitemap-generator');
     const logger = require('../utils/logging.js').Logger('preprocessing');
 
+    async function launch_scrapper(url) {
+        const puppeteer = require('puppeteer');
+        const io_utils = require('../utils/io_utils');
+        const regexOccurence = require('regex-occurrence');
+        const fs = require('fs');
+        let score = 0;
+        try {
+
+            const browser = await puppeteer.launch({
+                headless:false,
+            });
+
+            const page = await browser.newPage();
+
+            let response = await page.goto('http://'+url+'/',{"waitUntil" : "networkidle0"});
+            let status = response._status;
+            if(status === undefined) {
+                console.info('Retrying...');
+                response = await page.goto('https://'+url+'/', {"waitUntil" : "networkidle0"});
+                status =response._status;
+            }
+            //await page.addScriptTag({url:"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"});
+            console.info('Page response code', status);
+
+
+            let content = await page.content();
+            const occCloudFare = regexOccurence(content, /(cloudflare)+/ig);
+            const occPleaseAllow = regexOccurence(content, /(Please allow up)([A-Za-z ])+([0-9])+( seconds)+/gi);
+            if(occPleaseAllow >= 1) {
+                await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+            let links = await page.$$eval('a', as => as.map(a => a.href)); //Recupere liens
+
+            let filtered_links = links.filter((link) => {
+                let hostname = io_utils.extract_rootDomaine(link);
+                if(hostname === url)
+                    return link;
+            });
+
+
+            let requestCode = Math.floor((status)/100);
+            if(requestCode === 4
+                || requestCode === 5) {
+                score++;
+            }
+
+
+
+            await browser.close();
+
+            return Promise.resolve(filtered_links);
+
+
+        } catch(err) {
+            return Promise.reject(err);
+        }
+    }
+
     function generate_sitemap(website, callback) {
 
         const io_utils = require('../utils/io_utils.js');
-        const cliprogress = require('cli-progress');
         const generator = Sitemap(website, {
-        stripQuerystring: true,
-        filepath: `${__dirname}/data/websites/${io_utils.extract_hostname(website.trim())}.xml`,
-        maxEntriesPerFile: MAX_ENTRIES_SITEMAP,
-        });
+            stripQuerystring: true,
+            filepath: `${__dirname}/data/websites/${io_utils.extract_hostname(website.trim())}.xml`,
+            });
         let compteur = 0;
         let urls = [];
-        /*let bar = new cliprogress.Bar({
-            format: `${website} [{bar}]`,
-            position: 'center',
-        }, cliprogress.Presets.shades_classic);*/
-        //console.log('\n');
-        //bar.start(MAX_ENTRIES_SITEMAP, 1);
         generator.on('add', (url)=> {
-            compteur++;
+
             //bar.update(compteur);
-            urls.push(url);
-            //logger.log('debug', `Added ${url}`);
-            if(compteur == MAX_ENTRIES_SITEMAP) {
+            if(io_utils.validate_url(url)) {
+                compteur++;
+                urls.push(url);
+            }
+            logger.log('debug', `Added ${url}`);
+            if(compteur === MAX_ENTRIES_SITEMAP) {
+                generator.stop();
                 if(callback) {
-                    //bar.stop();
                     callback(urls);
                 }
-                generator.stop();
+
             }
+        });
+
+        generator.on('error', (err)=> {
+            console.log(err);
         });
 
 
         generator.on('done', () => {
             logger.log('info', `Sitemap for ${website} done.`);
             if(callback) {
-                //bar.update(MAX_ENTRIES_SITEMAP);
-                //bar.stop();
                 callback(urls);
             }
 
@@ -51,9 +106,14 @@ function PreprocessingController() {
     }
 
     return {
-        generate_sitemap:  generate_sitemap
+        generate_sitemap:  generate_sitemap,
+        launch_scrapper: launch_scrapper,
     };
 }
 
 module.exports = new PreprocessingController();
+(async() => {
+    let links = await new PreprocessingController().launch_scrapper('putlockers.fm');
+    console.info(links);
+})();
 

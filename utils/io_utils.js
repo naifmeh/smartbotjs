@@ -41,6 +41,17 @@ function IO_Utils() {
         return domain
     }
 
+    function validate_url(url) {
+        let accepted = ['xml', 'pdf', 'jpg', 'png', 'jpeg', 'js'];
+        let extension = url.split('?')[0];
+        extension = extension.split('.');
+        extension = extension[extension.length - 1];
+
+        if(accepted.indexOf(extension) > -1)
+            return false;
+        return true;
+    }
+
     /**
      * Async function reading an XML file given by it's path and returning
      * a promise.
@@ -178,6 +189,7 @@ function IO_Utils() {
         read_xml_file: read_xml_file,
         readLines: readLines,
         read_csv_file: read_csv_file,
+        validate_url: validate_url,
     }
 }
 
