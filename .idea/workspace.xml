@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithm/environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/environment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/app_debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app_debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/logs/persistence.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/persistence.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/preprocessing/preprocessing.js" beforeDir="false" afterPath="$PROJECT_DIR$/preprocessing/preprocessing.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/io_utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/utils/io_utils.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -22,13 +18,13 @@
     <session id="777841980">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.20" value="1" />
           <entry key="project.open.time.21" value="2" />
           <entry key="project.open.time.22" value="6" />
-          <entry key="project.open.time.23" value="6" />
+          <entry key="project.open.time.23" value="7" />
           <entry key="project.open.time.24" value="2" />
           <entry key="project.open.time.25" value="4" />
           <entry key="project.open.time.26" value="3" />
@@ -39,7 +35,7 @@
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="34" />
+          <entry key="project.opened" value="35" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -70,20 +66,20 @@
         <counts>
           <entry key="attributes" value="499" />
           <entry key="gitignore" value="15" />
-          <entry key="js" value="45970" />
+          <entry key="js" value="46338" />
           <entry key="json" value="54" />
           <entry key="md" value="1714" />
           <entry key="mjs" value="36" />
-          <entry key="txt" value="422" />
+          <entry key="txt" value="476" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ECMAScript 6" value="36" />
           <entry key="JSON" value="54" />
-          <entry key="JavaScript" value="45970" />
+          <entry key="JavaScript" value="46338" />
           <entry key="Markdown" value="1573" />
-          <entry key="PLAIN_TEXT" value="1077" />
+          <entry key="PLAIN_TEXT" value="1131" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
@@ -136,7 +132,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-253">
+                <state relative-caret-position="17">
                   <caret line="544" lean-forward="true" selection-start-line="544" selection-end-line="544" />
                 </state>
               </provider>
@@ -158,7 +154,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2944">
+                <state relative-caret-position="10557">
                   <caret line="621" column="3" selection-start-line="621" selection-start-column="3" selection-end-line="621" selection-end-column="3" />
                 </state>
               </provider>
@@ -167,8 +163,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="196">
-                  <caret line="115" column="82" selection-start-line="115" selection-start-column="82" selection-end-line="115" selection-end-column="82" />
+                <state relative-caret-position="136">
+                  <caret line="35" column="113" selection-start-line="35" selection-start-column="113" selection-end-line="35" selection-end-column="113" />
                 </state>
               </provider>
             </entry>
@@ -264,8 +260,8 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-133" />
-    <option name="y" value="98" />
+    <option name="x" value="-134" />
+    <option name="y" value="97" />
     <option name="width" value="1940" />
     <option name="height" value="1050" />
   </component>
@@ -449,7 +445,8 @@
       <workItem from="1544354633864" duration="597000" />
       <workItem from="1544368531614" duration="7743000" />
       <workItem from="1544464961680" duration="1052000" />
-      <workItem from="1544531099330" duration="10373000" />
+      <workItem from="1544531099330" duration="10428000" />
+      <workItem from="1544607467989" duration="869000" />
     </task>
     <task id="LOCAL-00001" summary="Added tests and logging">
       <created>1542798177978</created>
@@ -556,7 +553,14 @@
       <option name="project" value="LOCAL" />
       <updated>1544379634971</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="puppeteer scraper to get links">
+      <created>1544548174826</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1544548174826</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -592,7 +596,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="178713000" />
+    <option name="totallyTimeSpent" value="179637000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -605,13 +609,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4992908" weight="0.119629875" />
       <window_info id="Structure" order="1" sideWeight="0.50070924" side_tool="true" weight="0.16126901" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3929078" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.42411348" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39885223" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -649,7 +654,8 @@
     <MESSAGE value="fixed website fitting to state" />
     <MESSAGE value="plotting+sarsa(yet to be tested)" />
     <MESSAGE value="Serialising/Deserialising" />
-    <option name="LAST_COMMIT_MESSAGE" value="Serialising/Deserialising" />
+    <MESSAGE value="puppeteer scraper to get links" />
+    <option name="LAST_COMMIT_MESSAGE" value="puppeteer scraper to get links" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.js">
@@ -804,6 +810,40 @@
         <state relative-caret-position="-376301" />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/utils/logging.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="56" column="29" selection-start-line="56" selection-start-column="29" selection-end-line="56" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/preprocessing/data/websites/naifmehanna.com.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Programmation/NodeJs/phantom/gather_links.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="62" column="45" selection-start-line="62" selection-start-column="45" selection-end-line="62" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/puppeteer/lib/ExecutionContext.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="123" column="12" selection-start-line="123" selection-start-column="12" selection-end-line="123" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="195" selection-start-line="195" selection-end-line="195" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/algorithm/utils.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1054">
@@ -839,51 +879,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/logging.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="56" column="29" selection-start-line="56" selection-start-column="29" selection-end-line="56" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/preprocessing/data/websites/naifmehanna.com.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Programmation/NodeJs/phantom/gather_links.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2944">
+        <state relative-caret-position="10557">
           <caret line="621" column="3" selection-start-line="621" selection-start-column="3" selection-end-line="621" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/io_utils.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
-          <caret line="62" column="45" selection-start-line="62" selection-start-column="45" selection-end-line="62" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/puppeteer/lib/ExecutionContext.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="123" column="12" selection-start-line="123" selection-start-column="12" selection-end-line="123" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/io_utils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="195" selection-start-line="195" selection-end-line="195" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/preprocessing/preprocessing.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="115" column="82" selection-start-line="115" selection-start-column="82" selection-end-line="115" selection-end-column="82" />
+        <state relative-caret-position="136">
+          <caret line="35" column="113" selection-start-line="35" selection-start-column="113" selection-end-line="35" selection-end-column="113" />
         </state>
       </provider>
     </entry>

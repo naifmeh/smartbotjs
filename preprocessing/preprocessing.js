@@ -6,16 +6,16 @@ function PreprocessingController() {
     const Sitemap = require('sitemap-generator');
     const logger = require('../utils/logging.js').Logger('preprocessing');
 
-    async function launch_scrapper(url) {
+    async function launch_scrapper(url, limit) {
         const puppeteer = require('puppeteer');
         const io_utils = require('../utils/io_utils');
+        const _cliProgress = require('cli-progress');
         const regexOccurence = require('regex-occurrence');
-        const fs = require('fs');
         let score = 0;
         try {
 
             const browser = await puppeteer.launch({
-                headless:false,
+                headless:true,
             });
 
             const page = await browser.newPage();
@@ -25,7 +25,7 @@ function PreprocessingController() {
             if(status === undefined) {
                 console.info('Retrying...');
                 response = await page.goto('https://'+url+'/', {"waitUntil" : "networkidle0"});
-                status =response._status;
+                status = response._status;
             }
             //await page.addScriptTag({url:"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"});
             console.info('Page response code', status);
@@ -35,7 +35,9 @@ function PreprocessingController() {
             const occCloudFare = regexOccurence(content, /(cloudflare)+/ig);
             const occPleaseAllow = regexOccurence(content, /(Please allow up)([A-Za-z ])+([0-9])+( seconds)+/gi);
             if(occPleaseAllow >= 1) {
+                console.log('Waiting for cloudfare to resolve...');
                 await new Promise(resolve => setTimeout(resolve, 10000));
+                console.log('Done');
             }
             let links = await page.$$eval('a', as => as.map(a => a.href)); //Recupere liens
 
@@ -45,6 +47,9 @@ function PreprocessingController() {
                     return link;
             });
 
+            filtered_links = filtered_links.filter((val, index, self) => {
+                return self.indexOf(val) === index;
+            });
 
             let requestCode = Math.floor((status)/100);
             if(requestCode === 4
@@ -52,11 +57,9 @@ function PreprocessingController() {
                 score++;
             }
 
-
-
             await browser.close();
 
-            return Promise.resolve(filtered_links);
+            return Promise.resolve(filtered_links.slice(0,limit));
 
 
         } catch(err) {
@@ -113,7 +116,7 @@ function PreprocessingController() {
 
 module.exports = new PreprocessingController();
 (async() => {
-    let links = await new PreprocessingController().launch_scrapper('putlockers.fm');
+    let links = await new PreprocessingController().launch_scrapper('putlockers.fm', 20);
     console.info(links);
 })();
 
