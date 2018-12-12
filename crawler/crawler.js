@@ -5,9 +5,9 @@ module.exports.crawler = class Crawler {
         this._proxy = '';
         this._useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
         this._url = '';
-        this._runCss = false;
+        this._runCss = true;
         this._plugins = false;
-        this._loadPictures = false;
+        this._loadPictures = true;
         this._webdriver = false;
     }
 
@@ -73,6 +73,7 @@ function CrawlerController(crawler) {
     let proxy = crawler.getProxy();
     let user_agent = crawler.getUserAgent();
     let url = crawler.getUrl();
+    console.info(url);
     let viewportType = "desktop";
     let loadPictures = crawler.getLoadPictures();
     let runCss = crawler.getRunCss();
@@ -150,7 +151,7 @@ function CrawlerController(crawler) {
         if(!loadPictures || !runCss) {
             await page.setRequestInterception(true);
             if (!loadPictures) {
-                page.on('request', (req) => {
+                await page.on('request', (req) => {
                     if (req.resourceType() === 'image') {
                         req.abort();
                     } else {
@@ -159,25 +160,27 @@ function CrawlerController(crawler) {
                 });
             }
             if (!runCss) {
-                page.on('request', (req) => {
+                await page.on('request', (req) => {
                     if(req.resourceType() === 'stylesheet') {
                         req.abort();
                     } else {
-                        //req.continue();
+                        req.continue();
                     }
                 });
             }
         }
-        let response = await page.goto('http://'+url);
+        let link = url; //TODO: check if link has http/s
+        let response = await page.goto(link);
         let status = response._status;
         if(status === undefined) {
-            response = await page.goto('https://'+url);
+            link = link.replace('http', 'https');
+            response = await page.goto(link);
             status = response._status;
         }
 
         let content = await page.content();
         if(action === 'screenshot') {
-            await page.screenshot({path: `screenshots/currentPicture.png`, fullPage:true});
+            await page.screenshot({path: `${__dirname}/screenshots/currentPicture.png`, fullPage:true});
         }
 
         const captchaOcc = regexOccurence(content, /(captcha)+/gi);
@@ -187,7 +190,7 @@ function CrawlerController(crawler) {
         if(pleaseAllowOcc >= 1) {
             await new Promise(resolve => setTimeout(resolve, 10000));
         }
-        let stats = fs.statSync('screenshots/currentPicture.png');
+        let stats = fs.statSync(`${__dirname}/screenshots/currentPicture.png`);
 
         let propertyObject = {};
         propertyObject.fileSize = stats.size;

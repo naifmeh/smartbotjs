@@ -33,7 +33,7 @@ function PersistenceController() {
             });
         } catch(err) {
             logger.log('error', err.stack);
-            throw new Error(err.stack);
+            return Promise.reject(err);
         }
     }
 
@@ -55,7 +55,7 @@ function PersistenceController() {
 
         } catch(err) {
             logger.log('error', err.stack);
-            return Promise.reject(new Error(err.stack));
+            return Promise.reject(err);
         }
     }
 
@@ -78,7 +78,7 @@ function PersistenceController() {
 
         } catch(err) {
             logger.log('error', err.stack);
-            return Promise.reject(new Error(err.stack));
+            return Promise.reject(err);
         } finally {
             client.close();
         }

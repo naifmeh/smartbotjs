@@ -5,36 +5,33 @@ function PreprocessingController() {
     const MAX_ENTRIES_SITEMAP = 20;
     const Sitemap = require('sitemap-generator');
     const logger = require('../utils/logging.js').Logger('preprocessing');
+    const io_utils = require('../utils/io_utils');
 
     async function launch_scrapper(url, limit) {
-        const puppeteer = require('puppeteer');
-        const io_utils = require('../utils/io_utils');
-        const _cliProgress = require('cli-progress');
-        const regexOccurence = require('regex-occurrence');
+        const puppeteer = require('puppeteer'),
+            io_utils = require('../utils/io_utils'),
+            regexOccurence = require('regex-occurrence');
         let score = 0;
         try {
-
+            console.info('Scrapping links from '+url);
             const browser = await puppeteer.launch({
                 headless:true,
             });
 
             const page = await browser.newPage();
 
-            let response = await page.goto('http://'+url+'/',{"waitUntil" : "networkidle0"});
+            let response = await page.goto('http://'+url+'/',{"waitUntil" : "networkidle2"});
             let status = response._status;
             if(status === undefined) {
                 console.info('Retrying...');
-                response = await page.goto('https://'+url+'/', {"waitUntil" : "networkidle0"});
+                response = await page.goto('https://'+url+'/', {"waitUntil" : "networkidle2"});
                 status = response._status;
             }
-            //await page.addScriptTag({url:"http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"});
-            console.info('Page response code', status);
-
 
             let content = await page.content();
             const occCloudFare = regexOccurence(content, /(cloudflare)+/ig);
             const occPleaseAllow = regexOccurence(content, /(Please allow up)([A-Za-z ])+([0-9])+( seconds)+/gi);
-            if(occPleaseAllow >= 1) {
+            if(occCloudFare >= 1 && occPleaseAllow >= 1) {
                 console.log('Waiting for cloudfare to resolve...');
                 await new Promise(resolve => setTimeout(resolve, 10000));
                 console.log('Done');
@@ -43,7 +40,7 @@ function PreprocessingController() {
 
             let filtered_links = links.filter((link) => {
                 let hostname = io_utils.extract_rootDomaine(link);
-                if(hostname === url)
+                if(hostname === url && io_utils.validate_url(link))
                     return link;
             });
 
@@ -58,7 +55,7 @@ function PreprocessingController() {
             }
 
             await browser.close();
-
+            console.info('Done for '+url);
             return Promise.resolve(filtered_links.slice(0,limit));
 
 
@@ -115,8 +112,12 @@ function PreprocessingController() {
 }
 
 module.exports = new PreprocessingController();
-(async() => {
-    let links = await new PreprocessingController().launch_scrapper('putlockers.fm', 20);
-    console.info(links);
-})();
+// (async() => {
+//     try {
+//         let result = await new PreprocessingController().launch_scrapper('putlockers.fm', 20);
+//         console.log(result);
+//     } catch(err) {
+//         console.log(err);
+//     }
+// })();
 

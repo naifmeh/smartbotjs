@@ -17,6 +17,7 @@ function EnvironmentController(N_WEBSITES) {
     const logger = require('../utils/logging.js').Logger('environment');
     const io_utils = require('../utils/io_utils.js');
     const math_utils = require('../utils/math_utils');
+    const serialiser = require('../utils/serialisation');
     const Crawler = require('../crawler/crawler').crawler;
     const crawler_controller = require('../crawler/crawler').controller().CrawlerController;
 
@@ -80,6 +81,7 @@ function EnvironmentController(N_WEBSITES) {
 
     //Process
     let IS_LOADED = false;
+    let WEBSITES_OFF_DB = false;
 
     function getEnvironmentData() {
         return {
@@ -163,14 +165,33 @@ function EnvironmentController(N_WEBSITES) {
      * Async function getting the data from a mongoDb database, parsing them and generating a list of websites
      * matching the states attributes.txt.
      * @param MAX_WEBSITE
-     * @returns {Promise<Array>}
+     * @returns {Promise<>}
      */
     async function init_website_object() {
         let persistence = require('../utils/persistence');
         const Url = require('url-parse');
+        const mongo = require('mongodb');
+        let docs = [];
+        try {
+            persistence.mongoInit();
+            docs = await persistence.fetchData(MAX_WEBSITES);
+        } catch(err) {
+            if(err instanceof mongo.MongoNetworkError) {
+                console.info('Loading from file...');
+                websites = await serialiser.unserialise('./websites.json');
+                WEBSITES_OFF_DB = true;
+            }
+            return Promise.resolve(websites);
+        }
 
-        persistence.mongoInit();
-        let docs = await persistence.fetchData(MAX_WEBSITES);
+        docs.filter((val) => {
+            if(val.url !== undefined) {
+                console.info('Found one undefined');
+                return val;
+            }
+        });
+
+
 
 
         let attributes = await io_utils.readLines('./data/attributes.txt');
@@ -192,6 +213,7 @@ function EnvironmentController(N_WEBSITES) {
             try {
                 docs.forEach((doc) => {
                     counter++;
+                    if(doc === undefined) console.error('UNDEFINEEEED')
                     let hostname = new Url(doc.url).host;
                     let website_obj = {};
                     website_obj['hostname'] = io_utils.extract_rootDomaine(hostname);
@@ -241,23 +263,21 @@ function EnvironmentController(N_WEBSITES) {
         let keys = Object.keys(websites);
         let compteur = 0;
         let done = false;
-        return new Promise((resolve, reject) => {
+
+
+        for(let i=0; i< keys.length; i++) {
+            let result = [];
             try {
-                for(let i=0; i< keys.length; i++) {
-                    let result = preprocessing.generate_sitemap('http://' + keys[i], function (urls) {
-                        for (let j = 0; j < urls.length; j++) {
-                            websites[`${keys[i]}`]['urls'].push(urls[j]);
-                        }
-                        compteur++;
-                        if(compteur === keys.length) {
-                            resolve();
-                        }
-                    });
-                }
+                result = await preprocessing.launch_scrapper(keys[i], 100);
             } catch (err) {
-                reject(err);
+                continue;
             }
-        });
+            websites[`${keys[i]}`]['urls'] = result;
+        }
+        await serialiser.serialise(websites, 'websites.json');
+        return Promise.resolve();
+
+
     }
 
     async function init_miscellaneaous() {
@@ -319,7 +339,7 @@ function EnvironmentController(N_WEBSITES) {
 
         let amt_useless_changes = 0; //punish the bot if the amount of useless change is high
 
-        for(let i=0; i<action.length; i++) {
+        for(let i=0; i < action.length; i++) {
             switch (action[i]) {
                 case 0:
                     let old_useragent = useragent_list.find(actual_crawler.getUserAgent());
@@ -478,13 +498,14 @@ function EnvironmentController(N_WEBSITES) {
         if(!IS_LOADED) {
             states = init_states();
             websites = await init_website_object();
-            await add_websites_url(websites);
+            if(!WEBSITES_OFF_DB)
+                await add_websites_url(websites);
             actions = init_actions(N_ACTIONS);
             websites_keys = Object.keys(websites);
             await init_miscellaneaous();
 
             return new Promise(resolve => {
-                current_website = websites[math_utils.randomItem(websites_keys)];
+                current_website = websites[websites_keys[0]];
                 current_crawler = new Crawler();
                 current_reward = 0;
                 current_action = 0;
@@ -499,6 +520,7 @@ function EnvironmentController(N_WEBSITES) {
     async function step(action) {
         let action_data = set_action(action, current_crawler);
         let done = false;
+
         //Update useragent
         useragent_usage[current_crawler.getUserAgent().data] += 1;
 
@@ -508,9 +530,13 @@ function EnvironmentController(N_WEBSITES) {
         reward_info.n_actions = action.length; //TODO: Action is not yet a list
 
         current_crawler = action_data.crawler;
-        current_crawler.setUrl(current_website.urls[current_step++]);
+        if(length_episode === 0)
+            current_crawler.setUrl('http://'+current_website.hostname);
+        else
+            current_crawler.setUrl(current_website.urls[current_step++]);
 
         let crawl_infos =  await crawler_controller(current_crawler).launch_crawler();
+        console.log(crawl_infos);
 
         /* TODO: Maybe put this block into a promise */
         let blocked = is_blocked(crawl_infos); //compute if is blocked
@@ -518,10 +544,14 @@ function EnvironmentController(N_WEBSITES) {
 
         current_reward = compute_reward(reward_info);
         current_website.visits += 1;
+        console.info(current_website);
 
         if(current_step === length_episode) done = true;
 
         current_state = fit_website_to_state(current_website, current_crawler);
+
+        //Adding the modifications although we don't really care
+        websites[websites_keys[current_website_key]] = current_website;
 
         let step_infos = {
             state: current_state,
@@ -535,8 +565,7 @@ function EnvironmentController(N_WEBSITES) {
     }
 
     function reset() {
-        //Adding the modifications although we don't really care
-        websites[websites_keys[current_website_key]] = current_website;
+
 
         //Getting the new website to visit
         current_website_key++;
@@ -548,11 +577,6 @@ function EnvironmentController(N_WEBSITES) {
 
         return current_state;
     }
-
-
-
-
-
 
 
     return {
@@ -571,15 +595,12 @@ module.exports = function(){
     return {EnvironmentController: EnvironmentController }
 };
 
-let websites;
-let env_controller = new EnvironmentController(15);
 
-(async() => {
-    try {
+
+/*(async() => {
         await env_controller.init_env();
         let data = env_controller.getEnvironmentData();
-        //let step = await env_controller.step(5);
-        console.log(data.websites);
+        let step = await env_controller.step(5);
         //let serialising = require('../utils/serialisation');
         //let data2 = await serialising.unserialise('program_state.json');
         //await env_controller.setEnvironmentData(data2);
@@ -604,11 +625,9 @@ let env_controller = new EnvironmentController(15);
             plugins: false,
             webdriver: false }, my_crawler);
 
-        let data = env_controller.getEnvironmentData();*/
-    } catch(err) {
-        console.log(err);
-    }
-})();
+        let data = env_controller.getEnvironmentData();
+
+})();*/
 
 
 

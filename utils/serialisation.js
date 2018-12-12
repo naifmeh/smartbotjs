@@ -2,7 +2,7 @@
 
 function Serialisation() {
 
-    async function serialise(to_serialise, mode='current') {
+    async function serialise(to_serialise, filename='program_state.json') {
         /*
         We want to serialise :
         - the websites
@@ -17,9 +17,7 @@ function Serialisation() {
         let fs = require('fs');
 
         return new Promise((resolve, reject) => {
-            let filename = 'program_state.json';
-            if(mode === 'init') filename = 'init_state.json';
-            fs.writeFile('../algorithm/program_state.json', JSON.stringify(to_serialise),
+            fs.writeFile(`${__dirname}/../algorithm/${filename}`, JSON.stringify(to_serialise),
                 function(err) {
                     if(err) reject(err);
                     resolve();
