@@ -169,7 +169,9 @@ function CrawlerController(crawler) {
                 });
             }
         }
-        let link = url; //TODO: check if link has http/s
+        let link = url;
+        if(!regexOccurence(url, /http[s]*:\/\/.+/gm))
+            link = 'http://'+url;
         let response = await page.goto(link);
         let status = response._status;
         if(status === undefined) {

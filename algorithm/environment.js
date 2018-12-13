@@ -565,8 +565,6 @@ function EnvironmentController(N_WEBSITES) {
     }
 
     function reset() {
-
-
         //Getting the new website to visit
         current_website_key++;
         current_website = websites[websites_keys[current_website_key]];
@@ -628,9 +626,6 @@ module.exports = function(){
         let data = env_controller.getEnvironmentData();
 
 })();*/
-
-
-
 
 
 
