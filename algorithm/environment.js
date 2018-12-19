@@ -68,6 +68,7 @@ function EnvironmentController(N_WEBSITES) {
     let websites_keys;
     let states;
     let actions;
+    let actions_index;
 
     //Variables
     let current_website;
@@ -96,6 +97,7 @@ function EnvironmentController(N_WEBSITES) {
             current_action: current_action,
             current_crawler: current_crawler,
             length_episode: length_episode,
+            actions_index: actions_index,
             current_step: current_step,
             current_reward: current_reward,
             current_website_key: current_website_key,
@@ -186,7 +188,6 @@ function EnvironmentController(N_WEBSITES) {
 
         docs.filter((val) => {
             if(val.url !== undefined) {
-                console.info('Found one undefined');
                 return val;
             }
         });
@@ -213,7 +214,7 @@ function EnvironmentController(N_WEBSITES) {
             try {
                 docs.forEach((doc) => {
                     counter++;
-                    if(doc === undefined) console.error('UNDEFINEEEED')
+                    if(doc.url === undefined) console.error('UNDEFINED');
                     let hostname = new Url(doc.url).host;
                     let website_obj = {};
                     website_obj['hostname'] = io_utils.extract_rootDomaine(hostname);
@@ -261,9 +262,6 @@ function EnvironmentController(N_WEBSITES) {
         const preprocessing = require('../preprocessing/preprocessing');
 
         let keys = Object.keys(websites);
-        let compteur = 0;
-        let done = false;
-
 
         for(let i=0; i< keys.length; i++) {
             let result = [];
@@ -316,7 +314,15 @@ function EnvironmentController(N_WEBSITES) {
             math_utils.combinations(elementary_actions, i, output);
         }
 
-        return output;
+        let actions_index = [];
+        for(let i=0;i<output.length; i++) {
+            actions_index[i] = i;
+        }
+
+        return {
+            actions: output,
+            actions_index: actions_index,
+        };
     }
 
     /**
@@ -329,12 +335,13 @@ function EnvironmentController(N_WEBSITES) {
      * 6: Unrun css
      * 7: Change screen size
      * 8: Use plugins
-     * 9: Fake webdriver
+     * 9: Fake web driver
      * 10: Unfake webdriver
      * @param action
      * @param bot
      */
-    function set_action(action, actual_crawler) {
+    function set_action(action_ind, actual_crawler) {
+        let action = actions[action_ind];
         let my_crawler = actual_crawler;
 
         let amt_useless_changes = 0; //punish the bot if the amount of useless change is high
@@ -359,7 +366,7 @@ function EnvironmentController(N_WEBSITES) {
                     break;
                 case 2:
                     let old_proxy = proxies_list.find(actual_crawler.getProxy());
-                    if (old_proxy !== -1) {
+                    if (old_proxy !== -1 && actual_crawler.getProxy() !== '') {
                         let new_proxy;
                         if (old_proxy.hasNext()) {
                             //old_proxy.next.data['usage'] += 1;
@@ -373,6 +380,12 @@ function EnvironmentController(N_WEBSITES) {
                             new_proxy = proxies_list.getHeadNode().data;
                             my_crawler.setProxy(proxies_list.getHeadNode().data);
                         }
+                    }
+                    else {
+                        let new_proxy;
+                        proxies_usage[proxies_list.getHeadNode().data] += 1;
+                        new_proxy = proxies_list.getHeadNode().data;
+                        my_crawler.setProxy(proxies_list.getHeadNode().data);
                     }
                     break;
                 case 3:
@@ -424,25 +437,41 @@ function EnvironmentController(N_WEBSITES) {
 
     function is_blocked(propObject) {
         let score = 0;
-        if(propObject.fileSize < 150000)
-            score += 1;
+        let filesize = false;
+        let captcha = false;
+        let cloudfare = false;
+        let responsecode = false;
+        if(propObject.fileSize < 100000)
+            filesize = true;
 
-        if(propObject.captchaOccurence > 2)
-            score += 2;
+        if(propObject.captchaOccurence > 5) //en general plus de 10 captcha sur les sites qui le proposent
+            captcha = true;
 
+        if(propObject.cloudflareOccurence > 2) {
+            cloudfare = true;
+        }
         let flooredStatus = Math.floor(propObject.responseCode/100);
         if(flooredStatus === 4 || flooredStatus === 5) {
-            score += 4;
+            responsecode = true;
         }
 
+        if(cloudfare && propObject.responseCode === 503) {
+            return false;
+        }
 
-        if(score&4 === 4 && score&2 ===2 && score&1 ===1) {
+        if (responsecode && captcha && filesize) {
             return true;
         }
-        if(score&4 === 4 && score&2 === 2) {
+        else if (responsecode && captcha) {
             return true;
         }
-        if(score&4 === 4 || score&2===2) {
+        else if(responsecode && filesize) {
+            return true;
+        }
+        else if (captcha && filesize) {
+            return true;
+        }
+        else if (responsecode) {
             return true;
         }
 
@@ -500,7 +529,9 @@ function EnvironmentController(N_WEBSITES) {
             websites = await init_website_object();
             if(!WEBSITES_OFF_DB)
                 await add_websites_url(websites);
-            actions = init_actions(N_ACTIONS);
+            let in_actions = init_actions(N_ACTIONS);
+            actions = in_actions.actions;
+            actions_index = in_actions.actions_index;
             websites_keys = Object.keys(websites);
             await init_miscellaneaous();
 
@@ -520,31 +551,34 @@ function EnvironmentController(N_WEBSITES) {
     async function step(action) {
         let action_data = set_action(action, current_crawler);
         let done = false;
-
         //Update useragent
-        useragent_usage[current_crawler.getUserAgent().data] += 1;
+        useragent_usage[current_crawler.getUserAgent()] += 1;
 
         /* Building the reward info object */
         let reward_info = {};
         reward_info.useless_changes = action_data.changes;
-        reward_info.n_actions = action.length; //TODO: Action is not yet a list
+        reward_info.n_actions = action.length; //TODO: Action is not yet a list (OK)
 
         current_crawler = action_data.crawler;
         if(length_episode === 0)
             current_crawler.setUrl('http://'+current_website.hostname);
         else
             current_crawler.setUrl(current_website.urls[current_step++]);
-
+        console.log(current_crawler.getUrl());
         let crawl_infos =  await crawler_controller(current_crawler).launch_crawler();
         console.log(crawl_infos);
+        if(crawl_infos.unknown === true) {
+            current_reward = 0;
+        } else {
+            /* TODO: Maybe put this block into a promise */
+            let blocked = is_blocked(crawl_infos); //compute if is blocked
+            reward_info.blocked_bot = blocked;
 
-        /* TODO: Maybe put this block into a promise */
-        let blocked = is_blocked(crawl_infos); //compute if is blocked
-        reward_info.blocked_bot = blocked;
-
-        current_reward = compute_reward(reward_info);
+            current_reward = compute_reward(reward_info);
+        }
+        console.info('Reward : '+current_reward);
+        console.info('Action :'+actions[action]);
         current_website.visits += 1;
-        console.info(current_website);
 
         if(current_step === length_episode) done = true;
 
@@ -557,18 +591,19 @@ function EnvironmentController(N_WEBSITES) {
             state: current_state,
             done: done,
             reward: current_reward,
+            episode_length: length_episode,
         };
-
-        current_step++;
 
         return Promise.resolve(step_infos);
     }
 
-    function reset() {
+    function reset(index) {
         //Getting the new website to visit
-        current_website_key++;
-        current_website = websites[websites_keys[current_website_key]];
-        current_state = fit_website_to_state(current_website, current_crawler);
+        if (index !== 0) {
+            current_website_key++;
+            current_website = websites[websites_keys[current_website_key]];
+            current_state = fit_website_to_state(current_website, current_crawler);
+        }
 
         current_step = 0;
         length_episode = current_website.urls.length;

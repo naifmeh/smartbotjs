@@ -43,3 +43,6 @@ de pouvoir s'adapter à de nouveaux états.
 On doit pouvoir implémenter un algorithme utilisant une fonction d'approximation après
 une documentation plus complète.
 
+Update 19/12 : Réglé un soucis d'actions, ecriture q-learning, reglage de soucis de puppeteer
+mise a jour de la liste des proxies, debut de la reflection sur le multi bot
+

@@ -22,7 +22,7 @@ function Plotting() {
     function plot_rewards(dataRewards, smoothing_window=10, title='None') {
         let data = [
             {   x: dataRewards.x,
-                y: dataRewards.rewards,
+                y: smoothOut(dataRewards.rewards,0.75),
                 name: 'Rewards',
                 type: 'scatter'}
         ];
@@ -65,8 +65,10 @@ function Plotting() {
 }
 
 module.exports = new Plotting();
-(() => {
-   const plotting = new Plotting();
-   plotting.plot_rewards({x: [1,2,3,4,5,6,7,8,9,10],
-                        rewards: [1200,1542,857,658,684,574,1025,256,896]})
-})();
+// (() => {
+//     let vals = JSON.parse('{"0":100,"1":100,"2":100,"3":100,"4":26.666666666666668,"5":28.57142857142857,"6":93.06930693069307,"7":91.0891089108911,"8":0,"9":1.9801980198019802,"10":0,"11":8.695652173913043,"12":66.66666666666666,"13":77.77777777777779,"14":0,"15":43.47826086956522,"16":0,"17":21.782178217821784,"18":10,"19":79.36507936507937,"20":0,"21":82.35294117647058,"22":16.43835616438356,"23":0,"24":25,"25":0.9900990099009901,"26":23.076923076923077,"27":9.900990099009901,"28":64.70588235294117,"29":0,"30":24.752475247524753,"31":18.81188118811881,"32":4.597701149425287,"33":25}');
+//     new Plotting().plot_rewards({
+//         x: Object.keys(vals),
+//         rewards: Object.values(vals),
+//     },10, 'Pourcentage de bloquage par épisode');
+// })();

@@ -1,9 +1,9 @@
 function Math_utils() {
 
     function weightedRandomItem(data, prob) {
-        if(data.length !== prob.length) {
+        /*if(data.length !== prob.length) {
             throw new Error('Data and probability arrays are not of same length');
-        }
+        }*/
 
         let rand = Math.random();
         let threshold = 0;

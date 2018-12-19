@@ -71,9 +71,9 @@ module.exports.crawler = class Crawler {
 
 function CrawlerController(crawler) {
     let proxy = crawler.getProxy();
+    console.log('Proxy'+ proxy);
     let user_agent = crawler.getUserAgent();
     let url = crawler.getUrl();
-    console.info(url);
     let viewportType = "desktop";
     let loadPictures = crawler.getLoadPictures();
     let runCss = crawler.getRunCss();
@@ -108,102 +108,160 @@ function CrawlerController(crawler) {
         plugins = set_plugins
     }
 
+
     async function launch_crawler(action='screenshot', debug=false) {
         const puppeteer = require('puppeteer');
         const regexOccurence = require('regex-occurrence');
+        let timeout;
+        let sigint_cntr = 0;
+        let siginthandler = () => {
+            sigint_cntr++;
+            console.log('Caught SIGINT...');
+            setTimeout(()=> {
+                sigint_cntr = 0;
+            },7000); //Remise a zero du compteur de sigint apres 7 secondes
+            if(sigint_cntr == 1)
+                throw new Error('SIGINT requested');
+            else if(sigint_cntr == 3)
+                process.exit(-1);
+
+        };
+        process.on('SIGINT', siginthandler);
+
         const fs = require('fs');
-
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-
-        let properties = {};
-        if(debug) {
-            properties.headless = true;
-        }
-        if(user_agent !== undefined) {
-            await page.setUserAgent(user_agent);
-        }
-        if(proxy !== '') {
-            properties.args.push(`--proxy-server=${proxy}`);
-        }
+        try {
 
 
+            let properties = {};
+            properties.args = [];
+            if(debug) {
+                properties.headless = true;
+            }
+            if(proxy !== '') {
+                properties.args.push(`--proxy-server=${proxy}`);
+            }
+            properties.args.push('--disable-notifications');
 
-        if(url === '') {
-            throw new Error("URL not defined");
-        }
+            const browser = await puppeteer.launch(properties);
+            const page = await browser.newPage();
+            if(user_agent !== undefined) {
+                await page.setUserAgent(user_agent);
+            }
 
-        if(plugins) {
-            await page.evaluateOnNewDocument(() => {
-                Object.defineProperty(navigator, 'plugins', {
-                    get: () => [1, 2, 3, 4, 5]
+
+            if(url === '') {
+                throw new Error("URL not defined");
+            }
+
+            if(plugins) {
+                await page.evaluateOnNewDocument(() => {
+                    Object.defineProperty(navigator, 'plugins', {
+                        get: () => [1, 2, 3, 4, 5]
+                    })
+                });
+            }
+
+            if(webdriver) {
+                await page.evaluateOnNewDocument(() => {
+                    const newProto = Object.getPrototypeOf(navigator);
+                    delete newProto.webdriver;
+                    Object.setPrototypeOf(navigator, newProto);
                 })
+            }
+            if(!loadPictures || !runCss) {
+                await page.setRequestInterception(true);
+                if(!loadPictures && !runCss) {
+                    await page.on('request', (req) => {
+                        if (['image', 'stylesheet'].indexOf(req.resourceType()) > -1) {
+                            req.abort();
+                        } else {
+                            req.continue();
+                        }
+                    });
+                }
+                else if (!loadPictures && runCss) {
+                    await page.on('request', (req) => {
+                        if (req.resourceType() === 'image') {
+                            req.abort();
+                        } else {
+                            req.continue();
+                        }
+                    });
+                }
+                else if (!runCss && loadPictures) {
+                    await page.on('request', (req) => {
+                        if(req.resourceType() === 'stylesheet') {
+                            req.abort();
+                        } else {
+                            req.continue();
+                        }
+                    });
+                }
+            }
+            let link = url;
+            if(!regexOccurence(url, /http[s]*:\/\/.+/gm))
+                link = 'http://'+url;
+
+            timeout = setTimeout(()=> {
+                (async() => {
+                    throw new Error("Error with browser instance");
+                })();
+            }, 50000);
+            page.on('unhandledRejection', () => {
+                throw new Error('Unhandled rejection inside of browser');
             });
-        }
+            page.on('uncaughtException', () => {
+                throw new Error('Uncaught exception inside browser');
+            });
 
-        if(webdriver) {
-            await page.evaluateOnNewDocument(() => {
-                const newProto = Object.getPrototypeOf(navigator);
-                delete newProto.webdriver;
-                Object.setPrototypeOf(navigator, newProto);
-            })
-        }
-        if(!loadPictures || !runCss) {
-            await page.setRequestInterception(true);
-            if (!loadPictures) {
-                await page.on('request', (req) => {
-                    if (req.resourceType() === 'image') {
-                        req.abort();
-                    } else {
-                        req.continue();
-                    }
-                });
+
+            let response = await page.goto(link, {timeout:30000, waitUntil:'networkidle2'});
+            let status = response._status;
+            if (status === undefined) {
+                link = link.replace('http', 'https');
+                response = await page.goto(link,{timeout:30000, waitUntil:'networkidle2'});
+                status = response._status;
             }
-            if (!runCss) {
-                await page.on('request', (req) => {
-                    if(req.resourceType() === 'stylesheet') {
-                        req.abort();
-                    } else {
-                        req.continue();
-                    }
-                });
+
+            let content = await page.content();
+
+
+            const captchaOcc = regexOccurence(content, /(captcha)+/gi);
+            const cloudflareOcc = regexOccurence(content, /(cloudflare)+/ig);
+            const pleaseAllowOcc = regexOccurence(content, /(Please allow up)([A-Za-z ])+([0-9])+( seconds)+/gi);
+
+            if (pleaseAllowOcc >= 1 && cloudflareOcc >= 1) {
+                await new Promise(resolve => setTimeout(resolve, 10000));
             }
+            if (action === 'screenshot') {
+                await page.screenshot({path: `${__dirname}/screenshots/currentPicture.png`, fullPage: true});
+            }
+            let stats = fs.statSync(`${__dirname}/screenshots/currentPicture.png`);
+
+
+            let propertyObject = {};
+            propertyObject.fileSize = stats.size;
+            propertyObject.captchaOccurence = captchaOcc;
+            propertyObject.cloudflareOccurence = cloudflareOcc;
+            propertyObject.pleaseAllowOccurence = pleaseAllowOcc;
+            propertyObject.responseCode = status;
+
+            await browser.close();
+            clearTimeout(timeout);
+            return Promise.resolve(propertyObject);
+        }catch(err) {
+            console.error(err);
+
+            let propertyObject = {};
+            propertyObject.unknown = true;
+            clearTimeout(timeout);
+            return Promise.resolve(propertyObject);
+        } finally {
+            console.log('Finished crawl...');
+            process.removeListener('SIGINT', siginthandler)
         }
-        let link = url;
-        if(!regexOccurence(url, /http[s]*:\/\/.+/gm))
-            link = 'http://'+url;
-        let response = await page.goto(link);
-        let status = response._status;
-        if(status === undefined) {
-            link = link.replace('http', 'https');
-            response = await page.goto(link);
-            status = response._status;
-        }
 
-        let content = await page.content();
-        if(action === 'screenshot') {
-            await page.screenshot({path: `${__dirname}/screenshots/currentPicture.png`, fullPage:true});
-        }
 
-        const captchaOcc = regexOccurence(content, /(captcha)+/gi);
-        const cloudflareOcc = regexOccurence(content, /(cloudflare)+/ig);
-        const pleaseAllowOcc = regexOccurence(content, /(Please allow up)([A-Za-z ])+([0-9])+( seconds)+/gi);
-
-        if(pleaseAllowOcc >= 1) {
-            await new Promise(resolve => setTimeout(resolve, 10000));
-        }
-        let stats = fs.statSync(`${__dirname}/screenshots/currentPicture.png`);
-
-        let propertyObject = {};
-        propertyObject.fileSize = stats.size;
-        propertyObject.captchaOccurence = captchaOcc;
-        propertyObject.cloudflareOccurence = cloudflareOcc;
-        propertyObject.pleaseAllowOccurence = pleaseAllowOcc;
-        propertyObject.responseCode = status;
-
-        await browser.close();
-
-        return Promise.resolve(propertyObject);
     }
 
     return {

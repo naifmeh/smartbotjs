@@ -1,6 +1,4 @@
-
-
-function sarsa() {
+function qlearning() {
     const math_utils = require('../utils/math_utils');
     const defaultDict = require('./utils.js').defaultDict;
 
@@ -20,14 +18,12 @@ function sarsa() {
         return policy_fn;
     }
 
-    async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.2, offline=false) {
+    async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.1, offline=false) {
         let init_loop_state = 0;
         let episode_done = false;
         const serialiser = require('../utils/serialisation');
 
-
-        if(!offline)
-            await environment.init_env();
+        await environment.init_env();
 
 
         let data = environment.getEnvironmentData();
@@ -41,16 +37,18 @@ function sarsa() {
         let reward_plotting = {};
         let episode_length = 0;
 
+
         for (let i = init_loop_state; i < num_episode; i++) {
             episode_done = false;
             init_loop_state = i;
             reward_plotting[i] = 0;
 
-            let state = environment.reset(i); // Reset the environment
+            let state = environment.reset(); // Reset the environment
 
-            let action_probs = policy(state);
-            let action = math_utils.weightedRandomItem(data.actions_index, action_probs); //todo: change to refer to the indexes
             while (true) {
+                let action_probs = policy(state);
+                let action = math_utils.weightedRandomItem(data.actions_index, action_probs);
+
                 data = environment.getEnvironmentData();
                 console.log('Episode '+i+' : '+(data.current_step+1)+'/'+(data.length_episode+1));
                 let step_data = await environment.step(action);
@@ -62,10 +60,10 @@ function sarsa() {
 
                 reward_plotting[i] += reward < 0 ? 1: 0;
 
-                let next_action_probs = policy(next_state);
-                let next_action = math_utils.weightedRandomItem(data.actions_index, next_action_probs);
+                let best_next_action = math_utils.argmax(Q[next_state]);
 
-                let td_target = reward + discount_factor * Q[next_state][next_action];
+                //TD Update
+                let td_target = reward + discount_factor * Q[next_state][best_next_action];
                 let td_delta = td_target - Q[state][action];
 
                 Q[state][action] += alpha * td_delta;
@@ -73,7 +71,6 @@ function sarsa() {
                 if (done)
                     break;
 
-                action = next_action;
                 state = next_state;
 
             }
@@ -81,7 +78,7 @@ function sarsa() {
             await serialiser.serialise({
                 reward_plotting: reward_plotting,
                 Q: Q,
-            }, 'plot_sarsa.json');
+            }, 'plot_qlearning.json');
             episode_done = true;
         }
 
@@ -95,14 +92,13 @@ function sarsa() {
         execute_algo: algo,
     }
 }
-module.exports = new sarsa();
-let sars = new sarsa();
+
+let ql = new qlearning();
 (async() => {
     const plotting = require('../utils/plotting');
     const serialisation = require('../utils/serialisation');
-    let result = await sars.execute_algo(80, 1.0, 0.5, 0.1, false);
+    let result = await ql.execute_algo(80, 1.0, 0.5, 0.1, false);
     await serialisation.serialise(result, './plot.json');
     plotting.plot_rewards({x: Array.apply(null, {length: result.reward_plotting}).map(Number.call, Number),
-                            y: result.reward_plotting}, title='Premiere tentative SARSA')
+        y: result.reward_plotting}, title='Premiere tentative QLEARNING')
 })();
-
