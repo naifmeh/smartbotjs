@@ -327,8 +327,8 @@ function EnvironmentController(N_WEBSITES) {
 
     /**
      * 0: Change UA
-     * 1: Change IP
-     * 2: Use proxy
+     * 1: Change server
+     * 2: Do nothing
      * 3: Load pictures
      * 4: Unload pictures
      * 5: Run css
@@ -363,30 +363,9 @@ function EnvironmentController(N_WEBSITES) {
                     }
                     break;
                 case 1:
+
                     break;
                 case 2:
-                    let old_proxy = proxies_list.find(actual_crawler.getProxy());
-                    if (old_proxy !== -1 && actual_crawler.getProxy() !== '') {
-                        let new_proxy;
-                        if (old_proxy.hasNext()) {
-                            //old_proxy.next.data['usage'] += 1;
-                            proxies_usage[old_proxy.next.data] += 1; //TODO: il faudrait faire ça dans le step
-                            new_proxy = old_proxy.next.data;
-                            my_crawler.setProxy(new_proxy);
-                        }
-                        else {
-                            //proxies_list.getHeadNode().data['usage'] += 1;
-                            proxies_usage[proxies_list.getHeadNode().data] += 1;
-                            new_proxy = proxies_list.getHeadNode().data;
-                            my_crawler.setProxy(proxies_list.getHeadNode().data);
-                        }
-                    }
-                    else {
-                        let new_proxy;
-                        proxies_usage[proxies_list.getHeadNode().data] += 1;
-                        new_proxy = proxies_list.getHeadNode().data;
-                        my_crawler.setProxy(proxies_list.getHeadNode().data);
-                    }
                     break;
                 case 3:
                     if (actual_crawler.getLoadPictures() === true)
@@ -548,7 +527,7 @@ function EnvironmentController(N_WEBSITES) {
             return Promise.resolve();
     }
 
-    async function step(action) {
+    async function step(action) { //If action is to change server, do not crawl here, its done on set action TODO
         let action_data = set_action(action, current_crawler);
         let done = false;
         //Update useragent
