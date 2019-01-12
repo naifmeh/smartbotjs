@@ -7,22 +7,22 @@ function Plotting() {
     }
 
     function smoothOut (vector, variance) {
-        var t_avg = avg(vector)*variance;
-        var ret = Array(vector.length);
-        for (var i = 0; i < vector.length; i++) {
+        let t_avg = avg(vector)*variance;
+        let ret = Array(vector.length);
+        for (let i = 0; i < vector.length; i++) {
             (function () {
-                var prev = i>0 ? ret[i-1] : vector[i];
-                var next = i<vector.length ? vector[i] : vector[i-1];
+                let prev = i>0 ? ret[i-1] : vector[i];
+                let next = i<vector.length ? vector[i] : vector[i-1];
                 ret[i] = avg([t_avg, avg([prev, vector[i], next])]);
             })();
         }
         return ret;
     }
 
-    function plot_rewards(dataRewards, smoothing_window=10, title='None') {
+    function plot_rewards(dataRewards, smoothing_window=0.75, title='None') {
         let data = [
             {   x: dataRewards.x,
-                y: smoothOut(dataRewards.rewards,0.75),
+                y: smoothOut(dataRewards.rewards,smoothing_window),
                 name: 'Rewards',
                 type: 'scatter'}
         ];
@@ -59,8 +59,55 @@ function Plotting() {
 
     }
 
+    function plot_bars(donnes, smoothing_windows=0, title="Bar plot") {
+        let success_data = [];
+        for(let i=0; i< donnes.y.length; i++) {
+            success_data.push(100 - donnes.y[i]);
+        }
+        let data = {
+            x: donnes.x,
+            y: donnes.y,
+            name: donnes.name,
+            type: "bar"
+        };
+
+        let data2 = {
+            x: donnes.x,
+            y: success_data,
+            name:"Success",
+            type: "bar"
+        };
+        let layout = {
+            barmode: "stack",
+            title: title,
+            xaxis: {
+                title: "Episode",
+                titlefont : {
+                    family:"Courier New, monospace",
+                    size: 18,
+                    color: "#7f7f7f"
+                }
+            },
+            yaxis: {
+                title: "Blocking percentage",
+                titlefont : {
+                    family:"Courier New, monospace",
+                    size: 18,
+                    color: "#7f7f7f"
+                }
+            }
+
+        };
+
+        let graphOptions = {layout: layout, fileopt: 'overwrite', filename:title};
+        plotly.plot(data, graphOptions, function(err, msg) {
+            console.log(msg);
+        })
+    }
+
     return {
         plot_rewards: plot_rewards,
+        plot_bars: plot_bars,
     }
 }
 
