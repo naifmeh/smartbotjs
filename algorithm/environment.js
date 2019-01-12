@@ -61,6 +61,9 @@ function EnvironmentController(N_WEBSITES) {
     let proxies;
     let proxies_list;
     let proxies_usage;
+    let servers;
+    let servers_usage;
+    let server_list;
     let my_ip;
 
     //Environment
@@ -283,20 +286,24 @@ function EnvironmentController(N_WEBSITES) {
         try {
 
             user_agents = await io_utils.readLines('./data/useragents.txt');
-            useragent_list = utils.reformat_useragents(user_agents);
+            useragent_list = utils.reformat_into_linked_list(user_agents);
             useragent_usage = utils.reformat_with_usage(user_agents);
             proxies = await io_utils.read_csv_file('./data/proxies.csv');
             proxies_list = utils.reformat_proxies(proxies);
             proxies_usage = utils.reformat_with_usage(proxies_list,mode='linked');
-            const net = require('net');
+            servers = await io_utils.readLines('./data/servers.txt');
+            //server_list = utils.reformat_into_linked_list(servers);
+            servers_usage = utils.reformat_with_usage(servers);
+            servers_usage['localhost'] = 0;
+            /*const net = require('net');
             await new Promise((resolve) => {
                 const client = net.connect({port: 80, host:"google.com"}, () => {
                     my_ip = client.localAddress;
-                    proxies_usage[`${my_ip}`] = 0;
+                    servers_usage[`${my_ip}`] = 0;
                     client.end();
                     resolve();
                 });
-            });
+            });*/
 
 
             return Promise.resolve();
@@ -342,9 +349,12 @@ function EnvironmentController(N_WEBSITES) {
      */
     function set_action(action_ind, actual_crawler) {
         let action = actions[action_ind];
+        console.log('Actions : '+ action);
         let my_crawler = actual_crawler;
+        let remote;
 
         let amt_useless_changes = 0; //punish the bot if the amount of useless change is high
+        let contains_server_action = false;
 
         for(let i=0; i < action.length; i++) {
             switch (action[i]) {
@@ -363,7 +373,8 @@ function EnvironmentController(N_WEBSITES) {
                     }
                     break;
                 case 1:
-
+                    contains_server_action = true;
+                    remote = math_utils.randomItem(servers);
                     break;
                 case 2:
                     break;
@@ -410,8 +421,10 @@ function EnvironmentController(N_WEBSITES) {
                     break;
             }
         }
-
-        return {crawler: my_crawler, changes: amt_useless_changes};
+        if(!contains_server_action)
+            return {crawler: my_crawler, changes: amt_useless_changes};
+        else
+            return {remote: remote, crawler: my_crawler, changes: amt_useless_changes}
     }
 
     function is_blocked(propObject) {
@@ -457,7 +470,7 @@ function EnvironmentController(N_WEBSITES) {
         return false;
     }
 
-    function compute_reward(stepData) {
+    function compute_reward(stepData, remote) {
         let reward = 0;
         if(!stepData.blocked_bot)
             reward += 5;
@@ -470,19 +483,19 @@ function EnvironmentController(N_WEBSITES) {
         if(stepData.n_actions > 1)
             reward -= stepData.n_actions * 0.05;
 
+        if(remote)
+            reward -= 1;
+
         return reward;
     }
 
     function fit_website_to_state(website, actual_crawler) {
         let visits = website.visits;
         let ua_usage = useragent_usage[actual_crawler.getUserAgent()];
-        let ip_usage = 0;
-        if(actual_crawler.getProxy() !== '') { //TODO: verify this (OK)
-            let proxy = actual_crawler.getProxy();
-            ip_usage = proxies_usage[proxy];
-        } else {
-            ip_usage = proxies_usage[my_ip];
-        }
+        let ip_usage = 0;  //TODO: verify this (OK)
+        let ip = actual_crawler.getIp();
+        ip_usage = servers_usage[ip];
+
 
         for(let i=0; i<states.length;i++) {
             if(website['fingerprinting'] === states[i][0] &&
@@ -500,7 +513,7 @@ function EnvironmentController(N_WEBSITES) {
             }
         }
 
-    }
+     }
 
     async function init_env() {
         if(!IS_LOADED) {
@@ -544,7 +557,30 @@ function EnvironmentController(N_WEBSITES) {
         else
             current_crawler.setUrl(current_website.urls[current_step++]);
         console.log(current_crawler.getUrl());
-        let crawl_infos =  await crawler_controller(current_crawler).launch_crawler();
+        let crawl_infos;
+        let is_using_remote = action_data.remote ? true : false;
+        if(is_using_remote) {
+            let ws = require('ws');
+            let wss = new ws('ws://'+action_data.remote);
+
+            servers_usage[action_data.remote] += 1;
+            console.log("Usage : "+servers_usage[action_data.remote]);
+            crawl_infos = await new Promise(resolve => {
+                wss.on('open', function open() {
+                    wss.send(JSON.stringify(current_crawler));
+                });
+
+                wss.on('message', function incoming(data) {
+                    resolve(data)
+                });
+
+            });
+
+            wss.close();
+        } else {
+            servers_usage['localhost'] += 1;
+            crawl_infos = await crawler_controller(current_crawler).launch_crawler();
+        }
         console.log(crawl_infos);
         if(crawl_infos.unknown === true) {
             current_reward = 0;
@@ -553,7 +589,7 @@ function EnvironmentController(N_WEBSITES) {
             let blocked = is_blocked(crawl_infos); //compute if is blocked
             reward_info.blocked_bot = blocked;
 
-            current_reward = compute_reward(reward_info);
+            current_reward = compute_reward(reward_info, is_using_remote);
         }
         console.info('Reward : '+current_reward);
         console.info('Action :'+actions[action]);

@@ -39,7 +39,7 @@ function Algorithm_Utils() {
         return list;
     }
 
-    function reformat_useragents(useragents) {
+    function reformat_into_linked_list(useragents) {
         const dbly_lkd = require('dbly-linked-list');
         let list = new dbly_lkd();
 
@@ -49,6 +49,8 @@ function Algorithm_Utils() {
 
         return list;
     }
+
+
 
     function reformat_with_usage(data, mode='normal') {
         let with_usage = {};
@@ -100,7 +102,7 @@ function Algorithm_Utils() {
     return {
         generate_step_array: generate_step_array,
         reformat_proxies: reformat_proxies,
-        reformat_useragents: reformat_useragents,
+        reformat_into_linked_list: reformat_into_linked_list,
         is_blocked: is_blocked,
         reformat_with_usage: reformat_with_usage,
     }

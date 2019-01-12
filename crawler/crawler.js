@@ -2,7 +2,7 @@
 module.exports.crawler = class Crawler {
 
     constructor() {
-        this._proxy = '';
+        this._ip = 'localhost';
         this._useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36"
         this._url = '';
         this._runCss = true;
@@ -11,9 +11,14 @@ module.exports.crawler = class Crawler {
         this._webdriver = false;
     }
 
-    setProxy(value) {
-        this._proxy = value;
+    setIp(value) {
+        this._ip = value;
     }
+
+    getIp() {
+        return this._ip;
+    }
+
 
     setWebdriver(value) {
         this._webdriver = false;
@@ -39,9 +44,7 @@ module.exports.crawler = class Crawler {
         this._loadPictures = value;
     }
 
-    getProxy() {
-        return this._proxy;
-    }
+
 
     getWebdriver() {
         return this._webdriver;
@@ -70,8 +73,8 @@ module.exports.crawler = class Crawler {
 };
 
 function CrawlerController(crawler) {
-    let proxy = crawler.getProxy();
-    console.log('Proxy'+ proxy);
+    let ip = crawler.getIp();
+    console.log('Ip'+ ip);
     let user_agent = crawler.getUserAgent();
     let url = crawler.getUrl();
     let viewportType = "desktop";
@@ -80,9 +83,7 @@ function CrawlerController(crawler) {
     let plugins = crawler.getPlugins();
     let webdriver = crawler.getWebdriver();
 
-    function set_proxy(new_proxy) {
-        proxy = new_proxy;
-    }
+
 
     function set_useragent(new_ua) {
         user_agent = new_ua;
@@ -137,9 +138,7 @@ function CrawlerController(crawler) {
             if(debug) {
                 properties.headless = true;
             }
-            if(proxy !== '') {
-                properties.args.push(`--proxy-server=${proxy}`);
-            }
+
             properties.args.push('--disable-notifications');
 
             const browser = await puppeteer.launch(properties);
