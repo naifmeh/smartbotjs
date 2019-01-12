@@ -58,9 +58,6 @@ function EnvironmentController(N_WEBSITES) {
     let user_agents;
     let useragent_usage;
     let useragent_list;
-    let proxies;
-    let proxies_list;
-    let proxies_usage;
     let servers;
     let servers_usage;
     let server_list;
@@ -94,7 +91,6 @@ function EnvironmentController(N_WEBSITES) {
             states: states,
             actions: actions,
             useragent_usage: useragent_usage,
-            proxies_usage: proxies_usage,
             current_website: current_website,
             current_state: current_state,
             current_action: current_action,
@@ -116,7 +112,6 @@ function EnvironmentController(N_WEBSITES) {
             states = data.states;
             actions = data.actions;
             useragent_usage = data.useragent_usage;
-            proxies_usage = data.proxies_usage;
             current_website = data.current_website;
             current_state = data.current_state;
             current_action = data.current_action;
@@ -288,9 +283,6 @@ function EnvironmentController(N_WEBSITES) {
             user_agents = await io_utils.readLines('./data/useragents.txt');
             useragent_list = utils.reformat_into_linked_list(user_agents);
             useragent_usage = utils.reformat_with_usage(user_agents);
-            proxies = await io_utils.read_csv_file('./data/proxies.csv');
-            proxies_list = utils.reformat_proxies(proxies);
-            proxies_usage = utils.reformat_with_usage(proxies_list,mode='linked');
             servers = await io_utils.readLines('./data/servers.txt');
             //server_list = utils.reformat_into_linked_list(servers);
             servers_usage = utils.reformat_with_usage(servers);
@@ -375,6 +367,7 @@ function EnvironmentController(N_WEBSITES) {
                 case 1:
                     contains_server_action = true;
                     remote = math_utils.randomItem(servers);
+                    my_crawler.setIp(remote);
                     break;
                 case 2:
                     break;
@@ -494,6 +487,7 @@ function EnvironmentController(N_WEBSITES) {
         let ua_usage = useragent_usage[actual_crawler.getUserAgent()];
         let ip_usage = 0;  //TODO: verify this (OK)
         let ip = actual_crawler.getIp();
+        console.log(ip);
         ip_usage = servers_usage[ip];
 
 
@@ -508,7 +502,36 @@ function EnvironmentController(N_WEBSITES) {
                     (ua_usage >= states[i][7][0] && ua_usage < states[i][7][1]) &&
                     (ip_usage >= states[i][8][0] && ip_usage < states[i][8][1])) {
                     return states[i];
+                } else if((visits >= states[i][6][0] && visits >= MAX_DOMAIN_COUNT) &&
+                    (ua_usage >= states[i][7][0] && ua_usage >= MAX_UA_USE) &&
+                    (ip_usage >= states[i][8][0] && ip_usage >= MAX_IP_USE)) {
+                    return states[i];
+                } else if((visits >= states[i][6][0] && visits < states[i][6][1]) &&
+                    (ua_usage >= states[i][7][0] && ua_usage >= MAX_UA_USE) &&
+                    (ip_usage >= states[i][8][0] && ip_usage >= MAX_IP_USE)) {
+                    return states[i];
+                } else if((visits >= states[i][6][0] && visits >= MAX_DOMAIN_COUNT) &&
+                    (ua_usage >= states[i][7][0] && ua_usage < states[i][7][1]) &&
+                    (ip_usage >= states[i][8][0] && ip_usage >= MAX_IP_USE)) {
+                    return states[i];
+                } else if((visits >= states[i][6][0] && visits >= MAX_DOMAIN_COUNT) &&
+                    (ua_usage >= states[i][7][0] && ua_usage >= MAX_UA_USE) &&
+                    (ip_usage >= states[i][8][0] && ip_usage < states[i][8][1])) {
+                    return states[i];
+                } else if((visits >= states[i][6][0] && visits >= MAX_DOMAIN_COUNT) &&
+                    (ua_usage >= states[i][7][0] && ua_usage < states[i][7][1]) &&
+                    (ip_usage >= states[i][8][0] && ip_usage < states[i][8][1])) {
+                    return states[i];
+                } else if((visits >= states[i][6][0] && visits < states[i][6][1]) &&
+                    (ua_usage >= states[i][7][0] && ua_usage >= MAX_UA_USE) &&
+                    (ip_usage >= states[i][8][0] && ip_usage < states[i][8][1])) {
+                    return states[i];
+                } else if((visits >= states[i][6][0] && visits < states[i][6][1]) &&
+                    (ua_usage >= states[i][7][0] && ua_usage < states[i][7][1]) &&
+                    (ip_usage >= states[i][8][0] && ip_usage >= MAX_IP_USE)) {
+                    return states[i];
                 }
+
 
             }
         }

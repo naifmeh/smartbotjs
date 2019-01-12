@@ -2,16 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0141b92d-78a1-4aaf-96aa-8aa01fd08f34" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/algorithm/data/servers.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/algorithm/environment.js" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/environment.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/algorithm/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/algorithm/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/crawler.js" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/crawler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/screenshots/currentPicture.png" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/screenshots/currentPicture.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app_debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app_debug.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/persistence.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/persistence.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -78,20 +72,20 @@
         <counts>
           <entry key="attributes" value="499" />
           <entry key="gitignore" value="15" />
-          <entry key="js" value="56053" />
+          <entry key="js" value="56242" />
           <entry key="json" value="57" />
           <entry key="md" value="1892" />
           <entry key="mjs" value="36" />
-          <entry key="txt" value="559" />
+          <entry key="txt" value="635" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="ECMAScript 6" value="36" />
           <entry key="JSON" value="57" />
-          <entry key="JavaScript" value="56053" />
+          <entry key="JavaScript" value="56242" />
           <entry key="Markdown" value="1751" />
-          <entry key="PLAIN_TEXT" value="1214" />
+          <entry key="PLAIN_TEXT" value="1290" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.js.language.service.starts">
@@ -129,8 +123,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="578" column="24" lean-forward="true" selection-start-line="578" selection-start-column="24" selection-end-line="578" selection-end-column="24" />
+            <state relative-caret-position="394">
+              <caret line="538" column="75" selection-start-line="538" selection-start-column="75" selection-end-line="538" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -298,10 +292,11 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="952" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="947" />
+    <option name="y" value="1" />
+    <option name="width" value="978" />
+    <option name="height" value="1039" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -463,7 +458,7 @@
       <workItem from="1546012518326" duration="526000" />
       <workItem from="1546260572769" duration="1808000" />
       <workItem from="1547042474542" duration="2821000" />
-      <workItem from="1547294406573" duration="5970000" />
+      <workItem from="1547294406573" duration="9506000" />
     </task>
     <task id="LOCAL-00001" summary="Added tests and logging">
       <created>1542798177978</created>
@@ -598,7 +593,14 @@
       <option name="project" value="LOCAL" />
       <updated>1545232749801</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Done replacing proxies with websockets, some cleaning left to do">
+      <created>1547308798120</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1547308798120</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -634,7 +636,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="254943000" />
+    <option name="totallyTimeSpent" value="258479000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -649,12 +651,12 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4992908" visible="true" weight="0.18968935" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4992908" weight="0.38575268" />
       <window_info id="Structure" order="1" sideWeight="0.50070924" side_tool="true" weight="0.16126901" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3617021" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.27659574" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.48652482" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -696,7 +698,8 @@
     <MESSAGE value="Finished scraper" />
     <MESSAGE value="serialising main program" />
     <MESSAGE value="Fixing bugs + qlearning" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixing bugs + qlearning" />
+    <MESSAGE value="Done replacing proxies with websockets, some cleaning left to do" />
+    <option name="LAST_COMMIT_MESSAGE" value="Done replacing proxies with websockets, some cleaning left to do" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.js">
@@ -972,8 +975,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/algorithm/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="578" column="24" lean-forward="true" selection-start-line="578" selection-start-column="24" selection-end-line="578" selection-end-column="24" />
+        <state relative-caret-position="394">
+          <caret line="538" column="75" selection-start-line="538" selection-start-column="75" selection-end-line="538" selection-end-column="75" />
         </state>
       </provider>
     </entry>
