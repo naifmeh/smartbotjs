@@ -8,7 +8,7 @@ function EnvironmentController(N_WEBSITES) {
     const UA_PROXY = true;
     const UA_COUNT = true;
     const MAX_UA_USE = 1000;
-    const MAX_IP_USE = 100;
+    const MAX_IP_USE = 1000;
     const MAX_DOMAIN_COUNT = 100;
     const IP_COUNT = true;
     const WEBDRIVER = true;
@@ -287,15 +287,7 @@ function EnvironmentController(N_WEBSITES) {
             //server_list = utils.reformat_into_linked_list(servers);
             servers_usage = utils.reformat_with_usage(servers);
             servers_usage['localhost'] = 0;
-            /*const net = require('net');
-            await new Promise((resolve) => {
-                const client = net.connect({port: 80, host:"google.com"}, () => {
-                    my_ip = client.localAddress;
-                    servers_usage[`${my_ip}`] = 0;
-                    client.end();
-                    resolve();
-                });
-            });*/
+
 
 
             return Promise.resolve();
@@ -466,9 +458,9 @@ function EnvironmentController(N_WEBSITES) {
     function compute_reward(stepData, remote) {
         let reward = 0;
         if(!stepData.blocked_bot)
-            reward += 5;
+            reward += 2;
         else
-            reward -= 5;
+            reward -= 3;
 
         if(stepData.useless_changes >= 0)
             reward -= stepData.useless_changes * 0.1;
@@ -477,7 +469,7 @@ function EnvironmentController(N_WEBSITES) {
             reward -= stepData.n_actions * 0.05;
 
         if(remote)
-            reward -= 1;
+            reward -= 1.5;
 
         return reward;
     }
@@ -485,10 +477,9 @@ function EnvironmentController(N_WEBSITES) {
     function fit_website_to_state(website, actual_crawler) {
         let visits = website.visits;
         let ua_usage = useragent_usage[actual_crawler.getUserAgent()];
-        let ip_usage = 0;  //TODO: verify this (OK)
         let ip = actual_crawler.getIp();
         console.log(ip);
-        ip_usage = servers_usage[ip];
+        let ip_usage = servers_usage[ip];
 
 
         for(let i=0; i<states.length;i++) {
@@ -580,30 +571,44 @@ function EnvironmentController(N_WEBSITES) {
         else
             current_crawler.setUrl(current_website.urls[current_step++]);
         console.log(current_crawler.getUrl());
+
         let crawl_infos;
         let is_using_remote = action_data.remote ? true : false;
-        if(is_using_remote) {
+
+        if(is_using_remote && action_data.remote !== 'localhost') {
+            console.log('Launching remote crawler...');
             let ws = require('ws');
-            let wss = new ws('ws://'+action_data.remote);
+            try {
+                let wss = new ws('ws://' + action_data.remote);
+                servers_usage[action_data.remote] += 1;
+                let timeout_ws;
+                crawl_infos = await new Promise((resolve, reject) => {
+                    wss.on('open', function open() {
+                        wss.send(JSON.stringify(current_crawler));
+                        timeout_ws = setTimeout(() => {
+                            reject();
+                        }, 60000);
+                    });
 
-            servers_usage[action_data.remote] += 1;
-            console.log("Usage : "+servers_usage[action_data.remote]);
-            crawl_infos = await new Promise(resolve => {
-                wss.on('open', function open() {
-                    wss.send(JSON.stringify(current_crawler));
+                    wss.on('message', function incoming(data) {
+                        clearTimeout(timeout_ws);
+                        resolve(data);
+                    });
+
                 });
 
-                wss.on('message', function incoming(data) {
-                    resolve(data)
-                });
-
-            });
-
-            wss.close();
+                wss.terminate();
+                console.log('Remote crawler returned.');
+            } catch(err) {
+                crawl_infos['unknown'] = true;
+            }
         } else {
             servers_usage['localhost'] += 1;
             crawl_infos = await crawler_controller(current_crawler).launch_crawler();
         }
+
+        current_crawler.setIp('localhost');
+
         console.log(crawl_infos);
         if(crawl_infos.unknown === true) {
             current_reward = 0;
@@ -654,7 +659,6 @@ function EnvironmentController(N_WEBSITES) {
         init_env: init_env,
         reset: reset,
         step: step,
-        set_action: set_action,
         getEnvironmentData: getEnvironmentData,
         setEnvironmentData: setEnvironmentData,
 
@@ -666,44 +670,10 @@ module.exports = function(){
     return {EnvironmentController: EnvironmentController }
 };
 
-
-
-/*(async() => {
-        await env_controller.init_env();
-        let data = env_controller.getEnvironmentData();
-        let step = await env_controller.step(5);
-        //let serialising = require('../utils/serialisation');
-        //let data2 = await serialising.unserialise('program_state.json');
-        //await env_controller.setEnvironmentData(data2);
-        /*let crawl = new require('../crawler/crawler').crawler;
-        let my_crawler = new crawl();
-        my_crawler.setProxy('http://138.94.160.32:33173');
-        let websites = await env_controller.init_website_object();
-        await env_controller.add_websites_url(websites);
-        console.log(websites)*/
-        /*let states = env_controller.init_states()
-        let result = env_controller.init_actions(11);
-        await env_controller.init_miscellaneaous();*/
-        /*let state = env_controller.fit_website_to_state({ hostname: 'bnf.fr',
-            urls: [],
-            visits: 0,
-            uas: [],
-            ips: [],
-            ua_proxy: true,
-            screen_size: true,
-            fingerprinting: false,
-            block_bots: false,
-            plugins: false,
-            webdriver: false }, my_crawler);
-
-        let data = env_controller.getEnvironmentData();
-
-})();*/
-
-
-
 // Todo (1) : Make the init function (OK)
 // Todo (2) : Make the reset function (OK)
 // Todo (3) : Make the reward function (OK)
 // Todo (4) : Make the step function (OK)
-// Todo (5) : Serialize the program
+// Todo (5) : Serialize the program (OK)
+// Todo(6) : Reward based on time spent crawling, for faster crawl
+// Todo (7): Parallelize

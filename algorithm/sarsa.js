@@ -3,6 +3,7 @@
 function sarsa() {
     const math_utils = require('../utils/math_utils');
     const defaultDict = require('./utils.js').defaultDict;
+    const local_utils = require('./utils');
 
     const environment = require('./environment')().EnvironmentController(100);
 
@@ -20,7 +21,7 @@ function sarsa() {
         return policy_fn;
     }
 
-    async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.2, offline=false) {
+    async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.2, offline=true) {
         let init_loop_state = 0;
         let episode_done = false;
         const serialiser = require('../utils/serialisation');
@@ -34,7 +35,11 @@ function sarsa() {
 
         const AMOUNT_ACTIONS = data.actions_index.length;
 
-        let Q = new defaultDict(new Array(AMOUNT_ACTIONS).fill(0));
+        let Q;
+        if(!offline)
+            Q = new defaultDict(new Array(AMOUNT_ACTIONS).fill(0));
+        else
+            Q = local_utils.read_qvalues('plot_sarsa.js');
 
         let policy = make_epsilon_greedy_policy(Q, epsilon, AMOUNT_ACTIONS);
 

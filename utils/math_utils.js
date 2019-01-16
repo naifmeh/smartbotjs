@@ -42,6 +42,8 @@ function Math_utils() {
         return array.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1];
     }
 
+
+
     return {
         weightedRandomItem: weightedRandomItem,
         randomItem: randomItem,

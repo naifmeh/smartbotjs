@@ -9,6 +9,7 @@ module.exports.defaultDict = class DefaultDict {
                     defaultInit)
         })
     }
+
 };
 
 function Algorithm_Utils() {
@@ -99,12 +100,29 @@ function Algorithm_Utils() {
         return false;
     }
 
+    function read_qvalues(filepath) {
+        const fs =  require('fs');
+        const defaultdict = require('./utils.js').defaultDict;
+
+        let obj = JSON.parse(fs.readFileSync(filepath,{
+            encoding:'utf8'
+        }));
+
+        let Q = new defaultdict(new Array(2047).fill(0));
+        for(let key in obj.Q)
+            Q[key] = obj.Q[key];
+
+        return Q;
+
+    }
+
     return {
         generate_step_array: generate_step_array,
         reformat_proxies: reformat_proxies,
         reformat_into_linked_list: reformat_into_linked_list,
         is_blocked: is_blocked,
         reformat_with_usage: reformat_with_usage,
+        read_qvalues: read_qvalues,
     }
 }
 

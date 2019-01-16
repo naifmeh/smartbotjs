@@ -19,10 +19,11 @@ function Plotting() {
         return ret;
     }
 
-    function plot_rewards(dataRewards, smoothing_window=0.75, title='None') {
+    function plot_rewards(dataRewards, smoothing_window=5, title='None') {
+        const smooth = require('array-smooth');
         let data = [
             {   x: dataRewards.x,
-                y: smoothOut(dataRewards.rewards,smoothing_window),
+                y: smooth(dataRewards.rewards, smoothing_window),
                 name: 'Rewards',
                 type: 'scatter'}
         ];
@@ -59,15 +60,15 @@ function Plotting() {
 
     }
 
-    function plot_bars(donnes, smoothing_windows=0, title="Bar plot") {
+    function plot_bars(donnes, title="Bar plot") {
         let success_data = [];
-        for(let i=0; i< donnes.y.length; i++) {
-            success_data.push(100 - donnes.y[i]);
+        for(let i=0; i< donnes.rewards.length; i++) {
+            success_data.push(100 - donnes.rewards[i]);
         }
         let data = {
             x: donnes.x,
-            y: donnes.y,
-            name: donnes.name,
+            y: donnes.rewards,
+            name: "Blocked",
             type: "bar"
         };
 
@@ -99,8 +100,10 @@ function Plotting() {
 
         };
 
+        let final_data = [data, data2]
+
         let graphOptions = {layout: layout, fileopt: 'overwrite', filename:title};
-        plotly.plot(data, graphOptions, function(err, msg) {
+        plotly.plot(final_data, graphOptions, function(err, msg) {
             console.log(msg);
         })
     }
@@ -112,10 +115,15 @@ function Plotting() {
 }
 
 module.exports = new Plotting();
-// (() => {
-//     let vals = JSON.parse('{"0":100,"1":100,"2":100,"3":100,"4":26.666666666666668,"5":28.57142857142857,"6":93.06930693069307,"7":91.0891089108911,"8":0,"9":1.9801980198019802,"10":0,"11":8.695652173913043,"12":66.66666666666666,"13":77.77777777777779,"14":0,"15":43.47826086956522,"16":0,"17":21.782178217821784,"18":10,"19":79.36507936507937,"20":0,"21":82.35294117647058,"22":16.43835616438356,"23":0,"24":25,"25":0.9900990099009901,"26":23.076923076923077,"27":9.900990099009901,"28":64.70588235294117,"29":0,"30":24.752475247524753,"31":18.81188118811881,"32":4.597701149425287,"33":25}');
-//     new Plotting().plot_rewards({
-//         x: Object.keys(vals),
-//         rewards: Object.values(vals),
-//     },10, 'Pourcentage de bloquage par épisode');
-// })();
+(() => {
+    let vals = JSON.parse('{"0":100,"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":1.9801980198019802,"8":0,"9":0,"10":0,"11":0,"12":0,"13":22.22222222222222,"14":0,"15":4.3478260869565215,"16":0,"17":0.9900990099009901,"18":0,"19":1.5873015873015872,"20":0,"21":0,"22":5.47945205479452,"23":0,"24":0,"25":0,"26":0,"27":0,"28":0,"29":0,"30":0,"31":0,"32":1.1494252873563218,"33":0,"34":0,"35":0}');
+    new Plotting().plot_rewards({
+        x: Object.keys(vals),
+        rewards: Object.values(vals),
+    },10, 'Pourcentage de bloquage par épisode');
+
+    new Plotting().plot_bars({
+        x: Object.keys(vals),
+        rewards: Object.values(vals),
+    }, 'Bar plot sarsa with remote agent')
+})();
