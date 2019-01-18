@@ -45,8 +45,7 @@ function sarsa() {
 
         let reward_plotting = {};
         let episode_length = 0;
-
-        for (let i = init_loop_state; i < num_episode; i++) {
+        for (let i = init_loop_state; i < Object.values(data.websites).length; i++) {
             episode_done = false;
             init_loop_state = i;
             reward_plotting[i] = 0;
@@ -105,9 +104,9 @@ let sars = new sarsa();
 (async() => {
     const plotting = require('../utils/plotting');
     const serialisation = require('../utils/serialisation');
-    let result = await sars.execute_algo(80, 1.0, 0.5, 0.1, false);
+    let result = await sars.execute_algo(450, 1.0, 0.5, 0.1, false);
     await serialisation.serialise(result, './plot.json');
     plotting.plot_rewards({x: Array.apply(null, {length: result.reward_plotting}).map(Number.call, Number),
-                            y: result.reward_plotting}, title='Premiere tentative SARSA')
+                            y: result.reward_plotting}, title='Multiple crawlers SARSA(3)')
 })();
 

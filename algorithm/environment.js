@@ -173,6 +173,12 @@ function EnvironmentController(N_WEBSITES) {
         const mongo = require('mongodb');
         let docs = [];
         try {
+            if(process.argv[2] == 'OFFLINE') {
+                console.info('Loading from file...');
+                websites = await serialiser.unserialise('./websites.json');
+                WEBSITES_OFF_DB = true;
+                return Promise.resolve(websites);
+            }
             persistence.mongoInit();
             docs = await persistence.fetchData(MAX_WEBSITES);
         } catch(err) {
