@@ -183,7 +183,6 @@ function EnvironmentController(N_WEBSITES) {
             }
             return Promise.resolve(websites);
         }
-
         docs.filter((val) => {
             if(val.url !== undefined) {
                 return val;
@@ -260,7 +259,7 @@ function EnvironmentController(N_WEBSITES) {
         const preprocessing = require('../preprocessing/preprocessing');
 
         let keys = Object.keys(websites);
-
+        console.log(keys.length);
         for(let i=0; i< keys.length; i++) {
             let result = [];
             try {
@@ -572,7 +571,7 @@ function EnvironmentController(N_WEBSITES) {
             current_crawler.setUrl(current_website.urls[current_step++]);
         console.log(current_crawler.getUrl());
 
-        let crawl_infos;
+        let crawl_infos = {};
         let is_using_remote = action_data.remote ? true : false;
 
         if(is_using_remote && action_data.remote !== 'localhost') {

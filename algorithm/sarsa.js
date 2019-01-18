@@ -5,7 +5,7 @@ function sarsa() {
     const defaultDict = require('./utils.js').defaultDict;
     const local_utils = require('./utils');
 
-    const environment = require('./environment')().EnvironmentController(100);
+    const environment = require('./environment')().EnvironmentController(1500);
 
 
     function make_epsilon_greedy_policy(Q, epsilon, nA) {
