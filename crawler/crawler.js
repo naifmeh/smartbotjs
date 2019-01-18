@@ -140,6 +140,7 @@ function CrawlerController(crawler) {
             }
 
             properties.args.push('--disable-notifications');
+            properties.args.push('--no-sandbox');
 
             const browser = await puppeteer.launch(properties);
             const page = await browser.newPage();
