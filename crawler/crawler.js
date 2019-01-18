@@ -136,7 +136,7 @@ function CrawlerController(crawler) {
             let properties = {};
             properties.args = [];
             if(debug) {
-                properties.headless = true;
+                properties.headless = false;
             }
 
             properties.args.push('--disable-notifications');
