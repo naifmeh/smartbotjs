@@ -1,47 +1,89 @@
 function actor_critic() {
-    const tf = require('@tensorflow/tfjs');
+    const tf = require('@tensorflow/tfjs-node-gpu');
+    
+    class A2CAgent {
+        constructor(state_size, action_size) {
+            this.render = false;
+            this.state_size = state_size;
+            this.action_size = action_size;
+            this.value_size = 1;
 
-    class PolicyEstimator {
-        constructor(nStates, nActions, learning_rate=0.01, scope="policy_estimator") {
-            try {
-                this._state = tf.input({dtype:'int32', shape:[], name:"state"});
-                this._action = tf.input({dtype:'int32', name:"action"});
-                this._target = tf.input({dtype:'float32', name:"target"});
+            this.discount_factor = 0.99;
+            this.actor_learningr = 0.001;
+            this.critic_learningr = 0.005;
 
-                let state_one_hot = tf.oneHot(this._state, nStates);
-                this._output_layer = tf.layers.dense({
-                    inputDim:tf.expandDims(state_one_hot, 0),
-                    kernelInitializer: tf.initializers.zeros(),
-                    units: nActions,
-                });
-
-                this._action_probs = tf.squeeze(tf.softmax(this._output_layer));
-                this._picked_action_prob = tf.gather(this._action_probs, this._action);
-
-                this._loss = this._target.mul(-1*this._picked_action_prob);
-
-                this._optimizer = tf.train.adam(learning_rate);
-                this._train_op = this._optimizer.minimize(this._loss) //cannot get the global step
-
-            } catch(err) {
-                console.err(err);
-            }
-
+            this.actor = this.build_actor();
+            this.critic = this.build_critic();
+        
         }
 
-        predict(state, sess=null) {
-            // Sessions in TSF JS ?
+        build_actor() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({
+                units: 24,
+                activation: 'relu',
+                kernelInitializer:'glorotUniform',
+                inputDim:this.state_size,
+            }));
+
+            model.add(tf.layers.dense({
+                units: this.action_size,
+                activation:'softmax',
+                kernelInitializer:'glorotUniform',
+            }));
+
+            model.summary();
+
+            model.compile({
+                optimizer: tf.train.adam(this.actor_learningr),
+                loss:tf.losses.softmaxCrossEntropy
+            });
+
+            return model;
         }
 
-        update(state, target, action, sess=null) {
-            let feed_obj = {};
-            feed_obj[this._state] = state;
-            feed_obj[this._target] = target;
-            feed_obj[this._action] = action;
+        build_critic() {
+            const model = tf.sequential();
+            model.add(tf.layers.dense({
+                units: 24,
+                activation: 'relu',
+                kernelInitializer:'glorotUniform',
+                inputDim:this.state_size,
+            }));
 
-            //sessions again
+            model.add(tf.layers.dense({
+                units: this.action_size,
+                activation:'softmax',
+                kernelInitializer:'glorotUniform',
+            }));
 
+            model.summary();
 
+            model.compile({
+                optimizer: tf.train.adam(this.critic_learningr),
+                loss:tf.losses.meanSquaredError,
+            });
+
+            return model;
+        }
+
+        get_action(state, actions) {
+            const math_utils = require('../utils/math_utils');
+            let policy = this.actor.predict(state, {
+                batchSize:1,
+            }).flatten();
+            
+            return math_utils.weightedRandomItem(actions, policy);
+        }
+
+        train_model(state, action, reward, next_state, done) {
+            
         }
     }
+
+    
+
+    let A2c = new A2CAgent(100000, 20);
 }
+
+actor_critic();

@@ -24,6 +24,7 @@
   "homepage": "https://github.com/naifmeh/smartbotjs#readme",
   "dependencies": {
     "@tensorflow/tfjs": "^0.14.2",
+    "@tensorflow/tfjs-node-gpu": "^0.2.3",
     "array-smooth": "^1.0.0",
     "cartesian": "^1.0.1",
     "chai": "^4.2.0",
