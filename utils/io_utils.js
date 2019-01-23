@@ -81,35 +81,24 @@ function IO_Utils() {
      * @returns {Promise<never>} a promise resolving on the array
      */
     async function readLines(file_path) {
-        let fs = require('fs');
-
-        let remaining = '';
-        let line_array = [];
-        try {
-            let readStream = fs.createReadStream(file_path);
-            readStream.on('data', function (data) {
-                remaining += data;
-                let index = remaining.indexOf('\r');
-                while (index > -1) {
-                    let line = remaining.substr(0, index);
-                    remaining = remaining.substr(index + 1);
-                    line_array.push(line.split('\n').length == 2 ? line.split('\n')[1] : line);
-                    index = remaining.indexOf('\r');
-                }
+        var fs = require('fs');
+        var readline = require('readline');
+        var stream = require('stream');
+        return new Promise(resolve => {
+            var instream = fs.createReadStream(file_path);
+            var outstream = new stream;
+            var rl = readline.createInterface(instream, outstream);
+    
+            let content = [];
+            rl.on('line', function(line) {
+                content.push(line);
             });
-
-            return new Promise((resolve) => {
-                readStream.on('end', function () {
-                    if (remaining.length > 0) {
-                        line_array.push(remaining.split('\n').length == 2 ? remaining.split('\n')[1] : remaining);
-                        resolve(line_array);
-                    }
-                });
+    
+            rl.on('close', function() {
+                resolve(content);
             });
-        } catch(err) {
-            logger.log('error', err.stack);
-            return Promise.reject(err);
-        }
+        });
+        
     }
 
 

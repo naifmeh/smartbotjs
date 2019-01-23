@@ -289,7 +289,6 @@ function EnvironmentController(N_WEBSITES) {
             useragent_list = utils.reformat_into_linked_list(user_agents);
             useragent_usage = utils.reformat_with_usage(user_agents);
             servers = await io_utils.readLines('./data/servers.txt');
-            console.log(servers);
             //server_list = utils.reformat_into_linked_list(servers);
             servers_usage = utils.reformat_with_usage(servers);
             servers_usage['localhost'] = 0;
