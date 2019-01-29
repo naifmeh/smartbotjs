@@ -130,6 +130,7 @@ function CrawlerController(crawler) {
         process.on('SIGINT', siginthandler);
         let browser;
         const fs = require('fs');
+        const child_process = require('child_process');
         try {
 
 
@@ -143,18 +144,7 @@ function CrawlerController(crawler) {
             properties.args.push('--no-sandbox');
 
             browser = await puppeteer.launch(properties);
-            browser.on('disconnected', () => {
-                console.log('sleeping 100ms'); //  sleep to eliminate race condition  
-                setTimeout(function(){
-                console.log(`Browser Disconnected... Process Id: ${process}`);
-                child_process.exec(`kill -9 ${process}`, (error, stdout, stderr) => {
-                    if (error) {
-                    console.log(`Process Kill Error: ${error}`)
-                    }
-                    console.log(`Process Kill Success. stdout: ${stdout} stderr:${stderr}`);
-                });
-            }, 100);
-            });
+           
             const page = await browser.newPage();
             if(user_agent !== undefined) {
                 await page.setUserAgent(user_agent);

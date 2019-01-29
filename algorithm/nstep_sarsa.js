@@ -20,7 +20,7 @@ function nstep_sarsa() {
         return policy_fn;
     }
 
-    async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.2, n=10, offline=false) {
+    async function algo(num_episode, discount_factor = 1.0, alpha = 0.5, epsilon = 0.2, n=10, offline=true) {
         let init_loop_state = 0;
         let episode_done = false;
         const serialiser = require('../utils/serialisation');
