@@ -143,6 +143,18 @@ function CrawlerController(crawler) {
             properties.args.push('--no-sandbox');
 
             const browser = await puppeteer.launch(properties);
+            browser.on('disconnected', () => {
+                console.log('sleeping 100ms'); //  sleep to eliminate race condition  
+                setTimeout(function(){
+                console.log(`Browser Disconnected... Process Id: ${process}`);
+                child_process.exec(`kill -9 ${process}`, (error, stdout, stderr) => {
+                    if (error) {
+                    console.log(`Process Kill Error: ${error}`)
+                    }
+                    console.log(`Process Kill Success. stdout: ${stdout} stderr:${stderr}`);
+                });
+            }, 100);
+            });
             const page = await browser.newPage();
             if(user_agent !== undefined) {
                 await page.setUserAgent(user_agent);
@@ -246,17 +258,18 @@ function CrawlerController(crawler) {
             propertyObject.pleaseAllowOccurence = pleaseAllowOcc;
             propertyObject.responseCode = status;
 
-            await browser.close();
+            
             clearTimeout(timeout);
             return Promise.resolve(propertyObject);
         }catch(err) {
             console.error(err);
-
+        
             let propertyObject = {};
             propertyObject.unknown = true;
             clearTimeout(timeout);
             return Promise.resolve(propertyObject);
         } finally {
+            await browser.close()
             console.log('Finished crawl...');
             process.removeListener('SIGINT', siginthandler)
         }
