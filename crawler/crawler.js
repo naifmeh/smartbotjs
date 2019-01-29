@@ -128,7 +128,7 @@ function CrawlerController(crawler) {
 
         };
         process.on('SIGINT', siginthandler);
-
+        let browser;
         const fs = require('fs');
         try {
 
@@ -142,7 +142,7 @@ function CrawlerController(crawler) {
             properties.args.push('--disable-notifications');
             properties.args.push('--no-sandbox');
 
-            const browser = await puppeteer.launch(properties);
+            browser = await puppeteer.launch(properties);
             browser.on('disconnected', () => {
                 console.log('sleeping 100ms'); //  sleep to eliminate race condition  
                 setTimeout(function(){
@@ -269,7 +269,7 @@ function CrawlerController(crawler) {
             clearTimeout(timeout);
             return Promise.resolve(propertyObject);
         } finally {
-            await browser.close()
+            if(browser !== undefined) await browser.close()
             console.log('Finished crawl...');
             process.removeListener('SIGINT', siginthandler)
         }
