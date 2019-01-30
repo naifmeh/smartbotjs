@@ -3,7 +3,7 @@
 function sarsa() {
     const math_utils = require('../utils/math_utils');
     const defaultDict = require('./utils.js').defaultDict;
-    const local_utils = require('./utils');
+    const local_utils = require('./utils').algo_utils;
 
     const environment = require('./environment')().EnvironmentController(1500);
 
@@ -39,7 +39,7 @@ function sarsa() {
         if(!offline)
             Q = new defaultDict(new Array(AMOUNT_ACTIONS).fill(0));
         else
-            Q = local_utils.read_qvalues('plot_sarsa.js');
+            Q = local_utils.read_qvalues('plot_sarsa.js', AMOUNT_ACTIONS);
 
         let policy = make_epsilon_greedy_policy(Q, epsilon, AMOUNT_ACTIONS);
 

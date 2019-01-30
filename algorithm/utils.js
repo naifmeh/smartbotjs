@@ -100,20 +100,23 @@ function Algorithm_Utils() {
         return false;
     }
 
-    function read_qvalues(filepath) {
+    function read_qvalues(filepath, n_actions) {
         const fs =  require('fs');
         const defaultdict = require('./utils.js').defaultDict;
-
-        let obj = JSON.parse(fs.readFileSync(filepath,{
-            encoding:'utf8'
-        }));
-
-        let Q = new defaultdict(new Array(2047).fill(0));
+        let obj;
+        let Q = new defaultdict(new Array(n_actions).fill(0));
+        try {
+            obj = JSON.parse(fs.readFileSync(filepath,{
+                encoding:'utf8'
+            }));
+        } catch(err) {
+            return Q;
+        }
+        
         for(let key in obj.Q)
             Q[key] = obj.Q[key];
 
         return Q;
-
     }
 
     return {
