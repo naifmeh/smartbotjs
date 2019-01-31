@@ -20,13 +20,15 @@ function actor_critic() {
 
         build_actor() {
             const model = tf.sequential();
-
+            
             model.add(tf.layers.dense({
                 units: 24,
                 activation: 'relu',
                 kernelInitializer:'glorotUniform',
-                inputDim:this.state_size,
+                inputShape:[9, 12], //oneHotShape
             }));
+            
+            model.add(tf.layers.flatten());
 
             model.add(tf.layers.dense({
                 units: this.action_size,
@@ -47,12 +49,15 @@ function actor_critic() {
         build_critic() {
             const model = tf.sequential();
             
+            
             model.add(tf.layers.dense({
                 units: 24,
                 activation: 'relu',
                 kernelInitializer:'glorotUniform',
-                inputDim:this.state_size,
+                inputShape: [9, 12], //oneHot shape
             }));
+
+            model.add(tf.layers.flatten());
 
             model.add(tf.layers.dense({
                 units: this.value_size,
@@ -86,7 +91,8 @@ function actor_critic() {
             const math_utils = require('../utils/math_utils');
             
             let oneHotState = tf.oneHot(this.format_state(state), 12);
-            let policy = this.actor.predict(oneHotState, {
+            
+            let policy = this.actor.predict(oneHotState.reshape([1,9,12]), {
                 batchSize:1,
             });
             
@@ -101,26 +107,25 @@ function actor_critic() {
 
             let oneHotState = tf.oneHot(this.format_state(state), 12);
             let oneHotNextState = tf.oneHot(this.format_state(next_state), 12);
-
+            oneHotState = oneHotState.reshape([1, 9, 12])
+            oneHotNextState = oneHotNextState.reshape([1, 9, 12])
             let value = this.critic.predict(oneHotState).flatten().get(0);
             let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
             console.log(action) //Pb nbr d'actions dans advantages
             if(done) {
-                advantages[0][action] = reward - value;
-                target[0][0] = reward;
+                advantages[action] = [reward - value];
+                target[0] = reward;
             } else {
-                advantages[0][action] = reward +this.discount_factor * (next_value) - value;
-                target[0][0] = reward + this.discount_factor * next_value;
+                advantages[action] =  [reward +this.discount_factor * (next_value) - value];
+                target[0] = reward + this.discount_factor * next_value;
             }
 
-            console.log(advantages)
-            console.log(target)
-            process.exit(0)
             
-            this.actor.fit(oneHotState, advantages, {
+            this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
                 epochs:1,
             });
-            this.critic.fit(oneHotState, target, {
+
+            this.critic.fit(oneHotState, tf.tensor(target), {
                 epochs:1,
             });
             
@@ -187,17 +192,15 @@ function actor_critic() {
 
         return Promise.resolve({
             reward_plotting: reward_plotting,
-        })
+        });
     }
-
-    let A2C = new A2CAgent(1000,1000);
 
     return {
         main: main,
     }
 }
 
-module.exports = new actor_critic();
+//module.exports = new actor_critic();
 (async() => {
     let sars = new actor_critic();
     sars.main();
