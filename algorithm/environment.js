@@ -9,7 +9,7 @@ function EnvironmentController(N_WEBSITES) {
     const UA_COUNT = true;
     const MAX_UA_USE = 1000;
     const MAX_IP_USE = 1000;
-    const MAX_DOMAIN_COUNT = 100;
+    const MAX_DOMAIN_COUNT = 500;
     const IP_COUNT = true;
     const WEBDRIVER = true;
     const DOMAINE_COUNT = true;
