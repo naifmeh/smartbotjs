@@ -20,15 +20,15 @@ function actor_critic() {
 
         build_actor() {
             const model = tf.sequential();
-
-            this.state = tf.input({name:"state", dtype:'int32', shape:[]});
-            let one_hot = tf.oneHot(this.state, this.state_size); //Pb ne prend pas de placeholder
+            
             model.add(tf.layers.dense({
                 units: 24,
                 activation: 'relu',
                 kernelInitializer:'glorotUniform',
-                inputDim:tf.expandDims(one_hot, 0),
+                inputShape:[9, 12], //oneHotShape
             }));
+            
+            model.add(tf.layers.flatten());
 
             model.add(tf.layers.dense({
                 units: this.action_size,
@@ -48,20 +48,20 @@ function actor_critic() {
 
         build_critic() {
             const model = tf.sequential();
-
-            this.state = tf.input({name:"state", dtype:'int32', shape:[]});
-            let one_hot = tf.oneHot(this.state, this.state_size)
+            
             
             model.add(tf.layers.dense({
                 units: 24,
                 activation: 'relu',
                 kernelInitializer:'glorotUniform',
-                inputDim:this.state_size,
+                inputShape: [9, 12], //oneHot shape
             }));
 
+            model.add(tf.layers.flatten());
+
             model.add(tf.layers.dense({
-                units: this.action_size,
-                activation:'softmax',
+                units: this.value_size,
+                activation:'linear',
                 kernelInitializer:'glorotUniform',
             }));
 
@@ -75,34 +75,57 @@ function actor_critic() {
             return model;
         }
 
+        format_state(state) {
+            let copy_state = state.slice();
+            for(let i=0; i < state.length; i++) {
+                if(Array.isArray(copy_state[i])) {
+                    copy_state[i] = Math.ceil(state[i][1] / 10);
+                }
+            }
+    
+            return copy_state;
+    
+        }
+
         get_action(state, actions) {
             const math_utils = require('../utils/math_utils');
-            let policy = this.actor.predict(state, {
-                batchSize:1,
-            })[0].flatten();
             
-            return math_utils.weightedRandomItem(actions, policy);
+            let oneHotState = tf.oneHot(this.format_state(state), 12);
+            
+            let policy = this.actor.predict(oneHotState.reshape([1,9,12]), {
+                batchSize:1,
+            });
+            
+            let policy_flat = policy.dataSync();
+            
+            return math_utils.weightedRandomItem(actions, policy_flat);
         }
 
         train_model(state, action, reward, next_state, done) {
             let target = zeros(1, this.value_size);
             let advantages = zeros(1, this.action_size);
 
-            let value = this.critic.predict(state)[0];
-            let next_value = this.critic.predict(next_state)[0];
-
+            let oneHotState = tf.oneHot(this.format_state(state), 12);
+            let oneHotNextState = tf.oneHot(this.format_state(next_state), 12);
+            oneHotState = oneHotState.reshape([1, 9, 12])
+            oneHotNextState = oneHotNextState.reshape([1, 9, 12])
+            let value = this.critic.predict(oneHotState).flatten().get(0);
+            let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
+            console.log(action) //Pb nbr d'actions dans advantages
             if(done) {
-                advantages[0][action] = reward - value;
-                target[0][0] = reward;
+                advantages[action] = [reward - value];
+                target[0] = reward;
             } else {
-                advantages[0][action] = reward +this.discount_factor * (next_value) - value;
-                target[0][0] = reward + this.discount_factor * next_value;
+                advantages[action] =  [reward +this.discount_factor * (next_value) - value];
+                target[0] = reward + this.discount_factor * next_value;
             }
 
-            this.actor.fit(state, advantages, {
+            
+            this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
                 epochs:1,
             });
-            this.critic.fit(state, target, {
+
+            this.critic.fit(oneHotState, tf.tensor(target), {
                 epochs:1,
             });
             
@@ -110,7 +133,11 @@ function actor_critic() {
     }
 
     
+   
+
+    
     const environment = require('./environment')().EnvironmentController(1500);
+    const serialiser = require('../utils/serialisation');
 
 
     async function main(offline=false) {
@@ -120,7 +147,7 @@ function actor_critic() {
 
         let data = environment.getEnvironmentData();
         const AMOUNT_ACTIONS = data.actions_index.length;
-        const STATE_SIZE = data.states.length;
+        const STATE_SIZE = 12;
 
         let agent = new A2CAgent(STATE_SIZE, AMOUNT_ACTIONS);
         let reward_plotting = {};
@@ -135,8 +162,8 @@ function actor_critic() {
             while(true) {
                 data = environment.getEnvironmentData();
                 console.log('Episode '+i+' : '+(data.current_step+1)+'/'+(data.length_episode+1));
-            
-                let action = agent.get_action(state);
+
+                let action = agent.get_action(state, data.actions_index);
                 let step_data = await environment.step(action);
                 let next_state = step_data.state,
                     reward = step_data.reward,
@@ -154,26 +181,31 @@ function actor_critic() {
                 state = next_state;
             }
             reward_plotting[i] = (reward_plotting[i]/(episode_length+1))*100;
-            if(i%10) {
-                agent.actor.save('localstorage://'+__dirname+'/actor_model');
-                agent.critic.save('localstorage://'+__dirname+'/critic_model');
-            }
+            await serialiser.serialise({
+                reward_plotting: reward_plotting,
+            }, 'plot_actor_critic.json');
+            // if(i%10) {
+            //     agent.actor.save(__dirname+'/actor_model');
+            //     agent.critic.save(__dirname+'/critic_model');
+            // }
         }
 
         return Promise.resolve({
             reward_plotting: reward_plotting,
-        })
+        });
     }
-
-    let A2C = new A2CAgent(1000,1000);
 
     return {
         main: main,
     }
 }
 
-module.exports = new actor_critic();
-let sars = new actor_critic();
+//module.exports = new actor_critic();
+(async() => {
+    let sars = new actor_critic();
+    sars.main();
+})();
+
 
     
 
