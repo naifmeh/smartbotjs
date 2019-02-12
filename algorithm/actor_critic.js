@@ -1,5 +1,6 @@
 function actor_critic() {
-    const tf = require('@tensorflow/tfjs-node-gpu');
+    const tf = require('@tensorflow/tfjs');
+    require('@tensorflow/tfjs-node-gpu');
     let zeros = (w, h, v=0) => Array.from(new Array(h), _ => Array(w).fill(v));
     
     class A2CAgent {
@@ -133,9 +134,6 @@ function actor_critic() {
     }
 
     
-   
-
-    
     const environment = require('./environment')().EnvironmentController(1500);
     const serialiser = require('../utils/serialisation');
 
@@ -184,10 +182,10 @@ function actor_critic() {
             await serialiser.serialise({
                 reward_plotting: reward_plotting,
             }, 'plot_actor_critic.json');
-            // if(i%10) {
-            //     agent.actor.save(__dirname+'/actor_model');
-            //     agent.critic.save(__dirname+'/critic_model');
-            // }
+             if(i%10) {
+                 agent.actor.save('file://./actor_model');
+                 agent.critic.save('file://./critic_model');
+             }
         }
 
         return Promise.resolve({
