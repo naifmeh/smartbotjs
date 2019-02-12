@@ -119,6 +119,16 @@ class Worker {
             actions_onehot.push(tf.oneHot(memory.actions[i], this.action_size));
         }
         actions_onehot = tf.tensor(actions_onehot, dtype='float32');
+        let entropy = tf.sum(logits.mul(tf.log(tf.add(logits + 1e-20))), axis=1)
+
+        let policy_loss = tf.losses.softmaxCrossEntropy(actions_onehot, logits);
+
+        policy_loss.add(entropy.mul(-0.01));
+        value_loss_tensor = tf.tensor(value_loss, dtype='float32');
+
+        let total_loss = tf.mean(policy_loss.add(value_loss_tensor.mul(0.5)))
+
+        return total_loss;
         
 
         
