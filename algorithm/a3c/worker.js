@@ -20,16 +20,20 @@ class Memory{
 }
 
 var global_episode = 0;
+var global_moving_average_reward = 0;
+var best_score = 0;
+
 const environment = require('../environment.js')();
 
 class Worker {
     static Agent = require('./agent.js').Agent;
-    constructor(state_size, action_size, global_model, opti, res_queue, idx) {
+    constructor(state_size, action_size, global_model, opti_policy, opti_values, res_queue, idx) {
         this.state_size = state_size;
         this.action_size = action_size;
         this.result_queue = res_queue;
         this.global_model = global_model;
-        this.opti = opti;
+        this.opti_policy = opti_policy;
+        this.opti_value = opti_values;
 
         this.local_model = new Agent(this.state_size, this.action_size);
 
@@ -51,6 +55,7 @@ class Worker {
 
         for(let i = 0; i < Object.values(data.websites).length; i++) {
             let current_state = this.env.reset(i);
+            mem.clear();
             let ep_reward = 0.0;
             let ep_steps = 0;
             let step_count = 0;
@@ -72,9 +77,13 @@ class Worker {
 
                 if(i%this.update_freq || done) {
                     //TODO: Update global net
-                    let total_loss = compute_loss(done, new_state, mem);
-                    this.ep_loss += total_loss;
-                    let grads;
+                    let losses = compute_loss(done, new_state, mem);
+
+                    this.ep_loss += losses.total_loss;
+
+                    const f = (a) => (a);
+                    let grad_policy = tf.variableGrads(f(losses.policy_loss), this.local_model.actor.getWeights());
+                    let grad_value = tf.variableGrads(f(losses.value_loss), this.local_model.critic.getWeights());
                 }
 
                 if(done) break;
@@ -128,7 +137,8 @@ class Worker {
 
         let total_loss = tf.mean(policy_loss.add(value_loss_tensor.mul(0.5)))
 
-        return total_loss;
+        console.log("Total loss {"+total_loss+"}")
+        return {'policy_loss': policy_loss, 'value_loss': value_loss, 'total_loss':total_loss};
         
 
         

@@ -52,8 +52,7 @@ class Agent {
 
     build_critic() {
         const model = tf.sequential();
-        
-        
+
         model.add(tf.layers.dense({
             units: 24,
             activation: 'relu',
@@ -77,6 +76,10 @@ class Agent {
         });
 
         return model;
+    }
+
+    get_policy_weights() {
+        return this.actor.weig
     }
 
     format_state(state) {
@@ -105,6 +108,17 @@ class Agent {
         return math_utils.weightedRandomItem(actions, policy_flat)
     }
 
+    get_policy(state, actions, batchsize=1) {
+        let acts = actions ? actions : this.actions;
+        let oneHotState = tf.oneHot(this.format_state(state), 12);
+
+        let policy = this.actor.predict(oneHotState.reshape([batchsize,9,12]), {
+            batchSize:batchsize,
+        });
+
+        return policy;
+    }
+
     get_value(state) {
         const math_utils = require('../utils/math_utils');
         
@@ -116,6 +130,18 @@ class Agent {
         });
         
         return value.flatten().get(0);
+    }
+
+    get_raw_value(states, batchsize) {
+        const math_utils = require('../utils/math_utils');
+        
+        let oneHotState = tf.oneHot(this.format_state(state), 12);
+
+        let value = this.critic.predict(oneHotState.reshape([batchsize, 9, 12]), {
+            batchSize: batchsize,
+        });
+        
+        return value;
     }
 
     get_actions_values(states) {
@@ -133,14 +159,49 @@ class Agent {
             batchSize: states.length,
         });
             
-        
 
         return { 'policies' : policy, 'values': value};
     }
 
+    build_feedforward(num_hidden) {
+        
+        const input = tf.input({shape: [9, 12]});
+        let fc1 = tf.layers.dense({
+            units: num_hidden,
+            activation: 'relu',
+            kernelInitializer:'glorotUniform',
+            inputShape: [9, 12], //oneHot shape
+        });
+        
+        let fc2 =  tf.layers.dense({
+            units: num_hidden,
+            activation: 'relu',
+            kernelInitializer: 'glorotUniform'
+        });
+
+        let policy = tf.layers.dense({
+            units: this.action_size,
+            activation:'softmax',
+            kernelInitializer:'glorotUniform',
+        });
+
+        let value = tf.layers.dense({
+            units: this.value_size,
+            activation:'linear',
+            kernelInitializer:'glorotUniform',
+        });
+
+        let outputpolicy = policy.apply(fc2.apply(fc1.apply(input)));
+        let outputvalue = value.apply(fc2.apply(fc1.apply(input)));
+
+        const model = tf.model({inputs: input, outputs:[outputpolicy, outputvalue]});
+
+        return model;
+        
+    }
     
 
-    train_model(state, action, reward, next_state, done) {
+    async train_model(state, action, reward, next_state, done) {
         let target = zeros(1, this.value_size);
         let advantages = zeros(1, this.action_size);
 
@@ -160,11 +221,11 @@ class Agent {
         }
 
         
-        this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
+        await this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
             epochs:1,
         });
 
-        this.critic.fit(oneHotState, tf.tensor(target), {
+        await this.critic.fit(oneHotState, tf.tensor(target), {
             epochs:1,
         });
         

@@ -112,7 +112,7 @@ function actor_critic() {
             oneHotNextState = oneHotNextState.reshape([1, 9, 12])
             let value = this.critic.predict(oneHotState).flatten().get(0);
             let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
-            console.log(action) //Pb nbr d'actions dans advantages
+            
             if(done) {
                 advantages[action] = [reward - value];
                 target[0] = reward;
