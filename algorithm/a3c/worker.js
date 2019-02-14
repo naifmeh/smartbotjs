@@ -1,4 +1,3 @@
-
 class Memory{
     constructor() {
         this.states = [];
@@ -18,22 +17,25 @@ class Memory{
         this.rewards = [];
     }
 }
+const worker_utils = require('./worker_utils');
+const tf = require('@tensorflow/tfjs-node-gpu');
+const math_utils = require('../../utils/math_utils');
 
-var global_episode = 0;
-var global_moving_average_reward = 0;
-var best_score = 0;
+worker_utils.set_global_episode(0);
+worker_utils.set_global_moving_average(0);
+worker_utils.set_best_score(0);
+
 
 const environment = require('../environment.js')();
 
 class Worker {
-    static Agent = require('./agent.js').Agent;
-    constructor(state_size, action_size, global_model, opti_policy, opti_values, res_queue, idx) {
+    static Agent = require('./alternate_agent.js').Agent;
+    constructor(state_size, action_size, global_model, opti, res_queue, idx) {
         this.state_size = state_size;
         this.action_size = action_size;
         this.result_queue = res_queue;
         this.global_model = global_model;
-        this.opti_policy = opti_policy;
-        this.opti_value = opti_values;
+        this.opti = opti
 
         this.local_model = new Agent(this.state_size, this.action_size);
 
@@ -51,7 +53,6 @@ class Worker {
         await this.env.init_env();
 
         let data = this.env.getEnvironmentData();
-        this.local_model.set_actions(data.actions_index);
 
         for(let i = 0; i < Object.values(data.websites).length; i++) {
             let current_state = this.env.reset(i);
@@ -64,36 +65,50 @@ class Worker {
             let time_count = 0;
             let done = False;
             while(true) {
-                let action = this.local_model.get_action(current_state, data.actions_index);
-                let step_data = await environment.step(action);
+                let logits = this.local_model.call(tf.oneHot(current_state, 12).reshape([1, 9, 12]))[0];
+                
+                let probs = tf.layers.softmax(logits);
+                let action = math_utils.weightedRandomItem(probs.dataSync(), policy_flat);
+
+                let step_data = this.env.step(action);
                 let next_state = step_data.state,
                     reward = step_data.reward,
                     done = step_data.done;
-                
-                reward = tf.clipByValue(reward, -1, 1).flatten().get(0);
-                ep_reward += reward;
+
                 mem.store(current_state, action, reward);
 
+                if(time_count%this.update_freq === 0 || done) {
+                    let total_loss = compute_loss(done, next_state, mem);
 
-                if(i%this.update_freq || done) {
-                    //TODO: Update global net
-                    let losses = compute_loss(done, new_state, mem);
+                    ep_loss += total_loss;
+                    //TODO : compute gradient dL/dW (LOOK MORE ON THE MATTER)
+                    //TODO: Apply gradient to global model using optimizer
+                    //Here we could use a worker function to send back a serializable
+                    //version of our gradient and apply it to the global net there
+                    // TFJS says everything should be serialisable so lets see
 
-                    this.ep_loss += losses.total_loss;
+                    //TODO: Get back global weights and apply them to local net
 
-                    const f = (a) => (a);
-                    let grad_policy = tf.variableGrads(f(losses.policy_loss), this.local_model.actor.getWeights());
-                    let grad_value = tf.variableGrads(f(losses.value_loss), this.local_model.critic.getWeights());
+                    mem.clear();
+                    time_count = 0;
                 }
-
-                if(done) break;
                 
-                current_state = next_state;
-                step_count++;
+                if(done) {
+                    worker_utils.set_global_moving_average(record());//TODO: data here))
+                    if( ep_reward > worker_utils.get_best_score()) {
+                        worker_utils.save_global_model();
+                    }
+                    worker_utils.set_best_score(ep_reward);
+                    break;
+                }
             }
-
-            
+            ep_steps++;
+            time_count++;
+            current_state = next_state;
+            total_step++;   
         }
+
+        worker_utils.update_queue(res_queue, 'done');
     }
 
     compute_loss(done, new_state, memory, gamma=0.99) {
@@ -139,9 +154,6 @@ class Worker {
 
         console.log("Total loss {"+total_loss+"}")
         return {'policy_loss': policy_loss, 'value_loss': value_loss, 'total_loss':total_loss};
-        
-
-        
         
         
     }
