@@ -116,12 +116,21 @@ class Worker {
         if(done) {
             reward_sum = 0.;
         } else {
-            reward_sum = this.local_model.predict(tf.oneHot(new_state).reshape([1, 9, 12]))
+            reward_sum = this.local_model.call(tf.oneHot(new_state).reshape([1, 9, 12]))
                         .values.flatten().get(0);
         }
 
         let discounted_rewards = [];
-        
+        let memory_reward_rev = memory.rewards;
+        for(let reward in memory_reward_rev.reverse()) {
+            reward_sum = reward + gamma * reward_sum;
+            discounted_rewards.append(reward_sum);
+        }
+        discounted_rewards.reverse();
+
+        let log_val = this.local_model.call()
+
+
         
     }
 }
