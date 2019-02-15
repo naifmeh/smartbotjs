@@ -112,48 +112,15 @@ class Worker {
     }
 
     compute_loss(done, new_state, memory, gamma=0.99) {
-        let reward_sum;
+        let reward_sum = 0.;
         if(done) {
-            reward_sum = 0.0;
+            reward_sum = 0.;
         } else {
-            reward_sum = this.local_model.get_value(new_state);
+            reward_sum = this.local_model.predict(tf.oneHot(new_state).reshape([1, 9, 12]))
+                        .values.flatten().get(0);
         }
 
         let discounted_rewards = [];
-        let mem_rew_copy = memory.rewards.copy();
-        for(let i=0; i<mem_rew_copy.reverse(); i++) {
-            reward_sum = reward + gamma * reward_sum;
-            discounted_rewards.push(reward_sum);
-        }
-        discounted_rewards.reverse();
-
-        let action_values = this.local_model.get_actions_values(memory.states);
-        let logits = action_values.policies, //batches
-            values = action_values.values;
-
-        let advantages = [];
-        let value_loss = [];
-        for(let i=0; i< Math.min(values.shape[0], logits.length); i++) {
-            advantages.push(discounted_rewards[i] - values.get(i).flatten().get(0));
-            value_loss.push(advantages[i] ** 2);
-        }
-
-        let actions_onehot = [];
-        for(let i=0; i < memory.actions.length; i++) {
-            actions_onehot.push(tf.oneHot(memory.actions[i], this.action_size));
-        }
-        actions_onehot = tf.tensor(actions_onehot, dtype='float32');
-        let entropy = tf.sum(logits.mul(tf.log(tf.add(logits + 1e-20))), axis=1)
-
-        let policy_loss = tf.losses.softmaxCrossEntropy(actions_onehot, logits);
-
-        policy_loss.add(entropy.mul(-0.01));
-        value_loss_tensor = tf.tensor(value_loss, dtype='float32');
-
-        let total_loss = tf.mean(policy_loss.add(value_loss_tensor.mul(0.5)))
-
-        console.log("Total loss {"+total_loss+"}")
-        return {'policy_loss': policy_loss, 'value_loss': value_loss, 'total_loss':total_loss};
         
         
     }
