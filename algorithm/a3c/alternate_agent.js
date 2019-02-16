@@ -48,7 +48,7 @@ class Agent {
 
      call(input) {
          const result = this.model.predict(input);
-         return result;
+         return {'logits': result[0], 'values': result[1]};
      }
 
      get_trainable_weights() {

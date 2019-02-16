@@ -65,7 +65,7 @@ class Worker {
             let time_count = 0;
             let done = False;
             while(true) {
-                let logits = this.local_model.call(tf.oneHot(current_state, 12).reshape([1, 9, 12]))[0];
+                let logits = this.local_model.call(tf.oneHot(current_state, 12).reshape([1, 9, 12])).logits;
                 
                 let probs = tf.layers.softmax(logits);
                 let action = math_utils.weightedRandomItem(probs.dataSync(), policy_flat);
@@ -128,9 +128,36 @@ class Worker {
         }
         discounted_rewards.reverse();
 
-        let log_val = this.local_model.call()
+        let onehot_states = [];
+        for(let state of memory.states) {
+            onehot_states.push(tf.oneHot(state, 12));
+        }
+        let init_onehot = onehot_states[0];
+        for(let i=1; i<init_onehot.length;i++) {
+            init_onehot.concat(onehot_states[i]);
+        }
 
+        let log_val = this.local_model.call(
+            init_onehot.reshape([memory.states.length, 9, 12])
+        );
 
+        let advantage = tf.tensor(discounted_rewards).sub(log_val.values);
+        let value_loss = advantage.square();
+
+        let policy = tf.layers.softmax(log_val.logits);
+        let logits_cpy = log_val.values.copy();
+
+        let entropy = tf.sum(policy.mul(logits_cpy.mul(tf.scalar(-1)))); 
+        let policy_loss = tf.losses.softmaxCrossEntropy(memory.actions, log_val.logits);
+        
+        
+        let value_loss_copy = value_loss.copy();
+        let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
+        let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32')),
+            total_loss_2 = total_loss_1.sum(policy_loss),
+            total_loss = total_loss_2.sum(entropy_mul);
+
+        return total_loss;
         
     }
 }
