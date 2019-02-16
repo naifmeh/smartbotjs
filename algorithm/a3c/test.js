@@ -21,7 +21,9 @@ class Agent {
             units: this.num_hidden,
             name: 'dense1',
             activation: 'relu',
-        });
+		});
+		
+		const flatten = tf.layers.flatten();
 
         const policy_output = tf.layers.dense({
             units: this.action_size,
@@ -39,11 +41,11 @@ class Agent {
             name: 'value'
         });
 
-        const output1 = policy_output.apply(fc1.apply(input));
-        const output2 = value_output.apply(fc2.apply(input));
+        const output1 = policy_output.apply(flatten.apply(fc1.apply(input)));
+        const output2 = value_output.apply(flatten.apply(fc2.apply(input)));
 
         const model = tf.model({inputs:input, outputs: [output1, output2]});
-
+		model.summary();
         return model;
     }
 
@@ -118,7 +120,8 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 	let entropy = policy.mul(logits_cpy.mul(tf.scalar(-1))); 
 	entropy = entropy.sum();
 	log_val.logits.print();
-	let policy_loss = tf.losses.softmaxCrossEntropy(memory.actions, log_val.logits);
+	
+	let policy_loss = tf.losses.softmaxCrossEntropy(memory.actions, log_val.logits.reshape([log_val.logits.shape[1]]));
 	
 	
 	let value_loss_copy = value_loss.clone();
@@ -131,7 +134,7 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 	
 }
 
-let agent = new Agent(2000, 12, 24);
+let agent = new Agent(4, 12, 24);
 let memory = new Memory();
 memory.store([false,false,false,false,0,50,0,100,0], 2, -3);
 
