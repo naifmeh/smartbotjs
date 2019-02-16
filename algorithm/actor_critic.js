@@ -96,9 +96,11 @@ function actor_critic() {
             let policy = this.actor.predict(oneHotState.reshape([1,9,12]), {
                 batchSize:1,
             });
+            policy.print();
             
             let policy_flat = policy.dataSync();
             
+            //TODO: not random, pick the max prob
             return math_utils.weightedRandomItem(actions, policy_flat);
         }
 
