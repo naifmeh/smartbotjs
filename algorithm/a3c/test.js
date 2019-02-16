@@ -108,15 +108,15 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 		init_onehot = init_onehot.concat(onehot_states[i]);
     }
     
-    
-    
 	let log_val = agent.call(
 		init_onehot.reshape([memory.states.length, 9, 12])
     );
     
     let disc_reward_tensor = tf.tensor(discounted_rewards);
     let advantage = disc_reward_tensor.reshapeAs(log_val.values).sub(log_val.values);
-	let value_loss = advantage.square();
+    let value_loss = advantage.square();
+    log_val.values.print();
+
 	let policy = tf.softmax(log_val.logits);
 	let logits_cpy = log_val.logits.clone();
 
@@ -137,9 +137,22 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
     
     let total_loss_2 = total_loss_1.add(policy_loss);
     let total_loss = total_loss_2.add(entropy_mul);
-    
-	return total_loss;
+    total_loss.print();
+	return total_loss.mean();
 	
 }
 
+
+let agent = new Agent(2000, 12, 24);
+let memory = new Memory();
+memory.store([false,false,false,false,0,50,0,100,0], 2, 5);
+memory.store([false,false,true,false,0,50,0,100,0], 0, 1);
+
+let loss = compute_loss(false, [false,false,false,false,0,50,0,100,0], memory, agent);
+
+
+let f = () => loss;
+
+let grad = tf.variableGrads(f);
+grad(agent.get_trainable_weights());
 
