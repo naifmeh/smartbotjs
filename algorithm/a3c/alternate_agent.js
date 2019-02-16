@@ -17,10 +17,12 @@ class Agent {
         const input = tf.layers.input({shape: [9, 12]}); //oneHot state shape
 
         const fc1 = tf.layers.dense({
-            units: num_hidden,
+            units: this.num_hidden,
             name: 'dense1',
             activation: 'relu',
-        });
+		});
+		
+		const flatten = tf.layers.flatten();
 
         const policy_output = tf.layers.dense({
             units: this.action_size,
@@ -28,7 +30,7 @@ class Agent {
         });
 
         const fc2 = tf.layers.dense({
-            units: num_hidden,
+            units: this.num_hidden,
             name: 'dense2',
             activation: 'relu',
         });
@@ -38,11 +40,11 @@ class Agent {
             name: 'value'
         });
 
-        const output1 = policy_output.apply(fc1.apply(input));
-        const output2 = value_output.apply(fc2.apply(input));
+        const output1 = policy_output.apply(flatten.apply(fc1.apply(input)));
+        const output2 = value_output.apply(flatten.apply(fc2.apply(input)));
 
         const model = tf.model({inputs:input, outputs: [output1, output2]});
-
+		model.summary();
         return model;
     }
 

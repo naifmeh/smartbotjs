@@ -81,6 +81,8 @@ class Worker {
                     let total_loss = compute_loss(done, next_state, mem);
 
                     ep_loss += total_loss;
+
+                    let grad = tf.variableGrads(total_loss)
                     //TODO : compute gradient dL/dW (LOOK MORE ON THE MATTER)
                     //TODO: Apply gradient to global model using optimizer
                     //Here we could use a worker function to send back a serializable
@@ -113,51 +115,61 @@ class Worker {
 
     compute_loss(done, new_state, memory, gamma=0.99) {
         let reward_sum = 0.;
-        if(done) {
-            reward_sum = 0.;
-        } else {
-            reward_sum = this.local_model.call(tf.oneHot(new_state).reshape([1, 9, 12]))
-                        .values.flatten().get(0);
-        }
+	if(done) {
+		reward_sum = 0.;
+	} else {
+		reward_sum = this.local_model.call(tf.oneHot(new_state, 12).reshape([1, 9, 12]))
+					.values.flatten().get(0);
+	}
 
-        let discounted_rewards = [];
-        let memory_reward_rev = memory.rewards;
-        for(let reward in memory_reward_rev.reverse()) {
-            reward_sum = reward + gamma * reward_sum;
-            discounted_rewards.append(reward_sum);
-        }
-        discounted_rewards.reverse();
+	let discounted_rewards = [];
+	let memory_reward_rev = memory.rewards;
+	for(let reward of memory_reward_rev.reverse()) {
+		reward_sum = reward + gamma * reward_sum;
+		discounted_rewards.push(reward_sum);
+	}
+	discounted_rewards.reverse();
 
-        let onehot_states = [];
-        for(let state of memory.states) {
-            onehot_states.push(tf.oneHot(state, 12));
-        }
-        let init_onehot = onehot_states[0];
-        for(let i=1; i<init_onehot.length;i++) {
-            init_onehot.concat(onehot_states[i]);
-        }
+	let onehot_states = [];
+	for(let state of memory.states) {
+		onehot_states.push(tf.oneHot(state, 12));
+	}
+    let init_onehot = onehot_states[0];
+    
+	for(let i=1; i<onehot_states.length;i++) {
+		init_onehot = init_onehot.concat(onehot_states[i]);
+    }
+    
+    
+    
+	let log_val = this.local_model.call(
+		init_onehot.reshape([memory.states.length, 9, 12])
+    );
+    
+    let disc_reward_tensor = tf.tensor(discounted_rewards);
+    let advantage = disc_reward_tensor.reshapeAs(log_val.values).sub(log_val.values);
+	let value_loss = advantage.square();
+	let policy = tf.softmax(log_val.logits);
+	let logits_cpy = log_val.logits.clone();
 
-        let log_val = this.local_model.call(
-            init_onehot.reshape([memory.states.length, 9, 12])
-        );
-
-        let advantage = tf.tensor(discounted_rewards).sub(log_val.values);
-        let value_loss = advantage.square();
-
-        let policy = tf.layers.softmax(log_val.logits);
-        let logits_cpy = log_val.values.copy();
-
-        let entropy = tf.sum(policy.mul(logits_cpy.mul(tf.scalar(-1)))); 
-        let policy_loss = tf.losses.softmaxCrossEntropy(memory.actions, log_val.logits);
-        
-        
-        let value_loss_copy = value_loss.copy();
-        let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
-        let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32')),
-            total_loss_2 = total_loss_1.sum(policy_loss),
-            total_loss = total_loss_2.sum(entropy_mul);
-
-        return total_loss;
-        
+	let entropy = policy.mul(logits_cpy.mul(tf.scalar(-1))); 
+	entropy = entropy.sum();
+	
+    let memory_actions = [];
+    for(let i=0; i< memory.actions.length; i++) {
+        memory_actions.push(new Array(this.action_size).fill(0));
+        memory_actions[i][memory.actions[i]] = 1;
+    }
+    memory_actions = tf.tensor(memory_actions);
+	let policy_loss = tf.losses.softmaxCrossEntropy(memory_actions.reshape([memory.actions.length, this.action_size]), log_val.logits);
+    
+    let value_loss_copy = value_loss.clone();
+    let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
+	let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32'));
+    
+    let total_loss_2 = total_loss_1.add(policy_loss);
+    let total_loss = total_loss_2.add(entropy_mul);
+    
+	return total_loss;    
     }
 }

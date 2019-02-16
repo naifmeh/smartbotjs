@@ -102,41 +102,44 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 	for(let state of memory.states) {
 		onehot_states.push(tf.oneHot(state, 12));
 	}
-	let init_onehot = onehot_states[0];
-	for(let i=1; i<init_onehot.length;i++) {
-		init_onehot.concat(onehot_states[i]);
-	}
-
+    let init_onehot = onehot_states[0];
+    
+	for(let i=1; i<onehot_states.length;i++) {
+		init_onehot = init_onehot.concat(onehot_states[i]);
+    }
+    
+    
+    
 	let log_val = agent.call(
 		init_onehot.reshape([memory.states.length, 9, 12])
-	);
-	let disc_reward_tensor = tf.tensor(discounted_rewards);
-	let advantage = disc_reward_tensor.sub(log_val.values);
+    );
+    
+    let disc_reward_tensor = tf.tensor(discounted_rewards);
+    let advantage = disc_reward_tensor.reshapeAs(log_val.values).sub(log_val.values);
 	let value_loss = advantage.square();
-
 	let policy = tf.softmax(log_val.logits);
 	let logits_cpy = log_val.logits.clone();
 
 	let entropy = policy.mul(logits_cpy.mul(tf.scalar(-1))); 
 	entropy = entropy.sum();
-	log_val.logits.print();
 	
-	let policy_loss = tf.losses.softmaxCrossEntropy(memory.actions, log_val.logits.reshape([log_val.logits.shape[1]]));
-	
-	
-	let value_loss_copy = value_loss.clone();
-	let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
-	let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32')),
-		total_loss_2 = total_loss_1.sum(policy_loss),
-		total_loss = total_loss_2.sum(entropy_mul);
-
+    let memory_actions = [];
+    for(let i=0; i< memory.actions.length; i++) {
+        memory_actions.push(new Array(2000).fill(0));
+        memory_actions[i][memory.actions[i]] = 1;
+    }
+    memory_actions = tf.tensor(memory_actions);
+	let policy_loss = tf.losses.softmaxCrossEntropy(memory_actions.reshape([memory.actions.length, 2000]), log_val.logits);
+    
+    let value_loss_copy = value_loss.clone();
+    let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
+	let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32'));
+    
+    let total_loss_2 = total_loss_1.add(policy_loss);
+    let total_loss = total_loss_2.add(entropy_mul);
+    
 	return total_loss;
 	
 }
 
-let agent = new Agent(4, 12, 24);
-let memory = new Memory();
-memory.store([false,false,false,false,0,50,0,100,0], 2, -3);
 
-
-compute_loss(false, [false,false,false,false,0,50,0,100,0], memory, agent);
