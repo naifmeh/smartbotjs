@@ -10,54 +10,116 @@ class Agent {
 
         if(actions_index) this.actions_index = actions_index;
 
-        this.model = this.build_model();
+        this.actor = this.build_actor();
+        this.critic = this.build_critic();
     }
 
-    build_model() {
+    build_actor() {
+        let model = tf.sequential();
+        
+        tf.add(tf.layers.input({
+            shape: [9, 12]
+        }));
 
-        const input = tf.layers.input({shape: [9, 12]}); //oneHot state shape
-
-        const fc1 = tf.layers.dense({
-            units: this.num_hidden,
-            name: 'dense1',
+        tf.add(tf.layers.dense({
             activation: 'relu',
-		});
-		
-		const flatten = tf.layers.flatten();
+            units: this.num_hidden,
+        }));
 
-        const policy_output = tf.layers.dense({
+        tf.add(tf.layers.flatten());
+
+        tf.add(tf.layers.dense({
+            activation: 'softmax',
             units: this.action_size,
-            name:'policy'
+        }));
+
+        model.compile({
+            optimizer: tf.train.adam(1e-4),
+            loss: tf.losses.softmaxCrossEntropy
         });
 
-        const fc2 = tf.layers.dense({
-            units: this.num_hidden,
-            name: 'dense2',
-            activation: 'relu',
-        });
-
-        const value_output = tf.layers.dense({
-            units: 1,
-            name: 'value'
-        });
-
-        const output1 = policy_output.apply(flatten.apply(fc1.apply(input)));
-        const output2 = value_output.apply(flatten.apply(fc2.apply(input)));
-
-        const model = tf.model({inputs:input, outputs: [output1, output2]});
-      
-		model.summary();
         return model;
     }
 
-     call(input) {
-         const result = this.model.predict(input);
-         return {'logits': result[0], 'values': result[1]};
-     }
+    build_critic() {
+        let model = tf.sequential();
+        
+        tf.add(tf.layers.input({
+            shape: [9, 12]
+        }));
 
-     get_trainable_weights() {
-         return this.model.getWeights();
-     }
+        tf.add(tf.layers.dense({
+            activation: 'relu',
+            units: this.num_hidden,
+        }));
+
+        tf.add(tf.layers.flatten());
+
+        tf.add(tf.layers.dense({
+            activation: 'softmax',
+            units: this.action_size,
+        }));
+
+        model.compile({
+            optimizer: tf.train.adam(5e-4),
+            loss: tf.losses.meanSquaredError
+        });
+
+        return model;
+    }
+
+    format_state(state) {
+        let copy_state = state.slice();
+        for(let i=0; i < state.length; i++) {
+            if(Array.isArray(copy_state[i])) {
+                copy_state[i] = Math.ceil(state[i][1] / 10);
+            }
+        }
+
+        return copy_state;
+    }
+
+    call_actor(inputs, batchSize) {
+        this.actor.predict(inputs, {
+            batchSize: batchSize
+        });
+    }
+
+    call_critic(inputs, batchSize) {
+        this.critic.predict(inputs, {
+            batchSize: batchSize,
+        });
+    }
+
+    train_model(done, memory, reward, next_state) {
+        let target = tf.zeros([1, this.value_size]);
+        let advantages = tf.zeros([1, this.action_size]);
+
+        let oneHotState = tf.oneHot(this.format_state(state), 12);
+        let oneHotNextState = tf.oneHot(this.format_state(next_state), 12);
+        oneHotState = oneHotState.reshape([1, 9, 12])
+        oneHotNextState = oneHotNextState.reshape([1, 9, 12])
+        let value = this.critic.predict(oneHotState).flatten().get(0);
+        let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
+        
+        if(done) {
+            advantages[action] = [reward - value];
+            target[0] = reward;
+        } else {
+            advantages[action] =  [reward +this.discount_factor * (next_value) - value];
+            target[0] = reward + this.discount_factor * next_value;
+        }
+
+        
+        this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
+            epochs:1,
+        });
+
+        this.critic.fit(oneHotState, tf.tensor(target), {
+            epochs:1,
+        });
+        
+    }
 
 
 }
