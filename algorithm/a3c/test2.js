@@ -206,12 +206,8 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 }
 
 
-let agent = new Agent(2000, 12, 24);
-let memory = new Memory();
-memory.store([false,false,false,false,0,50,0,100,0], 2, 5);
-memory.store([false,false,true,false,0,50,0,100,0], 0, 1);
-
-let loss = compute_loss(false, [false,false,false,false,0,50,0,100,0], memory, agent);
+const fs =require('fs');
+fs.writeFileSync('weights.bin', 'Vi9WP5aYGD4AAAAA', 'base64');
 
 
 

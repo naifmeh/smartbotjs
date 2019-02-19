@@ -57,7 +57,18 @@ app.get('/queue', (req, res, next) => {
     fs.writeFileSync('queue.txt', str);
 
     res.send({status: 'SUCCESS', data: elem_pop});
-})
+});
+
+app.post('/local_model_weights', (req, res, next) => {
+    let id = req.body.idx;
+    let data = req.body.data;
+
+    fs.writeFileSync(__dirname+'/global-model/weights.bin', data, 'base64');
+});
+
+app.get('/global_model_weights', (req, res, next) => {
+    res.sendFile(__dirname+'/./global-model/weights.bin');
+});
 
 const server = app.listen(33333, function() {
     let host = server.address().address;
