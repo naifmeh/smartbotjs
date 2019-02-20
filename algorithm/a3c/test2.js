@@ -75,7 +75,6 @@ class Agent {
                 copy_state[i] = Math.ceil(state[i][1] / 10);
             }
         }
-
         return copy_state;
     }
 
@@ -95,12 +94,34 @@ class Agent {
         let target = tf.zeros([1, this.value_size]);
         let advantages = tf.zeros([1, this.action_size]);
 
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
+        let tf_oneHotStates;
+        for(let i=0; i< memory.states.length; i++) {
+            if(i===0) tf_oneHotStates = tf.oneHot(this.format_state(memory.state[i]), 12);
+            else tf_oneHotStates.concat(tf.oneHot(this.format_state(memory.state[i]), 12))
+        }
+        tf_oneHotStates.reshape([memory.states.length, 9, 12]);
+
+        // let oneHotState = tf.oneHot(this.format_state(state), 12);
         let oneHotNextState = tf.oneHot(this.format_state(next_state), 12);
-        oneHotState = oneHotState.reshape([1, 9, 12])
+        //oneHotState = oneHotState.reshape([1, 9, 12])
         oneHotNextState = oneHotNextState.reshape([1, 9, 12])
-        let value = this.critic.predict(oneHotState).flatten().get(0);
-        let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
+        let value = this.critic.predict(oneHotStates).reshape([memory.states.length, 1]);
+        let next_value = this.critic.predict(oneHotNextState);
+
+        let reward_sum = 0.;
+        if(done) {
+            reward_sum = 0.;
+        } else {
+            reward_sum = this.local_model.call(tf.oneHot(next_state, 12).reshape([1, 9, 12]))
+                        .values.flatten().get(0);
+        }
+    
+        let discounted_rewards = [];
+        let memory_reward_rev = memory.rewards;
+        for(let reward of memory_reward_rev.reverse()) {
+            reward_sum = reward + gamma * reward_sum;
+            discounted_rewards.push(reward_sum);
+        }
         
         if(done) {
             advantages[action] = [reward - value];
@@ -111,11 +132,11 @@ class Agent {
         }
 
         
-        this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
+        this.actor.fit(oneHotStates, tf.tensor(advantages).reshape([1,2047]), {
             epochs:1,
         });
 
-        this.critic.fit(oneHotState, tf.tensor(target), {
+        this.critic.fit(oneHotStates, tf.tensor(target), {
             epochs:1,
         });
         
@@ -206,8 +227,12 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 }
 
 
-const fs =require('fs');
-fs.writeFileSync('weights.bin', 'Vi9WP5aYGD4AAAAA', 'base64');
+const tst = tf.variable([2]);
+const a = tf.tensor([2,1]);
+const f = () => tst.mul(a).sum();
+
+let grad = tf.grad(f);
+grad.print();
 
 
 

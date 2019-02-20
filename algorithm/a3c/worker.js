@@ -96,11 +96,11 @@ class Worker {
                 }
                 
                 if(done) {
-                    worker_utils.set_global_moving_average(record());//TODO: data here))
-                    if( ep_reward > worker_utils.get_best_score()) {
-                        worker_utils.save_global_model();
+                    await worker_utils.set_global_moving_average(record());//TODO: data here))
+                    if( ep_reward > (await worker_utils.get_best_score())) {
+                        await worker_utils.save_global_model();
                     }
-                    worker_utils.set_best_score(ep_reward);
+                    await worker_utils.set_best_score(ep_reward);
                     break;
                 }
             }
@@ -110,7 +110,7 @@ class Worker {
             total_step++;   
         }
 
-        worker_utils.update_queue(res_queue, 'done');
+        await worker_utils.write_queue('done');
     }
 
     compute_loss(done, new_state, memory, gamma=0.99) {

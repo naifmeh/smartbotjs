@@ -130,8 +130,9 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
         memory_actions[i][memory.actions[i]] = 1;
     }
     memory_actions = tf.tensor(memory_actions);
-	let policy_loss = tf.losses.softmaxCrossEntropy(memory_actions.reshape([memory.actions.length, 2000]), log_val.logits);
-    
+    let policy_loss = tf.losses.softmaxCrossEntropy(memory_actions.reshape([memory.actions.length, 2000]), log_val.logits);
+    console.log(policy_loss);
+    policy_loss.print();
     let value_loss_copy = value_loss.clone();
     let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
 	let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32'));
@@ -150,7 +151,7 @@ memory.store([false,false,false,false,0,50,0,100,0], 2, 5);
 memory.store([false,false,true,false,0,50,0,100,0], 0, 1);
 
 let loss = compute_loss(false, [false,false,false,false,0,50,0,100,0], memory, agent);
-
+tf.train.adam(1e-4).minimize(()=>loss, true, agent.get_trainable_weights());
 
 
 
