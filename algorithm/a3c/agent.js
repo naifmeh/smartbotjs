@@ -178,11 +178,22 @@ class MasterAgent {
     }
 
     async train() {
+        worker_utils.create_queue();
 
         let workers = [];
         for(let i=0; i<this.amt_workers; i++) {
             worker_utils.start_worker(i);
         }
 
+        let moving_avg_rewards = [];
+        while(true) {
+            let reward = await worker_utils.get_queue();
+            if(reward !== 'done') {
+                moving_avg_rewards.push(reward);
+            } else {
+                break;
+            }
+        }
+        await worker_utils.wait_for_workers();
     }
 }

@@ -156,6 +156,10 @@ async function get_global_model() {
     });
 }
 
+function create_queue() {
+
+}
+
 async function write_queue(val) {
     const options = {
         hostname: host,
@@ -248,3 +252,4 @@ module.exports.send_model = send_model;
 module.exports.get_global_model = get_global_model;
 module.exports.start_worker = start_worker;
 module.exports.increment_global_episode = increment_global_episode;
+module.exports.create_queue = create_queue;
