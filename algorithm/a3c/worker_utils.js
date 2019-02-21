@@ -95,7 +95,7 @@ async function get_best_score() {
     }); 
 }
 
-async function send_model(worker_id) {
+async function send_model(worker_id, temporary) {
     const options = {
         hostname: host,
         port: port,
@@ -117,8 +117,9 @@ async function send_model(worker_id) {
         });
         let obj = {};
         obj.idx = worker_id;
-        obj.data_actor = fs.readFileSync(__dirname+'/local-model-actor/weights.bin', {encoding: 'base64'});
-        obj.data_critic = fs.readFileSync(__dirname+'/local-model-critic/weights.bin', {encoding: 'base64'});
+        obj.temporary = temporary;
+        obj.data_actor = fs.readFileSync(__dirname+'/local-model-actor/weights.bin', {encoding: 'binary'});
+        obj.data_critic = fs.readFileSync(__dirname+'/local-model-critic/weights.bin', {encoding: 'binary'});
         req.write(JSON.stringify(obj));
         req.end();
     });
@@ -300,8 +301,12 @@ async function get_global_model_critic() {
         const req = http.request(options, (res) => {
             res.on('data', (d) => {
                 let buffer = new Buffer(d, 'binary');
-                fs.writeFileSync(__dirname+'/local-model-critic/weights.bin', buffer);
-                resolve();
+                fs.writeFile(__dirname+'/local-model-critic/weights.bin', buffer, (err) => {
+                    if(!err) {
+                        resolve();
+                    }
+                });
+                
             });
         });
         req.on('error', (error) => {
@@ -323,8 +328,11 @@ async function get_global_model_actor() {
         const req = http.request(options, (res) => {
             res.on('data', (d) => {
                 let buffer = new Buffer(d, 'binary');
-                fs.writeFileSync(__dirname+'/local-model-actor/weights.bin', buffer);
-                resolve();
+                fs.writeFile(__dirname+'/local-model-actor/weights.bin', buffer, (err) => {
+                    if(!err) {
+                        resolve();
+                    }
+                });
             });
         });
         req.on('error', (error) => {

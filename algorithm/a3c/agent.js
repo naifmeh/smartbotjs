@@ -96,11 +96,11 @@ class Agent {
     async reload_weights(path_actor, path_critic) {
         this.actor = await tf.loadModel('file://'+path_actor);
         this.critic = await tf.loadModel('file://'+path_critic)
-        this.critic.compile({
+        await this.critic.compile({
             optimizer: tf.train.adam(5e-4),
             loss: tf.losses.meanSquaredError,
         });
-        this.actor.compile({
+        await this.actor.compile({
             optimizer: tf.train.adam(1e-4),
             loss: tf.losses.softmaxCrossEntropy
         });

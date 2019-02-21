@@ -3,7 +3,7 @@ const app = express();
 const fs = require('fs');
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.json({limit:'10mb', extended: true}));
+app.use(bodyParser.json({limit:'20mb', extended: true}));
 
 app.post('/global_moving_average', (req, res, next) => {
     console.log('Updating global moving average');
@@ -70,11 +70,11 @@ app.post('/local_model_weights', (req, res, next) => {
     let data_critic = req.body.data_critic;
     let temporary = req.body.temporary;
     if(temporary) {
-        fs.writeFileSync(__dirname+'/temporary-global-model-actor/weights.bin', data_actor, 'base64');
-        fs.writeFileSync(__dirname+'/temporary-global-model-critic/weights.bin', data_critic, 'base64');
+        fs.writeFileSync(__dirname+'/temporary-global-model-actor/weights.bin', data_actor, 'binary');
+        fs.writeFileSync(__dirname+'/temporary-global-model-critic/weights.bin', data_critic, 'binary');
     } else {
-        fs.writeFileSync(__dirname+'/global-model-actor/weights.bin', data_actor, 'base64');
-        fs.writeFileSync(__dirname+'/global-model-critic/weights.bin', data_critic, 'base64'); 
+        fs.writeFileSync(__dirname+'/global-model-actor/weights.bin', data_actor, 'binary');
+        fs.writeFileSync(__dirname+'/global-model-critic/weights.bin', data_critic, 'binary'); 
     }
     res.send({status: 'SUCCESS'});
 });
