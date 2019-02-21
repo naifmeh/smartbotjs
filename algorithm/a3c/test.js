@@ -96,8 +96,9 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 	for(let reward of memory_reward_rev.reverse()) {
 		reward_sum = reward + gamma * reward_sum;
 		discounted_rewards.push(reward_sum);
-	}
-	discounted_rewards.reverse();
+    }
+    discounted_rewards.reverse();
+    console.log(discounted_rewards);
 
 	let onehot_states = [];
 	for(let state of memory.states) {
@@ -151,7 +152,4 @@ memory.store([false,false,false,false,0,50,0,100,0], 2, 5);
 memory.store([false,false,true,false,0,50,0,100,0], 0, 1);
 
 let loss = compute_loss(false, [false,false,false,false,0,50,0,100,0], memory, agent);
-tf.train.adam(1e-4).minimize(()=>loss, true, agent.get_trainable_weights());
-
-
 

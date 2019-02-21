@@ -1,85 +1,76 @@
 const tf = require('@tensorflow/tfjs-node');
-class Agent {
+const zeros = (w, h, v=0) => Array.from(new Array(h), _ => Array(w).fill(v));
     
+class Agent {
+    constructor(action_size, state_size, num_hidden, actions_index=undefined) {
+        let optimizer = tf.train.adam(1e-4);
 
-    constructor(state_size, action_size, actions) {
-        this.render = false;
-        this.state_size = state_size;
         this.action_size = action_size;
-        this.value_size = 1;
+		this.state_size = state_size;
+        this.num_hidden = num_hidden;
+        this.discount_factor = 0.999;
 
-        this.discount_factor = 0.99;
-        this.actor_learningr = 0.001;
-        this.critic_learningr = 0.005;
+        if(actions_index) this.actions_index = actions_index;
 
-        this.actor = build_actor();
-        this.critic = build_critic();
-        if(actions)
-            this.actions = actions;
-    }
-
-    set_actions(actions) {
-        this.actions = actions;
+        this.actor = this.build_actor();
+        this.critic = this.build_critic();
     }
 
     build_actor() {
         const model = tf.sequential();
         
+
         model.add(tf.layers.dense({
-            units: 24,
+            inputShape: [9, 12],
+            units: this.num_hidden,
             activation: 'relu',
             kernelInitializer:'glorotUniform',
-            inputShape:[9, 12], //oneHotShape
+            
         }));
-        
+
         model.add(tf.layers.flatten());
 
         model.add(tf.layers.dense({
             units: this.action_size,
-            activation:'softmax',
+            activation: 'softmax',
             kernelInitializer:'glorotUniform',
+            
         }));
 
         model.summary();
 
         model.compile({
-            optimizer: tf.train.adam(this.actor_learningr),
-            loss:tf.losses.softmaxCrossEntropy
+            optimizer: tf.train.adam(1e-4),
+            loss: tf.losses.softmaxCrossEntropy
         });
 
         return model;
     }
 
     build_critic() {
-        const model = tf.sequential();
+        let model = tf.sequential();
 
         model.add(tf.layers.dense({
-            units: 24,
-            activation: 'relu',
+            inputShape: [9, 12],
             kernelInitializer:'glorotUniform',
-            inputShape: [9, 12], //oneHot shape
+            activation: 'relu',
+            units: this.num_hidden,
         }));
 
         model.add(tf.layers.flatten());
 
         model.add(tf.layers.dense({
-            units: this.value_size,
-            activation:'linear',
             kernelInitializer:'glorotUniform',
+            activation: 'softmax',
+            units: 1,
         }));
 
-        model.summary();
-
         model.compile({
-            optimizer: tf.train.adam(this.critic_learningr),
-            loss:tf.losses.meanSquaredError,
+            optimizer: tf.train.adam(5e-4),
+            loss: tf.losses.meanSquaredError
         });
 
         return model;
-    }
-
-    get_policy_weights() {
-        return this.actor.weig
     }
 
     format_state(state) {
@@ -89,154 +80,84 @@ class Agent {
                 copy_state[i] = Math.ceil(state[i][1] / 10);
             }
         }
-
         return copy_state;
-
     }
 
-    get_action(state, actions) {
-        const math_utils = require('../utils/math_utils');
-        
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
-        
-        let policy = this.actor.predict(oneHotState.reshape([1,9,12]), {
-            batchSize:1,
+    call_actor(inputs, batchSize) {
+        this.actor.predict(inputs, {
+            batchSize: batchSize
         });
-        
-        let policy_flat = policy.dataSync();
-        
-        return math_utils.weightedRandomItem(actions, policy_flat)
     }
 
-    get_policy(state, actions, batchsize=1) {
-        let acts = actions ? actions : this.actions;
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
-
-        let policy = this.actor.predict(oneHotState.reshape([batchsize,9,12]), {
-            batchSize:batchsize,
+    call_critic(inputs, batchSize) {
+        this.critic.predict(inputs, {
+            batchSize: batchSize,
         });
-
-        return policy;
     }
 
-    get_value(state) {
-        const math_utils = require('../utils/math_utils');
+    async train_model(done, memory, next_state) {
+        let target = zeros(this.value_size, memory.actions.length );
+        let advantages = zeros(this.action_size, memory.actions.length);
+
+        let tf_oneHotStates;
+        for(let i=0; i< memory.states.length; i++) {
+            if(i===0) tf_oneHotStates = tf.oneHot(this.format_state(memory.states[i]), 12);
+            else tf_oneHotStates = tf_oneHotStates.concat(tf.oneHot(this.format_state(memory.states[i]), 12))
+        }
         
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
-        
-
-        let value = this.critic.predict(oneHotState.reshape([1, 9, 12]), {
-            batchSize: 1,
-        });
-        
-        return value.flatten().get(0);
-    }
-
-    get_raw_value(states, batchsize) {
-        const math_utils = require('../utils/math_utils');
-        
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
-
-        let value = this.critic.predict(oneHotState.reshape([batchsize, 9, 12]), {
-            batchSize: batchsize,
-        });
-        
-        return value;
-    }
-
-    get_actions_values(states) {
-        const math_utils = require('../utils/math_utils');
-        let policies = [];
-        let values = [];
-
-        let oneHotState = tf.oneHot(this.format_state(states), 12);
-            
-        let policy = this.actor.predict(oneHotState.reshape([states.length,9,12]), {
-            batchSize:states.length,
-        });
-
-        let value = this.critic.predict(oneHotState.reshape([states.length, 9, 12]), {
-            batchSize: states.length,
-        });
-            
-
-        return { 'policies' : policy, 'values': value};
-    }
-
-    build_feedforward(num_hidden) {
-        
-        const input = tf.input({shape: [9, 12]});
-        let fc1 = tf.layers.dense({
-            units: num_hidden,
-            activation: 'relu',
-            kernelInitializer:'glorotUniform',
-            inputShape: [9, 12], //oneHot shape
-        });
-        
-        let fc2 =  tf.layers.dense({
-            units: num_hidden,
-            activation: 'relu',
-            kernelInitializer: 'glorotUniform'
-        });
-
-        let policy = tf.layers.dense({
-            units: this.action_size,
-            activation:'softmax',
-            kernelInitializer:'glorotUniform',
-        });
-
-        let value = tf.layers.dense({
-            units: this.value_size,
-            activation:'linear',
-            kernelInitializer:'glorotUniform',
-        });
-
-        let outputpolicy = policy.apply(fc2.apply(fc1.apply(input)));
-        let outputvalue = value.apply(fc2.apply(fc1.apply(input)));
-
-        const model = tf.model({inputs: input, outputs:[outputpolicy, outputvalue]});
-
-        return model;
-        
-    }
-    
-
-    async train_model(state, action, reward, next_state, done) {
-        let target = zeros(1, this.value_size);
-        let advantages = zeros(1, this.action_size);
-
-        let oneHotState = tf.oneHot(this.format_state(state), 12);
         let oneHotNextState = tf.oneHot(this.format_state(next_state), 12);
-        oneHotState = oneHotState.reshape([1, 9, 12])
         oneHotNextState = oneHotNextState.reshape([1, 9, 12])
-        let value = this.critic.predict(oneHotState).flatten().get(0);
-        let next_value = this.critic.predict(oneHotNextState).flatten().get(0);
-        console.log(action) //Pb nbr d'actions dans advantages
+        let values = this.critic.predict(tf_oneHotStates.reshape([memory.states.length, 9, 12])).reshape([memory.states.length, 1]);
+        let next_value = this.critic.predict(oneHotNextState).reshape([1]);
+        let reward_sum = 0.;
+        if(!done) {
+            reward_sum = this.critic.predict(tf.oneHot(next_state, 12).reshape([1, 9, 12]))
+                        .flatten().get(0);
+        }
+    
+        let discounted_rewards = [];
+        let memory_reward_rev = memory.rewards;
+        for(let reward of memory_reward_rev.reverse()) {
+            reward_sum = reward + this.discount_factor * reward_sum;
+            discounted_rewards.push(reward_sum);
+        }
+        let discounted_rewards_tf = tf.tensor(discounted_rewards);
         if(done) {
-            advantages[action] = [reward - value];
-            target[0] = reward;
+            for(let i=0; i < memory.actions.length; i++) {
+                advantages[i][memory.actions[i]] = discounted_rewards.get(i) - values.get(i, 0);
+                target[i][0] = discounted_rewards[i];
+            }
         } else {
-            advantages[action] =  [reward +this.discount_factor * (next_value) - value];
-            target[0] = reward + this.discount_factor * next_value;
+            for(let i=0; i < memory.actions.length; i++) {
+                advantages[i][memory.actions[i]] = next_value.flatten().get(0)*this.discount_factor + discounted_rewards_tf.get(i) - values.get(i, 0);
+                target[i][0] = next_value.flatten().get(0) * this.discount_factor + discounted_rewards_tf.get(i);
+            }
         }
 
         
-        await this.actor.fit(oneHotState, tf.tensor(advantages).reshape([1,2047]), {
+        const actor_train = await this.actor.fit(tf_oneHotStates.reshape([memory.actions.length, 9, 12]), tf.tensor(advantages).reshape([memory.actions.length, this.action_size]), {
             epochs:1,
         });
 
-        await this.critic.fit(oneHotState, tf.tensor(target), {
-            epochs:1,
-        });
+        const critic_train = await this.critic.fit(tf_oneHotStates.reshape([memory.actions.length, 9, 12]), tf.tensor(target).reshape([memory.actions.length, 1]), {
+             epochs:1,
+         }); 
+
+        this.actor.save('file://./local-model-actor');
+        this.critic.save('file://./local-model-critic')
         
+        return
     }
+
+
 }
 
 module.exports.Agent = Agent;
 
 const environment = require('../environment')();
+const worker_utils = require('./worker_utils');
 class MasterAgent {
-    async constructor(n_workers) {
+    constructor(n_workers) {
         this.name = "SmartbotJs-env"; //stylé
         this.env = environment.EnvironmentController(1500);
         await this.env.init_env();
@@ -256,11 +177,11 @@ class MasterAgent {
         this.amt_workers = n_workers;
     }
 
-    train() {
+    async train() {
 
         let workers = [];
         for(let i=0; i<this.amt_workers; i++) {
-            //TODO: create workers
+            worker_utils.start_worker(i);
         }
 
     }

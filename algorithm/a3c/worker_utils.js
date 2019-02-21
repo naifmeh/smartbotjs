@@ -123,13 +123,14 @@ async function send_model(worker_id) {
         });
         let obj = {};
         obj.idx = worker_id;
-        obj.data = fs.readFileSync(__dirname+'/local-model/weights.bin', {encoding: 'base64'});
+        obj.data_actor = fs.readFileSync(__dirname+'/local-model-actor/weights.bin', {encoding: 'base64'});
+        obj.data_critic = fs.readFileSync(__dirname+'/local-model-critic/weights.bin', {encoding: 'base64'});
         req.write(JSON.stringify(obj));
         req.end();
     });
 }
 
-async function get_global_model(worker_id) {
+async function get_global_model() {
     const options = {
         hostname: host,
         port: port,
@@ -144,7 +145,7 @@ async function get_global_model(worker_id) {
         const req = http.request(options, (res) => {
             console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
-                resolve(d.toString('utf8'));
+                resolve(d.toString('utf8')); //TODO: enregistrer le modele ?
             });
         });
         req.on('error', (error) => {
@@ -206,11 +207,35 @@ async function get_queue() {
         req.on('error', (error) => {
             reject(error);
         });
-        let obj = {};
-        obj.data = val;
-        req.write(JSON.stringify(obj));
         req.end();
     });
+}
+
+async function start_worker(hostn, portn, idx) {
+    const options = {
+        hostname: hostn,
+        port: portn,
+        path: '/start_worker',
+        method: 'GET',
+    };
+
+    return new Promise((resolve, reject) => {
+        const req = http.request(options, (res) => {
+            console.log('statusCode :'+ res.statusCode);
+            res.on('data', (d) => {
+                let data = d.toString('utf8');
+                resolve(data);
+            });
+        });
+        req.on('error', (error) => {
+            reject(error);
+        });
+        req.end();
+    });
+}
+
+async function increment_global_episode() {
+
 }
 
 module.exports.set_global_moving_average = set_global_moving_average;
@@ -221,3 +246,5 @@ module.exports.get_queue = get_queue;
 module.exports.write_queue = write_queue;
 module.exports.send_model = send_model;
 module.exports.get_global_model = get_global_model;
+module.exports.start_worker = start_worker;
+module.exports.increment_global_episode = increment_global_episode;
