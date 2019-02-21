@@ -121,6 +121,9 @@ class Agent {
             reward_sum = reward + this.discount_factor * reward_sum;
             discounted_rewards.push(reward_sum);
         }
+        console.log(discounted_rewards);
+        discounted_rewards = discounted_rewards.reverse();
+        console.log(discounted_rewards);
         let discounted_rewards_tf = tf.tensor(discounted_rewards);
         if(done) {
             for(let i=0; i < memory.actions.length; i++) {

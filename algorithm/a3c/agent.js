@@ -1,11 +1,11 @@
-const tf = require('@tensorflow/tfjs-node');
+const tf = require('@tensorflow/tfjs-node-gpu');
 const zeros = (w, h, v=0) => Array.from(new Array(h), _ => Array(w).fill(v));
     
 class Agent {
-    constructor(action_size, state_size, num_hidden, actions_index=undefined) {
-        let optimizer = tf.train.adam(1e-4);
+    constructor(state_size, action_size, num_hidden, actions_index=undefined) {
 
         this.action_size = action_size;
+        console.log('Actions size '+action_size);
 		this.state_size = state_size;
         this.num_hidden = num_hidden;
         this.discount_factor = 0.999;
@@ -14,6 +14,7 @@ class Agent {
 
         this.actor = this.build_actor();
         this.critic = this.build_critic();
+
     }
 
     build_actor() {
@@ -65,6 +66,7 @@ class Agent {
             units: 1,
         }));
 
+        model.summary(); 
         model.compile({
             optimizer: tf.train.adam(5e-4),
             loss: tf.losses.meanSquaredError
@@ -83,16 +85,26 @@ class Agent {
         return copy_state;
     }
 
-    call_actor(inputs, batchSize) {
-        this.actor.predict(inputs, {
-            batchSize: batchSize
-        });
+    call_actor(inputs) {
+        return this.actor.predict(inputs);
     }
 
-    call_critic(inputs, batchSize) {
-        this.critic.predict(inputs, {
-            batchSize: batchSize,
+    call_critic(inputs) {
+        return this.critic.predict(inputs);
+    }
+
+    async reload_weights(path_actor, path_critic) {
+        this.actor = await tf.loadModel('file://'+path_actor);
+        this.critic = await tf.loadModel('file://'+path_critic)
+        this.critic.compile({
+            optimizer: tf.train.adam(5e-4),
+            loss: tf.losses.meanSquaredError,
         });
+        this.actor.compile({
+            optimizer: tf.train.adam(1e-4),
+            loss: tf.losses.softmaxCrossEntropy
+        });
+        return Promise.resolve();
     }
 
     async train_model(done, memory, next_state) {
@@ -111,7 +123,7 @@ class Agent {
         let next_value = this.critic.predict(oneHotNextState).reshape([1]);
         let reward_sum = 0.;
         if(!done) {
-            reward_sum = this.critic.predict(tf.oneHot(next_state, 12).reshape([1, 9, 12]))
+            reward_sum = this.critic.predict(tf.oneHot(this.format_state(next_state), 12).reshape([1, 9, 12]))
                         .flatten().get(0);
         }
     
@@ -121,10 +133,11 @@ class Agent {
             reward_sum = reward + this.discount_factor * reward_sum;
             discounted_rewards.push(reward_sum);
         }
+        discounted_rewards = discounted_rewards.reverse();
         let discounted_rewards_tf = tf.tensor(discounted_rewards);
         if(done) {
             for(let i=0; i < memory.actions.length; i++) {
-                advantages[i][memory.actions[i]] = discounted_rewards.get(i) - values.get(i, 0);
+                advantages[i][memory.actions[i]] = discounted_rewards_tf.get(i) - values.get(i, 0);
                 target[i][0] = discounted_rewards[i];
             }
         } else {
@@ -137,16 +150,18 @@ class Agent {
         
         const actor_train = await this.actor.fit(tf_oneHotStates.reshape([memory.actions.length, 9, 12]), tf.tensor(advantages).reshape([memory.actions.length, this.action_size]), {
             epochs:1,
+            verbose:0,
         });
 
         const critic_train = await this.critic.fit(tf_oneHotStates.reshape([memory.actions.length, 9, 12]), tf.tensor(target).reshape([memory.actions.length, 1]), {
              epochs:1,
+             verbose:0,
          }); 
 
-        this.actor.save('file://./local-model-actor');
-        this.critic.save('file://./local-model-critic')
+        await this.actor.save('file://./local-model-actor');
+        await this.critic.save('file://./local-model-critic')
         
-        return
+        return Promise.resolve(tf.mean(tf.tensor([critic_train.history.loss[0], actor_train.history.loss[0]])).flatten().get(0));
     }
 
 
@@ -158,6 +173,10 @@ const environment = require('../environment')();
 const worker_utils = require('./worker_utils');
 class MasterAgent {
     constructor(n_workers) {
+        this.amt_workers = n_workers;
+    }
+
+    async init() {
         this.name = "SmartbotJs-env"; //stylé
         this.env = environment.EnvironmentController(1500);
         await this.env.init_env();
@@ -165,29 +184,28 @@ class MasterAgent {
         this.env_data = this.env.getEnvironmentData();
 
         this.action_size = this.env_data.actions_index.length;
-        this.state_size = 12;
+        this.state_size = 9;
 
-        this.lr = 0.0001;
-
-        this.opti = tf.train.Optimizer(tf.train.adam(this.lr));
         console.log(this.state_size, this.action_size);
 
-        this.global_model = new Agent(this.state_size, this.action_size, this.env_data.actions_index);
-        
-        this.amt_workers = n_workers;
+        this.agent = new Agent(this.state_size, this.action_size, 24);
+        this.agent.actor.save('file://global-model-actor/');
+        this.agent.critic.save('file://global-model-critic/');
+        return Promise.resolve();
     }
 
     async train() {
         worker_utils.create_queue();
 
-        let workers = [];
-        for(let i=0; i<this.amt_workers; i++) {
-            worker_utils.start_worker(i);
+        let workers = worker_utils.get_workers_hostnames();
+        for(let i=0; i<workers.length; i++) {
+            console.log("Starting worker "+i);
+            worker_utils.start_worker(workers[i]);
         }
 
         let moving_avg_rewards = [];
         while(true) {
-            let reward = await worker_utils.get_queue();
+            let reward = await worker_utils.get_blocking_queue();
             if(reward !== 'done') {
                 moving_avg_rewards.push(reward);
             } else {
@@ -195,5 +213,12 @@ class MasterAgent {
             }
         }
         await worker_utils.wait_for_workers();
+
+        return Promise.resolve();
     }
 }
+
+// (async() => {
+//     let master = new MasterAgent(1);
+//     await master.init();
+// })

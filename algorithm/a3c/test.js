@@ -97,8 +97,7 @@ function compute_loss(done, new_state, memory, agent, gamma=0.99) {
 		reward_sum = reward + gamma * reward_sum;
 		discounted_rewards.push(reward_sum);
     }
-    discounted_rewards.reverse();
-    console.log(discounted_rewards);
+    discounted_rewards = discounted_rewards.reverse();
 
 	let onehot_states = [];
 	for(let state of memory.states) {
