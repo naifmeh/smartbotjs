@@ -18,7 +18,6 @@ async function set_global_moving_average(avg) {
 
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
                 resolve(d);
             });
@@ -40,7 +39,6 @@ async function get_global_moving_average() {
     };
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log(`statusCode: ${res.statusCode}`);
             res.on('data', (d) => {
                 resolve(JSON.parse(d.toString('utf8')).data);
             });
@@ -65,7 +63,6 @@ async function set_best_score(score) {
 
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
                 resolve(d.toString('utf8'));
             });
@@ -87,9 +84,8 @@ async function get_best_score() {
     };
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log(`statusCode: ${res.statusCode}`);
             res.on('data', (d) => {
-                resolve(d.toString('utf8').data);
+                resolve(parseFloat(JSON.parse(d.toString('utf8')).data));
             });
         });
         req.on('error', (error) => {
@@ -112,7 +108,6 @@ async function send_model(worker_id) {
 
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
                 resolve(d.toString('utf8'));
             });
@@ -129,31 +124,6 @@ async function send_model(worker_id) {
     });
 }
 
-async function get_global_model() {
-    const options = {
-        hostname: host,
-        port: port,
-        path: '/global_model_weights',
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
-    return new Promise((resolve, reject) => {
-        const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
-            res.on('data', (d) => {
-                resolve(d.toString('utf8')); //TODO: enregistrer le modele ?
-            });
-        });
-        req.on('error', (error) => {
-            reject(error);
-        });
-        
-        req.end();
-    });
-}
 
 async function create_queue() {
     const options = {
@@ -165,7 +135,7 @@ async function create_queue() {
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
             res.on('data', (d) => {
-                resolve(d.toString('utf8')); //TODO: enregistrer le modele ?
+                resolve(d.toString('utf8')); 
             });
         });
         req.on('error', (error) => {
@@ -190,7 +160,6 @@ async function write_queue(val) {
 
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
                 resolve(d.toString('utf8'));
             });
@@ -219,9 +188,9 @@ async function get_queue() {
             res.on('data', (d) => {
                 let data = JSON.parse(d.toString('utf8')).data;
                 if(data === 'NaN') {
-                    resolve('Nan');
+                    resolve('NaN');
                 } else {
-                    resolve(parseInt(data));
+                    resolve(parseFloat(data));
                 }
             });
         });
@@ -232,21 +201,22 @@ async function get_queue() {
     });
 }
 
-async function get_blocking_queue() {
-    async function sleep(ms) {
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve();
-            }, ms);
-        });
-    }
+async function sleep(ms) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, ms);
+    });
+}
 
+async function get_blocking_queue() {
     let data = 'NaN';
     while(data === 'NaN') {
         data = await get_queue();
-        sleep(1000);
+        await sleep(1000);
     }
-    return data;
+
+    return Promise.resolve(data);
 }
 
 async function start_worker(hostn) {
@@ -260,7 +230,6 @@ async function start_worker(hostn) {
 
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
                 let data = d.toString('utf8');
                 resolve(data);
@@ -332,7 +301,7 @@ async function get_global_model_critic() {
             res.on('data', (d) => {
                 let buffer = new Buffer(d, 'binary');
                 fs.writeFileSync(__dirname+'/local-model-critic/weights.bin', buffer);
-                resolve(data);
+                resolve();
             });
         });
         req.on('error', (error) => {
@@ -355,7 +324,7 @@ async function get_global_model_actor() {
             res.on('data', (d) => {
                 let buffer = new Buffer(d, 'binary');
                 fs.writeFileSync(__dirname+'/local-model-actor/weights.bin', buffer);
-                resolve(data);
+                resolve();
             });
         });
         req.on('error', (error) => {
@@ -377,7 +346,7 @@ async function get_global_episode() {
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
             res.on('data', (d) => {
-                resolve(parseInt(JSON.parse(d.toString('utf8')).data));
+                resolve(parseFloat(JSON.parse(d.toString('utf8')).data));
             });
         });
         req.on('error', (error) => {
@@ -412,8 +381,33 @@ async function set_global_episode(ep) {
     });
 }
 
-async function wait_for_workers() {
+async function check_workers() {
+    const options = {
+        hostname: host,
+        port: port,
+        path: '/worker_status',
+        method: 'GET',
+    };
 
+    return new Promise((resolve, reject) => {
+        const req = http.request(options, (res) => {
+            res.on('data', (d) => {
+                resolve(JSON.parse(d.toString('utf8')).data);
+            });
+        });
+        req.on('error', (error) => {
+            reject(error);
+        });
+        req.end();
+    });
+}
+async function wait_for_workers() {
+    let data = 10000;
+    while(data !== 0) {
+        data = await check_workers();
+    }
+
+    return Promise.resolve();
 }
 
 async function add_worker_token(tok) {
@@ -449,8 +443,15 @@ module.exports.get_best_score = get_best_score;
 module.exports.get_queue = get_queue;
 module.exports.write_queue = write_queue;
 module.exports.send_model = send_model;
-module.exports.get_global_model = get_global_model;
 module.exports.start_worker = start_worker;
 module.exports.increment_global_episode = increment_global_episode;
 module.exports.create_queue = create_queue;
 module.exports.get_blocking_queue = get_blocking_queue;
+module.exports.get_workers_hostnames = get_workers_hostnames;
+module.exports.wait_for_workers =wait_for_workers;
+module.exports.get_global_episode = get_global_episode;
+module.exports.set_global_episode = set_global_episode;
+module.exports.add_worker_token = add_worker_token;
+module.exports.get_global_model_actor = get_global_model_actor;
+module.exports.get_global_model_critic = get_global_model_critic;
+module.exports.notify_worker_done = notify_worker_done;
