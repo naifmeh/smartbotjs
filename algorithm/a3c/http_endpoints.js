@@ -126,7 +126,7 @@ app.get('/workers_status', (res, req, next) => {
     console.log('Checking workers status');
     let workers = fs.readFileSync('workers_tokens.txt', 'utf8').toString().split('\n');
     if(workers.length === 1 && workers[0] === '')
-        res.send({status: 'SUCCESS', data: 0});
+        res.send({status: 'SUCCESS', data: 'done'});
     else
         res.send({status: 'SUCCESS', data: workers.length});
 });

@@ -198,6 +198,15 @@ class MasterAgent {
         worker_utils.create_queue();
 
         let workers = worker_utils.get_workers_hostnames();
+        await (async() => {
+            const { exec } = require('child_process');
+            return new Promise((resolve, reject) => {
+                exec(__dirname+'/init_files.sh', (err, stdout, stderr) => {
+                    if(err) reject();
+                    resolve();
+                });
+            });   
+        })();
         for(let i=0; i<workers.length; i++) {
             console.log("Starting worker "+i);
             worker_utils.start_worker(workers[i]);
@@ -206,8 +215,9 @@ class MasterAgent {
         let moving_avg_rewards = [];
         while(true) {
             let reward = await worker_utils.get_blocking_queue();
-            if(reward !== 'done') {
-                moving_avg_rewards.push(reward);
+            if(reward !== 'done' && reward !== 'NaN') {
+                console.log(reward);
+                moving_avg_rewards.push(parseFloat(reward));
             } else {
                 break;
             }
@@ -217,7 +227,7 @@ class MasterAgent {
         return Promise.resolve();
     }
 }
-
+module.exports.MasterAgent = MasterAgent;
 // (async() => {
 //     let master = new MasterAgent(1);
 //     await master.init();
