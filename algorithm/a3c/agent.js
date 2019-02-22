@@ -219,17 +219,20 @@ class MasterAgent {
             let reward = await worker_utils.get_blocking_queue();
             if(reward !== 'done') {
                 if(reward !== 'NaN') {
+                    console.log('Pulled new data from queue : '+reward);
                     moving_avg_rewards.push(parseFloat(reward));
                     reward_plotting[i] = moving_avg_rewards[i];
+                    await serialiser.serialise({
+                        reward_plotting: reward_plotting,
+                    }, __dirname+'/plot_moving_avg_reward_a3c.json');
                 }
             } else {
                 break;
             }
             i++;
+            
         }
-        await serialiser.serialise({
-            reward_plotting: reward_plotting,
-        }, 'plot_moving_avg_reward_a3c.json');
+        
         await worker_utils.wait_for_workers();
 
         return Promise.resolve();
