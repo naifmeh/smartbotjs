@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json({limit:'20mb', extended: true}));
 
+
 app.post('/global_moving_average', (req, res, next) => {
     console.log('Updating global moving average');
     let avg = req.body.data;
@@ -81,7 +82,8 @@ app.post('/local_model_weights', (req, res, next) => {
 
 app.get('/global_model_weights_actor', (req, res, next) => {
     console.log('Get global model weights (actor)');
-    res.sendFile(__dirname+'/global-model-actor/weights.bin');
+    
+    res.sendFile(__dirname+'/global-model-actor/weights.bin')
 });
 
 app.get('/global_model_weights_critic', (req, res, next) => {

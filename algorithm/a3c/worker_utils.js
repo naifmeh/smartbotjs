@@ -317,28 +317,47 @@ async function get_global_model_critic() {
 }
 
 async function get_global_model_actor() {
-    const options = {
-        hostname: host,
-        port: port,
-        path: '/global_model_weights_actor',
-        method: 'GET',
-    };
+    // const request = require('request');
+    // return new Promise(resolve => {
+    //     fs.createReadStream(__dirname+'/local-model-actor/weights.bin', {encoding:'binary'}).pipe(request.get('http://'+host+':'+port+'/global_model_weights_actor'));
+    //     resolve();
+    // });
+    //  const options = {
+    //      hostname: host,
+    //      port: port,
+    //      path: '/global_model_weights_actor',
+    //      method: 'GET',
+    //  };
 
-    return new Promise((resolve, reject) => {
-        const req = http.request(options, (res) => {
-            res.on('data', (d) => {
-                let buffer = new Buffer(d, 'binary');
-                fs.writeFile(__dirname+'/local-model-actor/weights.bin', buffer, (err) => {
-                    if(!err) {
-                        resolve();
-                    }
-                });
+    //  return new Promise((resolve, reject) => {
+    //      const req = http.request(options, (res) => {
+    //          res.on('data', (d) => {
+    //             let buffer = new Buffer(d, 'binary');
+    //             console.log(buffer);
+    //             fs.writeFile(__dirname+'/local-model-actor/weights.bin', buffer, (err) => {
+    //                 if(!err) {
+    //                     resolve();
+    //                 }
+    //             });
+    //         });
+    //      });
+    //      req.on('error', (error) => {
+    //          reject(error);
+    //      });
+    //      req.end();
+    //  });
+
+    let curl = new (require('curl-request'))();
+    return new Promise(resolve => {
+        curl.get('http://localhost:33333/global_model_weights_actor')
+        .then(({statusCode, body, headers}) => {
+            fs.writeFile(__dirname+'/local-model-actor/weights.bin', body, {encoding:'binary'} , (err) => {
+                if(!err) {
+                    resolve();
+                }
             });
+            
         });
-        req.on('error', (error) => {
-            reject(error);
-        });
-        req.end();
     });
 
 }
