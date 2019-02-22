@@ -36,7 +36,7 @@ async function record(episode, reward, idx, glob_ep_rew, total_loss, num_steps) 
     console.log('Loss: '+(num_steps == 0 ? total_loss : Math.ceil(total_loss/num_steps*1000)/1000));
     console.log("Steps : "+num_steps);  
     console.log("Worker :"+idx);
-
+    console.log('********************* GLOBAL EP REWARD '+global_ep_reward)
     await worker_utils.write_queue(global_ep_reward);
     return Promise.resolve(global_ep_reward);
 }
@@ -58,7 +58,7 @@ class Worker {
     async run() { //Analogy to the run function of threads
         let total_step = 1;
         let mem = new Memory();
-        await this.env.init_env();
+        await this.env.init_env(true);
 
         let data = this.env.getEnvironmentData();
         this.state_size = 9;
@@ -160,8 +160,12 @@ app.get('/start_worker', (req, res, next) => {
     res.send({status: 'SUCCESS'});
 });
 
-const server = app.listen(8085, function() {
+const argv = require('minimist')(process.argv.slice(2));;
+
+let port = 8085;
+if(argv.port || argv.p) port = argv.port ? argv.port : (argv.p ? argv.p : 8085); 
+const server = app.listen(port, function() {
     let host = server.address().address;
     let port = server.address().port;
-    console.log("Listening on port 8085...");
+    console.log("Listening on port "+port+"...");
 });

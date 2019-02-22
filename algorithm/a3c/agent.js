@@ -215,9 +215,9 @@ class MasterAgent {
         let moving_avg_rewards = [];
         while(true) {
             let reward = await worker_utils.get_blocking_queue();
-            if(reward !== 'done' && reward !== 'NaN') {
+            if(reward !== 'done') {
                 console.log(reward);
-                moving_avg_rewards.push(parseFloat(reward));
+                if(reward !== 'NaN') moving_avg_rewards.push(parseFloat(reward));
             } else {
                 break;
             }
@@ -228,7 +228,3 @@ class MasterAgent {
     }
 }
 module.exports.MasterAgent = MasterAgent;
-// (async() => {
-//     let master = new MasterAgent(1);
-//     await master.init();
-// })

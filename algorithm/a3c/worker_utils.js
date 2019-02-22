@@ -185,7 +185,6 @@ async function get_queue() {
 
     return new Promise((resolve, reject) => {
         const req = http.request(options, (res) => {
-            console.log('statusCode :'+ res.statusCode);
             res.on('data', (d) => {
                 let data = JSON.parse(d.toString('utf8')).data;
                 if(data === 'NaN') {
@@ -214,7 +213,7 @@ async function get_blocking_queue() {
     let data = 'NaN';
     while(data === 'NaN') {
         data = await get_queue();
-        await sleep(1000);
+        await sleep(750);
     }
 
     return Promise.resolve(data);

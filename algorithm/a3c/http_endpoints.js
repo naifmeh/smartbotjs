@@ -44,7 +44,9 @@ app.get('/create_queue', (req, res, next) => {
 app.post('/queue', (req, res, next) => {
     console.log('Adding to queue');
     let elem = req.body.data;
-    fs.appendFileSync('queue.txt', elem.toString()+'\n');
+    console.log('Queue :'+elem);
+    if(elem !== '')
+        fs.appendFileSync('queue.txt', elem.toString()+'\n');
 
     res.send({status: 'SUCCESS'});
 });
@@ -53,13 +55,13 @@ app.get('/queue', (req, res, next) => {
     let data = fs.readFileSync('queue.txt', 'utf8').toString().split('\n');
     if(data.length === 1 && data[0] === '') {
         res.send({status: 'FAIL', data: "NaN", err: 'No data in queue'});
+        return;
     }
     let elem_pop = data[0];
     let str = '';
     for(let i=1;i <data.length;i++) {
-        str += data[i] + '\n';
+        if(data[i] != '') str += data[i] + '\n';
     }
-
     fs.writeFileSync('queue.txt', str);
 
     res.send({status: 'SUCCESS', data: elem_pop});
