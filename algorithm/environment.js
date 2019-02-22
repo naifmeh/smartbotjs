@@ -14,12 +14,12 @@ function EnvironmentController(N_WEBSITES) {
     const WEBDRIVER = true;
     const DOMAINE_COUNT = true;
 
-    const logger = require('../utils/logging.js').Logger('environment');
-    const io_utils = require('../utils/io_utils.js');
-    const math_utils = require('../utils/math_utils');
-    const serialiser = require('../utils/serialisation');
-    const Crawler = require('../crawler/crawler').crawler;
-    const crawler_controller = require('../crawler/crawler').controller().CrawlerController;
+    const logger = require(__dirname+'/../utils/logging.js').Logger('environment');
+    const io_utils = require(__dirname+'/../utils/io_utils.js');
+    const math_utils = require(__dirname+'/../utils/math_utils');
+    const serialiser = require(__dirname+'/../utils/serialisation');
+    const Crawler = require(__dirname+'/../crawler/crawler').crawler;
+    const crawler_controller = require(__dirname+'/../crawler/crawler').controller().CrawlerController;
 
     const N_ACTIONS = 11;
     const MAX_WEBSITES = N_WEBSITES;
@@ -130,7 +130,7 @@ function EnvironmentController(N_WEBSITES) {
      * @returns {Array}
      */
     function init_states() {
-        let utils = require('./utils.js').algo_utils;
+        let utils = require(__dirname+'/utils.js').algo_utils;
 
         states = [];
 
@@ -168,14 +168,14 @@ function EnvironmentController(N_WEBSITES) {
      * @returns {Promise<>}
      */
     async function init_website_object() {
-        let persistence = require('../utils/persistence');
+        let persistence = require(__dirname+'/../utils/persistence');
         const Url = require('url-parse');
         const mongo = require('mongodb');
         let docs = [];
         try {
             if(process.argv[2] == 'OFFLINE') {
                 console.info('Loading from file...');
-                websites = await serialiser.unserialise('./websites.json');
+                websites = await serialiser.unserialise(__dirname+'/websites.json');
                 WEBSITES_OFF_DB = true;
                 return Promise.resolve(websites);
             }
@@ -184,7 +184,7 @@ function EnvironmentController(N_WEBSITES) {
         } catch(err) {
             if(err instanceof mongo.MongoNetworkError) {
                 console.info('Loading from file...');
-                websites = await serialiser.unserialise('./websites.json');
+                websites = await serialiser.unserialise(__dirname+'/websites.json');
                 WEBSITES_OFF_DB = true;
             }
             return Promise.resolve(websites);
@@ -198,7 +198,7 @@ function EnvironmentController(N_WEBSITES) {
 
 
 
-        let attributes = await io_utils.readLines('./data/attributes.txt');
+        let attributes = await io_utils.readLines(__dirname+'/./data/attributes.txt');
 
         let unique_attrs = {};
         for(let v of attributes) {
@@ -211,7 +211,7 @@ function EnvironmentController(N_WEBSITES) {
         websites = {};
         let counter = 0;
 
-        let csv = await io_utils.read_csv_file('./data/data_rl_bot.csv','features');
+        let csv = await io_utils.read_csv_file(__dirname+'/data/data_rl_bot.csv','features');
 
         return new Promise((resolve, reject) => {
             try {
@@ -262,7 +262,7 @@ function EnvironmentController(N_WEBSITES) {
     }
 
     async function add_websites_url(websites) {
-        const preprocessing = require('../preprocessing/preprocessing');
+        const preprocessing = require(__dirname+'/../preprocessing/preprocessing');
 
         let keys = Object.keys(websites);
         console.log(keys.length);
@@ -275,7 +275,7 @@ function EnvironmentController(N_WEBSITES) {
             }
             websites[`${keys[i]}`]['urls'] = result;
         }
-        await serialiser.serialise(websites, 'websites.json');
+        await serialiser.serialise(websites, __dirname+'/websites.json');
         return Promise.resolve();
 
 
@@ -285,10 +285,10 @@ function EnvironmentController(N_WEBSITES) {
         const utils = require('./utils').algo_utils;
         try {
 
-            user_agents = await io_utils.readLines('./data/useragents.txt');
+            user_agents = await io_utils.readLines(__dirname+'/data/useragents.txt');
             useragent_list = utils.reformat_into_linked_list(user_agents);
             useragent_usage = utils.reformat_with_usage(user_agents);
-            servers = await io_utils.readLines('./data/servers.txt');
+            servers = await io_utils.readLines(__dirname+'/data/servers.txt');
             //server_list = utils.reformat_into_linked_list(servers);
             servers_usage = utils.reformat_with_usage(servers);
             servers_usage['localhost'] = 0;
@@ -302,7 +302,7 @@ function EnvironmentController(N_WEBSITES) {
     }
 
     function init_actions(NUM_ACTIONS) {
-        const math_utils = require('../utils/math_utils.js');
+        const math_utils = require(__dirname+'/../utils/math_utils.js');
         let elementary_actions = Array.from(Array(NUM_ACTIONS).keys());
         let output = [];
 
@@ -534,7 +534,25 @@ function EnvironmentController(N_WEBSITES) {
 
      }
 
-    async function init_env() {
+    async function init_env(shuffle=false) {
+        function shuffle(array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+          
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+          
+              // Pick a remaining element...
+              randomIndex = Math.floor(Math.random() * currentIndex);
+              currentIndex -= 1;
+          
+              // And swap it with the current element.
+              temporaryValue = array[currentIndex];
+              array[currentIndex] = array[randomIndex];
+              array[randomIndex] = temporaryValue;
+            }
+          
+            return array;
+          }
         if(!IS_LOADED) {
             states = init_states();
             websites = await init_website_object();
@@ -544,6 +562,7 @@ function EnvironmentController(N_WEBSITES) {
             actions = in_actions.actions;
             actions_index = in_actions.actions_index;
             websites_keys = Object.keys(websites);
+            if(shuffle) websites_keys = shuffle(websites_keys);
             await init_miscellaneaous();
 
             return new Promise(resolve => {

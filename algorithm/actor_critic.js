@@ -120,7 +120,7 @@ function actor_critic() {
                 target[0] = reward;
             } else {
                 advantages[action] =  [reward +this.discount_factor * (next_value) - value];
-                target[0] = reward + this.discount_factor * next_value;
+                target[0] = reward + this.discount_factor * next_value; //chgt + a -
             }
 
             

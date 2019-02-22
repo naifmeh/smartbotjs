@@ -74,7 +74,7 @@ module.exports.crawler = class Crawler {
 
 function CrawlerController(crawler) {
     let ip = crawler.getIp();
-    console.log('Ip'+ ip);
+    console.log('Launching locally...');
     let user_agent = crawler.getUserAgent();
     let url = crawler.getUrl();
     let viewportType = "desktop";
@@ -204,11 +204,13 @@ function CrawlerController(crawler) {
             if(!regexOccurence(url, /http[s]*:\/\/.+/gm))
                 link = 'http://'+url;
 
-            timeout = setTimeout(()=> {
-                (async() => {
+            async function err_browser() {
+                setTimeout(()=> {
                     throw new Error("Error with browser instance");
-                })();
-            }, 50000);
+                }, 50000);
+            }
+            timeout = err_browser//TODO fix error here
+           
             page.on('unhandledRejection', () => {
                 throw new Error('Unhandled rejection inside of browser');
             });

@@ -169,8 +169,9 @@ class Agent {
 
 module.exports.Agent = Agent;
 
-const environment = require('../environment')();
-const worker_utils = require('./worker_utils');
+const environment = require(__dirname+'/../environment')();
+const worker_utils = require(__dirname+'/./worker_utils');
+const serialiser = require(__dirname+'/../../utils/serialisation');
 class MasterAgent {
     constructor(n_workers) {
         this.amt_workers = n_workers;
@@ -196,7 +197,7 @@ class MasterAgent {
 
     async train() {
         worker_utils.create_queue();
-
+        let reward_plotting = {};
         let workers = worker_utils.get_workers_hostnames();
         await (async() => {
             const { exec } = require('child_process');
@@ -213,15 +214,22 @@ class MasterAgent {
         }
 
         let moving_avg_rewards = [];
+        let i=0;
         while(true) {
             let reward = await worker_utils.get_blocking_queue();
             if(reward !== 'done') {
-                console.log(reward);
-                if(reward !== 'NaN') moving_avg_rewards.push(parseFloat(reward));
+                if(reward !== 'NaN') {
+                    moving_avg_rewards.push(parseFloat(reward));
+                    reward_plotting[i] = moving_avg_rewards[i];
+                }
             } else {
                 break;
             }
+            i++;
         }
+        await serialiser.serialise({
+            reward_plotting: reward_plotting,
+        }, 'plot_moving_avg_reward_a3c.json');
         await worker_utils.wait_for_workers();
 
         return Promise.resolve();
