@@ -316,55 +316,38 @@ async function get_global_model_critic() {
 }
 
 async function get_global_model_actor() {
-    // const request = require('request');
-    // return new Promise(resolve => {
-    //     fs.createReadStream(__dirname+'/local-model-actor/weights.bin', {encoding:'binary'}).pipe(request.get('http://'+host+':'+port+'/global_model_weights_actor'));
-    //     resolve();
-    // });
-    //    const options = {
-    //        hostname: host,
-    //        port: port,
-    //        path: '/global_model_weights_actor',
-    //        method: 'GET',
-    //    };
+    
+        // const options = {
+        //     hostname: host,
+        //     port: port,
+        //     path: '/global_model_weights_actor',
+        //     method: 'GET',
+        // };
 
-    //    return new Promise((resolve, reject) => {
-    //        const req = http.request(options, (res) => {
-    //            res.on('data', (d) => {
-    //                 let buffer = new Buffer(d, 'binary');
-    //                 const outStream = fs.createWriteStream(__dirname+'/local-model-actor/weights.bin');
-    //                 outStream.on('error', reject());
-    //                 res.pipe(outStream);
-    //                 res.on('end', () => {
-    //                     outStream.close();
-    //                     resolve();
-    //                 })
-    //           });
-    //        });
-    //        req.on('error', (error) => {
-    //            reject(error);
-    //        });
-    //        req.end();
-    //    });
-     const {exec} = require('child_process');
-     return new Promise((resolve, reject) => {
-         exec('curl http://'+host+':'+port+'/global_model_weights_actor > '+__dirname+'/local-model-actor/weights.bin', (err, stdout, stderr) => {
-         if(err) reject();
-         else resolve();
-         });
-     });
-    // let curl = new (require('curl-request'))();
-    // return new Promise(resolve => {
-    //     curl.get('http://localhost:33333/global_model_weights_actor')
-    //     .then(({statusCode, body, headers}) => {
-    //         fs.writeFile(__dirname+'/local-model-actor/weights.bin', body, {encoding:'binary'} , (err) => {
-    //             if(!err) {
-    //                 resolve();
-    //             }
-    //         });
-            
-    //     });
-    // });
+        // return new Promise((resolve, reject) => {
+        //     const req = http.request(options, (res) => {
+        //         res.on('data', (d) => {
+        //              const outStream = fs.createWriteStream(__dirname+'/local-model-actor/weights.bin');
+        //              outStream.on('error', reject);
+        //              res.pipe(outStream);
+        //              res.on('end', () => {
+        //                  outStream.close();
+        //                  resolve();
+        //              });
+        //        });
+        //     });
+        //     req.on('error', (error) => {
+        //         reject(error);
+        //     });
+        //     req.end();
+        // });
+      const {exec} = require('child_process');
+      return new Promise((resolve, reject) => {
+          exec('curl http://'+host+':'+port+'/global_model_weights_actor > '+__dirname+'/local-model-actor/weights.bin', (err, stdout, stderr) => {
+          if(err) reject();
+          else resolve();
+          });
+      });
 
 }
 

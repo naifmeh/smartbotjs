@@ -107,7 +107,7 @@ class Agent {
         return Promise.resolve();
     }
 
-    async train_model(done, memory, next_state) {
+    async train_model(done, memory, next_state) { //TODO: Dispose unecessary tensors
         let target = zeros(this.value_size, memory.actions.length );
         let advantages = zeros(this.action_size, memory.actions.length);
 
@@ -224,7 +224,7 @@ class MasterAgent {
                     reward_plotting[i] = moving_avg_rewards[i];
                     await serialiser.serialise({
                         reward_plotting: reward_plotting,
-                    }, __dirname+'/plot_moving_avg_reward_a3c.json');
+                    },'plot_moving_avg_reward_a3c.json');
                 }
             } else {
                 break;
