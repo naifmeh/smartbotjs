@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs-node-gpu');
 
 class Agent {
     constructor(action_size, state_size, num_hidden, actions_index=undefined) {
-        let optimizer = tf.train.adam(1e-4);
+        
 
         this.action_size = action_size;
 		this.state_size = state_size;
@@ -83,64 +83,66 @@ class Memory{
 }
 
 function compute_loss(done, new_state, memory, agent, gamma=0.99) {
-	let reward_sum = 0.;
-	if(done) {
-		reward_sum = 0.;
-	} else {
-		reward_sum = agent.call(tf.oneHot(new_state, 12).reshape([1, 9, 12]))
-					.values.flatten().get(0);
-	}
-
-	let discounted_rewards = [];
-	let memory_reward_rev = memory.rewards;
-	for(let reward of memory_reward_rev.reverse()) {
-		reward_sum = reward + gamma * reward_sum;
-		discounted_rewards.push(reward_sum);
-    }
-    discounted_rewards = discounted_rewards.reverse();
-
-	let onehot_states = [];
-	for(let state of memory.states) {
-		onehot_states.push(tf.oneHot(state, 12));
-	}
-    let init_onehot = onehot_states[0];
+	const f = () => { let reward_sum = 0.;
+        if(done) {
+            reward_sum = 0.;
+        } else {
+            reward_sum = agent.call(tf.oneHot(new_state, 12).reshape([1, 9, 12]))
+                        .values.flatten().get(0);
+        }
+        
+        let discounted_rewards = [];
+        let memory_reward_rev = memory.rewards;
+        for(let reward of memory_reward_rev.reverse()) {
+            reward_sum = reward + gamma * reward_sum;
+            discounted_rewards.push(reward_sum);
+        }
+        discounted_rewards.reverse();
     
-	for(let i=1; i<onehot_states.length;i++) {
-		init_onehot = init_onehot.concat(onehot_states[i]);
-    }
+        let onehot_states = [];
+        for(let state of memory.states) {
+            onehot_states.push(tf.oneHot(state, 12));
+        }
+        let init_onehot = onehot_states[0];
     
-	let log_val = agent.call(
-		init_onehot.reshape([memory.states.length, 9, 12])
-    );
+        for(let i=1; i<onehot_states.length;i++) {
+            init_onehot = init_onehot.concat(onehot_states[i]);
+        }
     
-    let disc_reward_tensor = tf.tensor(discounted_rewards);
-    let advantage = disc_reward_tensor.reshapeAs(log_val.values).sub(log_val.values);
-    let value_loss = advantage.square();
-    log_val.values.print();
+        let log_val = agent.call(
+            init_onehot.reshape([memory.states.length, 9, 12])
+        );
+    
+        let disc_reward_tensor = tf.tensor(discounted_rewards);
+        let advantage = disc_reward_tensor.reshapeAs(log_val.values).sub(log_val.values);
+        let value_loss = advantage.square();
+        log_val.values.print();
+    
+        let policy = tf.softmax(log_val.logits);
+        let logits_cpy = log_val.logits.clone();
+    
+        let entropy = policy.mul(logits_cpy.mul(tf.scalar(-1))); 
+        entropy = entropy.sum();
+    
+        let memory_actions = [];
+        for(let i=0; i< memory.actions.length; i++) {
+            memory_actions.push(new Array(2000).fill(0));
+            memory_actions[i][memory.actions[i]] = 1;
+        }
+        memory_actions = tf.tensor(memory_actions);
+        let policy_loss = tf.losses.softmaxCrossEntropy(memory_actions.reshape([memory.actions.length, 2000]), log_val.logits);
+    
+        let value_loss_copy = value_loss.clone();
+        let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
+        let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32'));
+    
+        let total_loss_2 = total_loss_1.add(policy_loss);
+        let total_loss = total_loss_2.add(entropy_mul);
 
-	let policy = tf.softmax(log_val.logits);
-	let logits_cpy = log_val.logits.clone();
-
-	let entropy = policy.mul(logits_cpy.mul(tf.scalar(-1))); 
-	entropy = entropy.sum();
-	
-    let memory_actions = [];
-    for(let i=0; i< memory.actions.length; i++) {
-        memory_actions.push(new Array(2000).fill(0));
-        memory_actions[i][memory.actions[i]] = 1;
-    }
-    memory_actions = tf.tensor(memory_actions);
-    let policy_loss = tf.losses.softmaxCrossEntropy(memory_actions.reshape([memory.actions.length, 2000]), log_val.logits);
-    console.log(policy_loss);
-    policy_loss.print();
-    let value_loss_copy = value_loss.clone();
-    let entropy_mul = (entropy.mul(tf.scalar(0.01))).mul(tf.scalar(-1));
-	let total_loss_1 = value_loss_copy.mul(tf.scalar(0.5, dtype='float32'));
+        return total_loss.mean().asScalar();
+    };
     
-    let total_loss_2 = total_loss_1.add(policy_loss);
-    let total_loss = total_loss_2.add(entropy_mul);
-    total_loss.print();
-	return total_loss.mean();
+    return tf.train.adam(1e-4).minimize(f, true, agent.get_trainable_weights())
 	
 }
 
@@ -149,6 +151,8 @@ let agent = new Agent(2000, 12, 24);
 let memory = new Memory();
 memory.store([false,false,false,false,0,50,0,100,0], 2, 5);
 memory.store([false,false,true,false,0,50,0,100,0], 0, 1);
+console.log(tf.memory().numTensors);
+let loss = compute_loss(false, [true,false,false,false,0,50,0,100,0], memory, agent);
 
-let loss = compute_loss(false, [false,false,false,false,0,50,0,100,0], memory, agent);
+console.log(tf.memory().numTensors);
 
