@@ -37,7 +37,7 @@
     "mocha": "^5.2.0",
     "mongodb": "^3.1.10",
     "plotly": "^1.0.6",
-    "puppeteer": "^1.10.0",
+    "puppeteer": "^1.13.0",
     "regex-occurrence": "^1.0.0",
     "request": "^2.88.0",
     "serialise": "^1.0.2",
